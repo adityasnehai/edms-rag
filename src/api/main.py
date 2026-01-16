@@ -1,14 +1,13 @@
-from fastapi import FastAPI, Query
+from fastapi import FastAPI, Query, Depends
 from typing import Dict
 
-# Import your existing RAG pipeline pieces
-from src.parser import parse_org_folder
-from src.chunker import create_chunks
-from src.embedder import embed_chunks
-from src.vector_store import VectorStore
+from src.api.auth_routes import router as auth_router
+from src.api.admin_routes import router as admin_router
+from src.auth.dependencies import get_current_user
+from src.api.index_manager import rebuild_vector_store, get_vector_store
+
 from src.retriever import retrieve_chunks
 from src.generator import generate_answer
-
 
 
 app = FastAPI(
@@ -17,29 +16,17 @@ app = FastAPI(
     version="0.1.0",
 )
 
+# Register routers
+app.include_router(auth_router)
+app.include_router(admin_router)
+
 
 # ---------
-# Startup: load & index data ONCE
+# Startup: build vector index ONCE
 # ---------
 @app.on_event("startup")
 def startup_event():
-    global vector_store
-
-    # 1. Load documents
-    docs = parse_org_folder("data/acmetech")
-
-    # 2. Create chunks
-    chunks = create_chunks(docs)
-
-    # 3. Embed chunks
-    embedded_chunks = embed_chunks(chunks)
-
-    # 4. Build vector store
-    dim = len(embedded_chunks[0]["embedding"])
-    store = VectorStore(embedding_dim=dim)
-    store.add(embedded_chunks)
-
-    vector_store = store
+    rebuild_vector_store()
 
 
 # ---------
@@ -51,11 +38,15 @@ def health():
 
 
 # ---------
-# Search endpoint (core)
+# Search endpoint (protected)
 # ---------
 @app.get("/search")
-def search(q: str = Query(..., description="Search question")) -> Dict:
-    retrieved = retrieve_chunks(q, vector_store, top_k=5)
+def search(
+    q: str = Query(..., description="Search question"),
+    user=Depends(get_current_user),
+) -> Dict:
+    store = get_vector_store()
+    retrieved = retrieve_chunks(q, store, top_k=5)
     result = generate_answer(q, retrieved)
 
     return {
