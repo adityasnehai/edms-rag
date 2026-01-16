@@ -1,5 +1,18 @@
-venv/
+# Python
 __pycache__/
+venv/
+
+# Environment
 .env
-*.pyc
-.DS_Store
+
+# Local databases
+data/edms_auth.db
+
+# Uploaded / runtime data
+data/acmetech/**
+
+# Test artifacts
+ADR-*.md
+
+# Docker
+*.log
