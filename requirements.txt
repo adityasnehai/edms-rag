@@ -1,9 +1,9 @@
-faiss-cpu==1.9.0.post1
+fastapi==0.115.6
 uvicorn==0.38.0
 
 openai==1.61.0
 numpy==1.26.4
-faiss-cpu==1.7.4
+faiss-cpu==1.9.0.post1
 
 python-multipart==0.0.20
 passlib[bcrypt]==1.7.4
