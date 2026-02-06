@@ -4,68 +4,83 @@ from typing import List, Dict
 from openai import OpenAI
 
 from src.vector_store import VectorStore
+from src.api.index_manager import get_bm25_index
 
 
 EMBEDDING_MODEL = "text-embedding-3-small"
 
+# -------------------------
+# Guardrail configuration
+# -------------------------
+LOW_SIGNAL_QUERIES = {
+    "hi", "hello", "hey", "thanks", "thank you",
+    "ok", "okay", "cool", "yes", "no",
+}
+
+
+def is_low_signal_query(query: str) -> bool:
+    q = query.strip().lower()
+    if not q:
+        return True
+    if q in LOW_SIGNAL_QUERIES:
+        return True
+    if len(q.split()) <= 2 and not q.endswith("?"):
+        return True
+    return False
+
 
 def embed_query(query: str) -> np.ndarray:
-    """
-    Embed a user query using OpenAI embeddings.
-    """
-    api_key = os.getenv("OPENAI_API_KEY")
-    if not api_key:
-        raise RuntimeError("OPENAI_API_KEY is not set")
-
-    client = OpenAI(api_key=api_key)
-
+    client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
     response = client.embeddings.create(
         model=EMBEDDING_MODEL,
-        input=query
+        input=query,
     )
-
-    embedding = np.array(response.data[0].embedding, dtype="float32")
-    return embedding.reshape(1, -1)
+    emb = np.array(response.data[0].embedding, dtype="float32")
+    return emb.reshape(1, -1)
 
 
 def retrieve_chunks(
     query: str,
     store: VectorStore,
-    top_k: int = 5
+    top_k: int = 5,
 ) -> List[Dict]:
     """
-    Retrieve top-k relevant chunks for a query.
+    🔥 Hybrid Retrieval: BM25 + Embeddings
     """
-    query_embedding = embed_query(query)
-    results = store.search(query_embedding, top_k=top_k)
-    return results
 
+    if is_low_signal_query(query):
+        return []
 
-# ------------------------
-# Manual test
-# ------------------------
-# if __name__ == "__main__":
-#     from parser import parse_adr_folder
-#     from chunker import create_chunks
-#     from embedder import embed_chunks
+    # ------------------
+    # Semantic retrieval
+    # ------------------
+    semantic_results = store.search(
+        embed_query(query),
+        top_k=top_k
+    )
 
-    adr_folder = "data/adrs"
+    # ------------------
+    # Lexical retrieval
+    # ------------------
+    try:
+        bm25 = get_bm25_index()
+        lexical_results = bm25.search(query, top_k=top_k)
+    except Exception:
+        lexical_results = []
 
-    parsed = parse_adr_folder(adr_folder)
-    chunks = create_chunks(parsed)
-    embedded_chunks = embed_chunks(chunks)
+    # ------------------
+    # Fusion (dedup)
+    # ------------------
+    seen = set()
+    fused = []
 
-    dim = len(embedded_chunks[0]["embedding"])
-    store = VectorStore(embedding_dim=dim)
-    store.add(embedded_chunks)
+    for c in semantic_results + lexical_results:
+        key = (c["doc_id"], c["section_type"])
+        if key not in seen:
+            fused.append(c)
+            seen.add(key)
 
-    query = "Why was Kafka chosen?"
-    results = retrieve_chunks(query, store, top_k=3)
+        if len(fused) >= top_k:
+            break
 
-    print(f"\nQuery: {query}\n")
-    for r in results:
-        print("=" * 60)
-        print(f"Decision ID : {r['decision_id']}")
-        print(f"Section     : {r['section_type']}")
-        print("Text:")
-        print(r["text"][:300], "...")
+    return fused

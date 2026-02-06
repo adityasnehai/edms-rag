@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>EDMS Search</title>
+</head>
+<body>
+
+  <script>
+  const token = localStorage.getItem("access_token");
+  if (!token) {
+    window.location.href = "index.html";
+  }
+  </script>
+
+
+  <h2>Enterprise Decision Memory System</h2>
+
+  <input id="query" placeholder="Ask a question..." size="60"/>
+  <button onclick="search()">Search</button>
+  <button onclick="logout()">Logout</button>
+
+
+  <pre id="result"></pre>
+
+  <script src="app.js"></script>
+</body>
+</html>

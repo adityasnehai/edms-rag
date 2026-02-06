@@ -30,34 +30,66 @@ IMPORTANT_SECTIONS = {
 
 
 def create_chunks(docs: List[Dict]) -> List[Dict]:
+    """
+    Create chunks from:
+    - Structured documents (with sections)
+    - Flat documents (images / vision / OCR)
+    """
+
     chunks = []
 
     for doc in docs:
-        for section, text in doc["sections"].items():
+        # =====================================================
+        # CASE 1 — SECTIONED DOCUMENTS (ADRs, RFCs, etc.)
+        # =====================================================
+        if "sections" in doc and isinstance(doc["sections"], dict):
+            for section, text in doc["sections"].items():
+                if not text:
+                    continue
+
+                if section not in IMPORTANT_SECTIONS:
+                    continue
+
+                chunks.append({
+                    "chunk_id": f"{doc['doc_id']}-{section}",
+                    "org_id": doc.get("org_id"),
+                    "doc_id": doc["doc_id"],
+                    "data_type": doc["data_type"],
+                    "section_type": section,
+                    "text": text.strip(),
+                    "metadata": {
+                        "title": doc.get("title"),
+                        "source_file": doc.get("source_file"),
+                    },
+                })
+
+        # =====================================================
+        # CASE 2 — FLAT DOCUMENTS (IMAGES / VISION OUTPUT)
+        # =====================================================
+        elif "text" in doc:
+            text = doc["text"].strip()
             if not text:
                 continue
 
-            if section not in IMPORTANT_SECTIONS:
-                continue
-
-            chunk = {
-                "chunk_id": f"{doc['doc_id']}-{section}",
-                "org_id": doc["org_id"],
+            chunks.append({
+                "chunk_id": f"{doc['doc_id']}-vision",
+                "org_id": doc.get("org_id"),
                 "doc_id": doc["doc_id"],
-                "data_type": doc["data_type"],
-                "section_type": section,
-                "text": text.strip(),
+                "data_type": doc["data_type"],     # usually "images"
+                "section_type": doc.get("section_type", "vision_summary"),
+                "text": text,
                 "metadata": {
-                    "title": doc["title"],
-                    "source_file": doc["source_file"],
+                    "title": doc.get("title", "Image document"),
+                    "source_file": doc.get("source_file"),
                 },
-            }
-
-            chunks.append(chunk)
+            })
 
     return chunks
 
 
+# -----------------------
+# Manual test
+# -----------------------
 if __name__ == "__main__":
     from src.parser import parse_org_folder
 

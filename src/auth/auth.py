@@ -8,7 +8,13 @@ from passlib.context import CryptContext
 # Configuration
 # ------------------
 
-SECRET_KEY = "change-this-secret-key"
+import os
+
+SECRET_KEY = os.getenv("JWT_SECRET")
+
+if not SECRET_KEY:
+    raise RuntimeError("JWT_SECRET is not set")
+
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60
 
