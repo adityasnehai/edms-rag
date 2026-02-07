@@ -7,7 +7,8 @@ from fastapi.responses import JSONResponse
 from fastapi.requests import Request
 from fastapi.staticfiles import StaticFiles
 from typing import Dict
-
+import os
+from fastapi.staticfiles import StaticFiles
 # -------------------------
 # CREATE APP FIRST
 # -------------------------
@@ -25,12 +26,13 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:5173",
         "http://127.0.0.1:5173",
-        "https://ornate-bubblegum-418696.netlify.app",  # ✅ Netlify frontend
+        "https://ornate-bubblegum-418696.netlify.app",
     ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 
 # -------------------------
@@ -47,12 +49,14 @@ async def global_exception_handler(request: Request, exc: Exception):
 # -------------------------
 # STATIC FILES (IMAGES)
 # -------------------------
-app.mount(
-    "/static/images",
-    StaticFiles(directory="data/acmetech/images"),
-    name="images",
-)
+IMAGE_DIR = "data/acmetech/images"
 
+if os.path.exists(IMAGE_DIR):
+    app.mount(
+        "/static/images",
+        StaticFiles(directory=IMAGE_DIR),
+        name="images",
+    )
 # -------------------------
 # IMPORT ROUTERS (AFTER APP)
 # -------------------------
