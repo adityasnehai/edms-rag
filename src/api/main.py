@@ -68,7 +68,8 @@ from src.api.stats_routes import router as stats_router
 # from src.api.eval_routes import router as eval_router
 
 from src.auth.dependencies import get_current_user
-from src.auth.models import init_db
+from src.auth.models import init_db, get_user_by_email, create_user
+from src.auth.auth import hash_password
 from src.api.index_manager import rebuild_vector_store, get_vector_store
 from src.retriever import retrieve_chunks
 from src.generator import generate_answer
@@ -90,6 +91,18 @@ app.include_router(chat_router)
 def startup_event():
     os.makedirs("data", exist_ok=True)
     init_db()
+    admin_email = os.getenv("ADMIN_EMAIL")
+    admin_password = os.getenv("ADMIN_PASSWORD")
+    admin_role = os.getenv("ADMIN_ROLE", "admin")
+    if admin_email and admin_password:
+        if admin_role not in ("admin", "employee"):
+            admin_role = "admin"
+        if not get_user_by_email(admin_email):
+            create_user(
+                admin_email,
+                hash_password(admin_password),
+                admin_role,
+            )
     rebuild_vector_store()
 
 # -------------------------
