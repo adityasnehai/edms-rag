@@ -68,6 +68,7 @@ from src.api.stats_routes import router as stats_router
 # from src.api.eval_routes import router as eval_router
 
 from src.auth.dependencies import get_current_user
+from src.auth.models import init_db
 from src.api.index_manager import rebuild_vector_store, get_vector_store
 from src.retriever import retrieve_chunks
 from src.generator import generate_answer
@@ -87,6 +88,8 @@ app.include_router(chat_router)
 # -------------------------
 @app.on_event("startup")
 def startup_event():
+    os.makedirs("data", exist_ok=True)
+    init_db()
     rebuild_vector_store()
 
 # -------------------------
