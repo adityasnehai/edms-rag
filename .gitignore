@@ -9,7 +9,7 @@ venv/
 data/edms_auth.db
 
 # Uploaded / runtime data
-data/acmetech/**
+# (sample data is committed for demo)
 
 # Test artifacts
 ADR-*.md
