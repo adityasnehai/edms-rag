@@ -1,0 +1,29 @@
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Node
+node_modules/
+dist/
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# Runtime / generated data
+edms/logs/
+edms/data/
+edms/.venv/
+
+# Local databases
+*.db
+*.sqlite
+*.sqlite3
+

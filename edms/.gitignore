@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.pyc
+venv/
+.venv/
+
+# Environment
+.env
+
+# Local databases
+data/edms_auth.db
+
+# Uploaded / runtime data
+data/
+logs/
+
+# Test artifacts
+ADR-*.md
+
+# Docker
+*.log

@@ -1,0 +1,239 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 240 20% 99%;
+    --foreground: 240 10% 6%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 6%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 6%;
+
+    --primary: 243 75% 59%;
+    --primary-foreground: 0 0% 100%;
+    --primary-glow: 270 91% 65%;
+
+    --secondary: 240 5% 96%;
+    --secondary-foreground: 240 10% 12%;
+
+    --muted: 240 5% 96%;
+    --muted-foreground: 240 4% 46%;
+
+    --accent: 243 100% 97%;
+    --accent-foreground: 243 75% 35%;
+
+    --success: 160 70% 42%;
+    --success-foreground: 0 0% 100%;
+
+    --warning: 14 90% 60%;
+    --warning-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 240 6% 90%;
+    --input: 240 6% 90%;
+    --ring: 243 75% 59%;
+
+    --radius: 0.9rem;
+
+    --gradient-primary: linear-gradient(135deg, hsl(243 75% 59%), hsl(270 91% 65%));
+    --gradient-soft: linear-gradient(180deg, hsl(243 100% 99%), hsl(0 0% 100%));
+    --gradient-mesh:
+      radial-gradient(at 20% 10%, hsl(243 100% 95% / 0.85) 0px, transparent 52%),
+      radial-gradient(at 80% 0%, hsl(270 100% 95% / 0.75) 0px, transparent 55%),
+      radial-gradient(at 52% 100%, hsl(200 100% 95% / 0.55) 0px, transparent 50%);
+    --gradient-text: linear-gradient(135deg, hsl(243 75% 45%), hsl(270 91% 55%));
+
+    --shadow-glow: 0 20px 60px -20px hsl(243 75% 59% / 0.35);
+    --shadow-card:
+      0 1px 0 0 hsl(240 6% 92%),
+      0 8px 24px -8px hsl(240 10% 6% / 0.08);
+
+    --sidebar-background: 240 20% 99%;
+    --sidebar-foreground: 240 6% 30%;
+    --sidebar-primary: 243 75% 59%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 5% 95%;
+    --sidebar-accent-foreground: 240 10% 12%;
+    --sidebar-border: 240 6% 90%;
+    --sidebar-ring: 243 75% 59%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    font-family: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    letter-spacing: -0.022em;
+  }
+
+  button,
+  input,
+  textarea,
+  select {
+    font: inherit;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    background: var(--gradient-text);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .bg-gradient-primary {
+    background: var(--gradient-primary);
+  }
+
+  .bg-gradient-soft {
+    background: var(--gradient-soft);
+  }
+
+  .bg-gradient-mesh {
+    background: var(--gradient-mesh);
+  }
+
+  .shadow-card {
+    box-shadow: var(--shadow-card);
+  }
+
+  .shadow-glow {
+    box-shadow: var(--shadow-glow);
+  }
+
+  .animate-fade-up {
+    animation: fade-up 600ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .animate-blink {
+    animation: blink 1s steps(2, start) infinite;
+  }
+
+  .animate-float-slow {
+    animation: float-slow 7s ease-in-out infinite;
+  }
+
+  .animate-float-delay {
+    animation: float-slow 7s ease-in-out 1.4s infinite;
+  }
+
+  .animate-float-fast {
+    animation: float-fast 5.4s ease-in-out infinite;
+  }
+
+  .animate-pulse-soft {
+    animation: pulse-soft 3s ease-in-out infinite;
+  }
+
+  .animate-line-flow {
+    animation: line-flow 3.6s linear infinite;
+  }
+
+  .animate-flow-dot {
+    animation: flow-dot 2.8s linear infinite;
+  }
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes blink {
+    to {
+      visibility: hidden;
+    }
+  }
+
+  @keyframes float-slow {
+    0%,
+    100% {
+      transform: translateY(0px);
+    }
+
+    50% {
+      transform: translateY(-9px);
+    }
+  }
+
+  @keyframes float-fast {
+    0%,
+    100% {
+      transform: translateY(0px);
+    }
+
+    50% {
+      transform: translateY(-6px);
+    }
+  }
+
+  @keyframes pulse-soft {
+    0%,
+    100% {
+      opacity: 0.55;
+      transform: scale(0.96);
+    }
+
+    50% {
+      opacity: 1;
+      transform: scale(1.04);
+    }
+  }
+
+  @keyframes line-flow {
+    from {
+      background-position: 0% 50%;
+    }
+
+    to {
+      background-position: 200% 50%;
+    }
+  }
+
+  @keyframes flow-dot {
+    0% {
+      transform: translateX(0);
+      opacity: 0.35;
+    }
+
+    15% {
+      opacity: 1;
+    }
+
+    100% {
+      transform: translateX(calc(100% - 10px));
+      opacity: 0.35;
+    }
+  }
+}

@@ -1,0 +1,193 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: edms
+      POSTGRES_USER: edms
+      POSTGRES_PASSWORD: edms
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U edms -d edms"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    command: ["redis-server", "--save", "60", "1", "--appendonly", "yes"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.14.3
+    environment:
+      discovery.type: single-node
+      xpack.security.enabled: "false"
+      ES_JAVA_OPTS: "-Xms512m -Xmx512m"
+    ports:
+      - "9200:9200"
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsSL http://127.0.0.1:9200 >/dev/null"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+
+  minio:
+    image: minio/minio:RELEASE.2024-09-13T20-26-02Z
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    command: server /data --console-address ":9001"
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio_data:/data
+
+  backend:
+    build:
+      context: ./edms
+    env_file:
+      - ./edms/.env
+    environment:
+      APP_ENV: production
+      DATABASE_URL: postgresql://edms:edms@postgres:5432/edms
+      REDIS_URL: redis://redis:6379/0
+      CELERY_BROKER_URL: redis://redis:6379/1
+      CELERY_RESULT_BACKEND: redis://redis:6379/2
+      ELASTICSEARCH_URL: http://elasticsearch:9200
+      VECTOR_BACKEND: pinecone
+      LEXICAL_BACKEND: elasticsearch
+      OBJECT_STORAGE_BACKEND: s3
+      S3_BUCKET: edms
+      S3_ENDPOINT_URL: http://minio:9000
+      S3_REGION: us-east-1
+      S3_ACCESS_KEY_ID: minioadmin
+      S3_SECRET_ACCESS_KEY: minioadmin
+      CORS_ALLOW_ORIGINS: http://127.0.0.1:5173,http://localhost:5173
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      elasticsearch:
+        condition: service_healthy
+    command: ["uvicorn", "src.api.main:app", "--host", "0.0.0.0", "--port", "8000"]
+
+  worker:
+    build:
+      context: ./edms
+    env_file:
+      - ./edms/.env
+    environment:
+      APP_ENV: production
+      DATABASE_URL: postgresql://edms:edms@postgres:5432/edms
+      REDIS_URL: redis://redis:6379/0
+      CELERY_BROKER_URL: redis://redis:6379/1
+      CELERY_RESULT_BACKEND: redis://redis:6379/2
+      ELASTICSEARCH_URL: http://elasticsearch:9200
+      VECTOR_BACKEND: pinecone
+      LEXICAL_BACKEND: elasticsearch
+      OBJECT_STORAGE_BACKEND: s3
+      S3_BUCKET: edms
+      S3_ENDPOINT_URL: http://minio:9000
+      S3_REGION: us-east-1
+      S3_ACCESS_KEY_ID: minioadmin
+      S3_SECRET_ACCESS_KEY: minioadmin
+      CORS_ALLOW_ORIGINS: http://127.0.0.1:5173,http://localhost:5173
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      elasticsearch:
+        condition: service_healthy
+    command: ["celery", "-A", "src.celery_app.celery_app", "worker", "--loglevel=info"]
+
+  flower:
+    build:
+      context: ./edms
+    env_file:
+      - ./edms/.env
+    environment:
+      CELERY_BROKER_URL: redis://redis:6379/1
+      CELERY_RESULT_BACKEND: redis://redis:6379/2
+    depends_on:
+      redis:
+        condition: service_healthy
+    command: ["celery", "-A", "src.celery_app.celery_app", "flower", "--port=5555"]
+    ports:
+      - "5555:5555"
+
+  prometheus:
+    image: prom/prometheus:v2.54.1
+    volumes:
+      - ./edms/deploy/monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    ports:
+      - "9090:9090"
+    depends_on:
+      - backend
+      - flower
+
+  loki:
+    image: grafana/loki:3.1.1
+    command: ["-config.file=/etc/loki/loki-config.yml"]
+    volumes:
+      - ./edms/deploy/monitoring/loki/loki-config.yml:/etc/loki/loki-config.yml:ro
+    ports:
+      - "3100:3100"
+
+  grafana:
+    image: grafana/grafana:11.2.0
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./edms/deploy/monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+    depends_on:
+      - prometheus
+      - loki
+
+  promtail:
+    image: grafana/promtail:3.1.1
+    command: ["-config.file=/etc/promtail/promtail-config.yml"]
+    volumes:
+      - ./edms/deploy/monitoring/promtail/promtail-config.yml:/etc/promtail/promtail-config.yml:ro
+      - ./edms/logs:/var/log/edms
+    depends_on:
+      - loki
+
+  uptime-kuma:
+    image: louislam/uptime-kuma:1.23.13
+    ports:
+      - "3001:3001"
+    volumes:
+      - uptime_kuma_data:/app/data
+
+  nginx:
+    image: nginx:1.27-alpine
+    depends_on:
+      - backend
+    ports:
+      - "8080:80"
+    volumes:
+      - ./edms/deploy/nginx/edms-api.conf:/etc/nginx/conf.d/default.conf:ro
+
+volumes:
+  postgres_data:
+  elasticsearch_data:
+  minio_data:
+  uptime_kuma_data:
