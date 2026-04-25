@@ -21,9 +21,9 @@ dist/
 edms/logs/
 edms/data/
 edms/.venv/
+edms/.git_backup_nested/
 
 # Local databases
 *.db
 *.sqlite
 *.sqlite3
-
