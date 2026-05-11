@@ -1,6 +1,7 @@
 from datetime import datetime
 from threading import Lock
 from typing import Any, Dict
+import time
 from uuid import uuid4
 
 from src.cache_store import invalidate_org_caches
@@ -179,17 +180,21 @@ def rebuild_vector_store(
             touched_files = set(manifest_diff["touched"])
             removed_files = set(manifest_diff["removed"])
             existing_chunks = list(getattr(vector_stores.get(org_slug), "chunks", []) or [])
+            force_full_rebuild = not existing_chunks
             reusable_chunks = [
                 chunk
                 for chunk in existing_chunks
                 if chunk.get("metadata", {}).get("source_file") not in touched_files
                 and chunk.get("metadata", {}).get("source_file") not in removed_files
-            ]
+            ] if not force_full_rebuild else []
             touched_docs = [
                 doc
                 for doc in docs
-                if doc.get("source_file") in touched_files
-                or not previous_manifest.get("files")
+                if (
+                    force_full_rebuild
+                    or not previous_manifest.get("files")
+                    or doc.get("source_file") in touched_files
+                )
             ]
             touched_chunks = create_chunks(touched_docs)
             embedded_touched_chunks, embedding_stats = embed_chunks_with_stats(
@@ -325,6 +330,52 @@ def get_bm25_index(org_slug: str):
     if bm25 is None:
         raise RuntimeError("BM25 index not initialized")
     return bm25
+
+
+def _wait_for_vector_store(org_slug: str, timeout_seconds: float = 20.0):
+    deadline = time.monotonic() + timeout_seconds
+    while time.monotonic() < deadline:
+        store = vector_stores.get(org_slug)
+        if store is not None:
+            return store
+        meta = get_index_metadata(org_slug)
+        if meta.get("status") in {"ready", "empty", "error"} and meta.get("pipeline_status") != "running":
+            break
+        time.sleep(0.25)
+    return vector_stores.get(org_slug)
+
+
+def ensure_org_search_indexes(org_slug: str, org_id: int):
+    try:
+        store = get_vector_store(org_slug)
+    except Exception:
+        try:
+            meta = rebuild_vector_store(
+                org_slug=org_slug,
+                org_id=org_id,
+                trigger_source="lazy_search_rebuild",
+            )
+        except Exception as exc:
+            store = _wait_for_vector_store(org_slug)
+            if store is not None:
+                meta = get_index_metadata(org_slug)
+            else:
+                latest_meta = get_index_metadata(org_slug)
+                raise RuntimeError(
+                    latest_meta.get("last_error") or str(exc) or "Knowledge index is not ready"
+                ) from exc
+        if meta.get("status") != "ready":
+            raise RuntimeError(meta.get("last_error") or "Knowledge index is not ready")
+        store = get_vector_store(org_slug)
+    else:
+        meta = get_index_metadata(org_slug)
+
+    try:
+        bm25 = get_bm25_index(org_slug)
+    except Exception:
+        bm25 = None
+
+    return store, bm25, meta
 
 
 def get_index_metadata(org_slug: str) -> Dict:

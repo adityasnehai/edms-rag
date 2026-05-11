@@ -2,69 +2,84 @@ const TYPE_METRICS = [
   {
     label: "ADRs",
     key: "adrs",
-    accentClass: "border-violet-200 bg-violet-50 text-violet-700",
-    dotClass: "bg-violet-500",
+    bg: "bg-violet-50",
+    border: "border-violet-200/80",
+    text: "text-violet-700",
+    num: "text-violet-900",
   },
   {
     label: "RFCs",
     key: "rfcs",
-    accentClass: "border-sky-200 bg-sky-50 text-sky-700",
-    dotClass: "bg-sky-500",
+    bg: "bg-sky-50",
+    border: "border-sky-200/80",
+    text: "text-sky-700",
+    num: "text-sky-900",
   },
   {
     label: "Meeting Notes",
     key: "meeting_notes",
-    accentClass: "border-emerald-200 bg-emerald-50 text-emerald-700",
-    dotClass: "bg-emerald-500",
+    bg: "bg-emerald-50",
+    border: "border-emerald-200/80",
+    text: "text-emerald-700",
+    num: "text-emerald-900",
   },
   {
     label: "Postmortems",
     key: "postmortems",
-    accentClass: "border-rose-200 bg-rose-50 text-rose-700",
-    dotClass: "bg-rose-500",
+    bg: "bg-rose-50",
+    border: "border-rose-200/80",
+    text: "text-rose-700",
+    num: "text-rose-900",
   },
   {
     label: "Tickets",
     key: "tickets",
-    accentClass: "border-amber-200 bg-amber-50 text-amber-700",
-    dotClass: "bg-amber-500",
+    bg: "bg-amber-50",
+    border: "border-amber-200/80",
+    text: "text-amber-700",
+    num: "text-amber-900",
   },
   {
-    label: "Diagrams",
+    label: "Images",
     key: "images",
-    accentClass: "border-indigo-200 bg-indigo-50 text-indigo-700",
-    dotClass: "bg-indigo-500",
+    bg: "bg-indigo-50",
+    border: "border-indigo-200/80",
+    text: "text-indigo-700",
+    num: "text-indigo-900",
   },
 ];
 
 export default function DashboardHeader({ stats }) {
   return (
-    <div className="flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
-      {TYPE_METRICS.map((item) => (
-        <CountTile
-          key={item.key}
-          label={item.label}
-          value={stats?.[item.key] ?? 0}
-          accentClass={item.accentClass}
-          dotClass={item.dotClass}
-        />
-      ))}
+    <div className="rounded-2xl border border-border bg-white px-3 py-2.5 shadow-sm">
+      <div className="flex gap-2 overflow-x-auto pb-1">
+        {TYPE_METRICS.map((item) => (
+          <StatTile
+            key={item.key}
+            label={item.label}
+            value={stats?.[item.key] ?? 0}
+            item={item}
+            loading={stats === null}
+          />
+        ))}
+      </div>
     </div>
   );
 }
 
-function CountTile({ label, value, accentClass, dotClass }) {
+function StatTile({ label, value, item, loading }) {
   return (
-    <div
-      className={`inline-flex shrink-0 items-center gap-2 rounded-[18px] border px-3 py-2 shadow-sm ${accentClass}`}
-    >
-      <span className={`h-2.5 w-2.5 rounded-full ${dotClass}`} />
-      <p className="text-[11px] font-semibold tracking-[0.12em] whitespace-nowrap">
-        {label}
-      </p>
-      <p className="rounded-full bg-white/80 px-2 py-0.5 text-sm font-semibold tracking-tight text-foreground">
-        {value}
-      </p>
+    <div className={`flex min-w-[8.5rem] items-center justify-between gap-3 rounded-xl border ${item.border} ${item.bg} px-3 py-2`}>
+      <div className="min-w-0 flex-1">
+        <p className={`truncate text-xs font-semibold ${item.text} leading-tight`}>
+          {label}
+        </p>
+      </div>
+      {loading ? (
+        <div className="h-5 w-7 animate-pulse rounded-lg bg-current opacity-10" />
+      ) : (
+        <p className={`min-w-7 text-right text-xs font-bold tabular-nums ${item.num}`}>{value}</p>
+      )}
     </div>
   );
 }

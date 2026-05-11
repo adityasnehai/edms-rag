@@ -8,8 +8,8 @@ import Dashboard from "./pages/Dashboard";
 import Chat from "./pages/Chat";
 import EvidenceBrowser from "./pages/EvidenceBrowser";
 import AdminAccess from "./pages/AdminAccess";
+import AdminDataManager from "./pages/AdminDataManager";
 import AdminUpload from "./pages/AdminUpload";
-import AdminEvaluation from "./pages/AdminEvaluation";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -66,16 +66,14 @@ ReactDOM.createRoot(document.getElementById("root")).render(
             </ProtectedRoute>
           }
         />
-        {/* RAG Evaluation */}
         <Route
-          path="/admin/eval"
+          path="/admin/data"
           element={
             <ProtectedRoute requireAdmin>
-              <AdminEvaluation />
+              <AdminDataManager />
             </ProtectedRoute>
           }
         />
-
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

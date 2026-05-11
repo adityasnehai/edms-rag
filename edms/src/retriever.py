@@ -72,9 +72,10 @@ def sanitize_top_k(top_k: Optional[int]) -> int:
     return max(1, min(parsed, MAX_TOP_K))
 
 
-def _chunk_key(chunk: Dict) -> Tuple[str, str, str]:
+def _chunk_key(chunk: Dict) -> Tuple[str, str, str, str]:
     return (
         chunk.get("chunk_id") or "",
+        chunk.get("data_type") or "",
         chunk.get("doc_id") or "",
         chunk.get("section_type") or "",
     )
@@ -83,6 +84,7 @@ def _chunk_key(chunk: Dict) -> Tuple[str, str, str]:
 def _chunk_ref(chunk: Dict) -> Dict:
     return {
         "chunk_id": chunk.get("chunk_id"),
+        "data_type": chunk.get("data_type"),
         "doc_id": chunk.get("doc_id"),
         "section_type": chunk.get("section_type"),
     }
@@ -104,6 +106,52 @@ def _dedupe_chunks(chunks: List[Dict]) -> List[Dict]:
     return deduped
 
 
+def _normalized_identifier(value: str) -> str:
+    return "".join(tokenize(value or ""))
+
+
+def _doc_id_matches_query(query: str, chunk: Dict) -> bool:
+    doc_id = _normalized_identifier(chunk.get("doc_id", ""))
+    return bool(doc_id and doc_id in _normalized_identifier(query))
+
+
+def _doc_type_prefix_bonus(chunk: Dict) -> float:
+    doc_id = (chunk.get("doc_id") or "").strip().lower()
+    data_type = (chunk.get("data_type") or "").strip().lower()
+    prefix_map = {
+        "adrs": ("adr-", "adr_"),
+        "rfcs": ("rfc-", "rfc_"),
+        "meeting_notes": ("meeting-", "meeting_", "inc-", "inc_"),
+        "postmortems": ("post-", "post_", "postmortem-", "postmortem_"),
+        "tickets": ("ticket-", "ticket_", "jira-", "jira_"),
+    }
+    prefixes = prefix_map.get(data_type, ())
+    return 0.3 if any(doc_id.startswith(prefix) for prefix in prefixes) else 0.0
+
+
+def _prepend_exact_doc_matches(
+    query: str,
+    candidates: List[Dict],
+    ranked_chunks: List[Dict],
+) -> List[Dict]:
+    exact_matches = _dedupe_chunks(
+        [
+            candidate["chunk"]
+            for candidate in candidates
+            if _doc_id_matches_query(query, candidate["chunk"])
+        ]
+    )
+    exact_matches.sort(
+        key=lambda chunk: (
+            _doc_type_prefix_bonus(chunk),
+            chunk.get("data_type") == "adrs",
+            chunk.get("doc_id") or "",
+        ),
+        reverse=True,
+    )
+    return _dedupe_chunks(exact_matches + ranked_chunks)
+
+
 def _restore_chunks_from_refs(store: VectorStore, refs: List[Dict]) -> List[Dict]:
     if not refs:
         return []
@@ -113,6 +161,7 @@ def _restore_chunks_from_refs(store: VectorStore, refs: List[Dict]) -> List[Dict
     for ref in refs:
         key = (
             ref.get("chunk_id") or "",
+            ref.get("data_type") or "",
             ref.get("doc_id") or "",
             ref.get("section_type") or "",
         )
@@ -262,6 +311,24 @@ def _build_candidate_pool(
         candidate["lexical_score"] = max(candidate["lexical_score"], hit["score"])
         candidate["fusion_score"] += _rrf_score(hit["rank"])
 
+    for chunk in getattr(store, "chunks", []) or []:
+        if not _doc_id_matches_query(query, chunk):
+            continue
+        key = _chunk_key(chunk)
+        candidate = candidate_map.setdefault(
+            key,
+            {
+                "chunk": chunk,
+                "semantic_rank": None,
+                "lexical_rank": None,
+                "lexical_score": 0.0,
+                "fusion_score": 0.0,
+            },
+        )
+        exact_boost = 10.0 + _doc_type_prefix_bonus(chunk)
+        candidate["lexical_score"] = max(candidate["lexical_score"], exact_boost)
+        candidate["fusion_score"] += exact_boost
+
     return sorted(
         candidate_map.values(),
         key=lambda candidate: candidate["fusion_score"],
@@ -307,7 +374,9 @@ def _metadata_match_score(query_text: str, query_terms: set[str], chunk: Dict) -
     score = 0.0
     doc_id = (chunk.get("doc_id") or "").lower()
     if doc_id and doc_id in query_text:
-        score += 0.4
+        score += 0.7
+    if _doc_id_matches_query(query_text, chunk):
+        score += 0.3
 
     title_terms = set(content_terms(chunk.get("metadata", {}).get("title", "")))
     if title_terms and query_terms & title_terms:
@@ -320,6 +389,7 @@ def _metadata_match_score(query_text: str, query_terms: set[str], chunk: Dict) -
     data_type_terms = set(tokenize(chunk.get("data_type", "")))
     if data_type_terms and query_terms & data_type_terms:
         score += 0.1
+    score += _doc_type_prefix_bonus(chunk)
 
     return min(score, 1.0)
 
@@ -442,11 +512,11 @@ def _heuristic_rerank_candidates(
         chunk = candidate["chunk"]
         key = _chunk_key(chunk)
         score = (
-            0.42 * normalized_semantic.get(key, 0.0)
-            + 0.2 * normalized_lexical.get(key, 0.0)
+            0.3 * normalized_semantic.get(key, 0.0)
+            + 0.22 * normalized_lexical.get(key, 0.0)
             + 0.18 * overlap_scores.get(key, 0.0)
             + 0.12 * normalized_fusion.get(key, 0.0)
-            + 0.08 * metadata_scores.get(key, 0.0)
+            + 0.18 * metadata_scores.get(key, 0.0)
         )
         ranked_candidates.append((score, normalized_fusion.get(key, 0.0), chunk))
 
@@ -540,6 +610,7 @@ def retrieve_chunks(
                 candidates=candidates,
                 top_k=final_top_k,
             )
+    reranked_chunks = _prepend_exact_doc_matches(query, candidates, reranked_chunks)
     reranked_chunks = _dedupe_chunks(reranked_chunks)[:final_top_k]
 
     if retrieval_cache_key and reranked_chunks:

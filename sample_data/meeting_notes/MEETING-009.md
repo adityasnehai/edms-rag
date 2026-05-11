@@ -1,0 +1,18 @@
+# MEETING-009: EDMS Workspace Review
+
+Date: 2026-05-09
+Participants: Platform, Product, Operations
+Last Updated: 2026-05-09 12:00 UTC
+
+## Discussion Summary
+The team reviewed upload behavior, job status visibility, data type naming, and evidence quality in search results.
+
+## Decisions Made
+- Show latest upload time per data type.
+- Keep records isolated by organization.
+- Display sample structure before admins upload files.
+
+## Action Items
+- Platform validates ingestion jobs.
+- Product reviews upload guidance.
+- Operations tests search with sample records.

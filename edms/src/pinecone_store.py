@@ -16,9 +16,10 @@ from src.runtime_config import (
 from src.vector_store import VectorStore
 
 
-def _chunk_key(chunk: Dict) -> Tuple[str, str, str]:
+def _chunk_key(chunk: Dict) -> Tuple[str, str, str, str]:
     return (
         chunk.get("chunk_id") or "",
+        chunk.get("data_type") or "",
         chunk.get("doc_id") or "",
         chunk.get("section_type") or "",
     )
@@ -199,6 +200,7 @@ class PineconeVectorStore:
                     metadata = match.get("metadata") or {}
                 key = (
                     str(metadata.get("chunk_id") or ""),
+                    str(metadata.get("data_type") or ""),
                     str(metadata.get("doc_id") or ""),
                     str(metadata.get("section_type") or ""),
                 )
@@ -232,6 +234,7 @@ class PineconeVectorStore:
                 metadata = match.get("metadata") or {}
             key = (
                 str(metadata.get("chunk_id") or ""),
+                str(metadata.get("data_type") or ""),
                 str(metadata.get("doc_id") or ""),
                 str(metadata.get("section_type") or ""),
             )

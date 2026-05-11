@@ -7,11 +7,7 @@ import {
 } from "../api/admin";
 import WorkspaceShell from "../components/WorkspaceShell";
 import { getAuthPayload } from "../utils/auth";
-import {
-  CopyIcon,
-  RotateIcon,
-  ShieldIcon,
-} from "../components/AppIcons";
+import { CopyIcon, RotateIcon, ShieldIcon, CheckIcon } from "../components/AppIcons";
 
 export default function AdminAccess() {
   const token = localStorage.getItem("access_token");
@@ -22,6 +18,7 @@ export default function AdminAccess() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     async function loadOrganization() {
@@ -36,143 +33,158 @@ export default function AdminAccess() {
         setLoading(false);
       }
     }
-
     loadOrganization();
   }, []);
 
-  if (!token || !payload) {
-    return <Navigate to="/" replace />;
-  }
-
-  if (payload.role !== "admin") {
-    return <Navigate to="/dashboard" replace />;
-  }
+  if (!token || !payload) return <Navigate to="/" replace />;
+  if (payload.role !== "admin") return <Navigate to="/dashboard" replace />;
 
   async function handleRotateCode() {
     setError("");
     setSuccess("");
-
     try {
       setLoading(true);
       const data = await rotateOrganizationInviteCode();
       setOrganization(data.organization);
       setInviteCode(data.invite_code);
-      setSuccess("Invite code rotated successfully.");
+      setSuccess("Invite code rotated. Share the new code with teammates.");
     } catch {
-      setError("Unable to rotate invite code.");
+      setError("Unable to rotate invite code. Try again.");
     } finally {
       setLoading(false);
     }
   }
 
   async function handleCopyCode() {
-    if (!inviteCode) {
-      return;
-    }
-
+    if (!inviteCode) return;
     try {
       await navigator.clipboard.writeText(inviteCode);
-      setSuccess("Invite code copied.");
+      setCopied(true);
+      setSuccess("Invite code copied to clipboard.");
       setError("");
+      setTimeout(() => setCopied(false), 2000);
     } catch {
-      setError("Copy failed. Please copy the invite code manually.");
+      setError("Copy failed — please copy the code manually.");
     }
   }
 
   return (
     <WorkspaceShell mainClassName="overflow-x-hidden">
-      <div className="container max-w-5xl space-y-6 py-6 lg:py-8">
-        <section className="rounded-[30px] border border-border bg-card p-6 shadow-card">
-          <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+      <div className="container max-w-5xl space-y-6 py-8 lg:py-10">
+
+        {/* Header */}
+        <div className="animate-fade-up overflow-hidden rounded-2xl border border-border bg-white shadow-sm">
+          <div className="h-1 w-full bg-gradient-primary" />
+          <div className="flex flex-col gap-4 p-5 lg:flex-row lg:items-center lg:justify-between lg:p-6">
             <div>
-              <p className="text-[11px] uppercase tracking-[0.24em] text-primary">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-primary">
                 Organization
               </p>
-              <h1 className="mt-2 text-3xl font-semibold tracking-tight text-foreground">
+              <h1 className="mt-2 text-2xl font-bold tracking-tight text-foreground lg:text-[1.65rem]">
                 Manage company access
               </h1>
-              <p className="mt-3 max-w-2xl text-sm leading-7 text-muted-foreground">
-                Share this employee invite code with teammates so they join this
-                company instead of creating a separate workspace.
+              <p className="mt-1.5 text-sm text-muted-foreground">
+                Share the invite code with teammates so they join this workspace instead of creating a separate one.
               </p>
             </div>
-
-            <div className="rounded-2xl border border-border bg-secondary px-4 py-3">
-              <p className="text-[11px] uppercase tracking-[0.24em] text-muted-foreground">
+            <div className="shrink-0 rounded-xl border border-border bg-secondary px-4 py-3">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
                 Active Workspace
               </p>
-              <p className="mt-1 text-base font-semibold text-secondary-foreground">
+              <p className="mt-1 text-sm font-semibold text-foreground">
                 {organization?.name || payload.org_name}
               </p>
             </div>
           </div>
-        </section>
+        </div>
 
-        <section className="rounded-[30px] border border-border bg-card p-6 shadow-card">
-          <div className="flex items-start justify-between gap-4">
-            <div>
-              <p className="text-[11px] uppercase tracking-[0.24em] text-muted-foreground">
-                Employee Invite Code
-              </p>
-              <h2 className="mt-2 text-xl font-semibold text-foreground">
-                Invite teammates into this workspace
-              </h2>
-            </div>
+        {/* Invite code card */}
+        <section className="animate-fade-up rounded-2xl border border-border bg-white shadow-sm" style={{ animationDelay: "60ms" }}>
+          <div className="border-b border-border p-5 lg:p-6">
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <div>
+                <span className="inline-flex items-center rounded-full border border-primary/20 bg-accent px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-primary">
+                  Employee Invite Code
+                </span>
+                <h2 className="mt-2.5 text-lg font-semibold tracking-tight text-foreground">
+                  Invite teammates into this workspace
+                </h2>
+              </div>
 
-            <div className="flex gap-3">
-              <button
-                type="button"
-                onClick={handleCopyCode}
-                disabled={!inviteCode}
-                className="inline-flex items-center gap-2 rounded-2xl border border-border bg-card px-4 py-3 text-sm font-semibold text-foreground shadow-card transition hover:bg-secondary disabled:opacity-60"
-              >
-                <CopyIcon className="h-4 w-4" />
-                Copy Code
-              </button>
-              <button
-                type="button"
-                onClick={handleRotateCode}
-                disabled={loading}
-                className="inline-flex items-center gap-2 rounded-2xl bg-gradient-primary px-4 py-3 text-sm font-semibold text-primary-foreground shadow-glow transition hover:opacity-95 disabled:opacity-60"
-              >
-                <RotateIcon className="h-4 w-4" />
-                {loading ? "Loading..." : "Rotate Code"}
-              </button>
+              <div className="flex gap-2.5">
+                <button
+                  type="button"
+                  onClick={handleCopyCode}
+                  disabled={!inviteCode}
+                  className="inline-flex items-center gap-2 rounded-xl border border-border bg-secondary px-4 py-2.5 text-sm font-medium text-foreground transition hover:border-primary/20 hover:bg-accent hover:text-accent-foreground disabled:opacity-50"
+                >
+                  {copied ? <CheckIcon className="h-4 w-4 text-emerald-600" /> : <CopyIcon className="h-4 w-4" />}
+                  {copied ? "Copied!" : "Copy Code"}
+                </button>
+                <button
+                  type="button"
+                  onClick={handleRotateCode}
+                  disabled={loading}
+                  className="inline-flex items-center gap-2 rounded-xl bg-gradient-primary px-4 py-2.5 text-sm font-semibold text-white shadow-glow transition hover:opacity-95 disabled:opacity-60"
+                >
+                  <RotateIcon className="h-4 w-4" />
+                  {loading ? "Loading…" : "Rotate Code"}
+                </button>
+              </div>
             </div>
           </div>
 
-          <div className="mt-6 grid gap-4 md:grid-cols-[minmax(0,1fr)_240px]">
-            <div className="rounded-[26px] border border-primary/15 bg-accent p-6">
-              <p className="text-[11px] uppercase tracking-[0.24em] text-muted-foreground">
+          <div className="grid gap-4 p-5 md:grid-cols-[minmax(0,1fr)_220px] lg:p-6">
+            {/* Invite code display */}
+            <div className="relative overflow-hidden rounded-2xl border border-primary/20 bg-accent p-6">
+              <div className="pointer-events-none absolute -right-8 -top-8 h-32 w-32 rounded-full bg-primary/5 blur-2xl" />
+              <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-muted-foreground">
                 Current Invite
               </p>
-              <p className="mt-4 break-all text-3xl font-semibold tracking-[0.3em] text-primary">
-                {inviteCode || "---- ---- ----"}
+              {loading ? (
+                <div className="mt-4 h-10 w-48 animate-pulse rounded-xl bg-primary/10" />
+              ) : (
+                <p className="mt-4 break-all font-mono text-3xl font-bold tracking-[0.35em] text-primary">
+                  {inviteCode || "— — —"}
+                </p>
+              )}
+              <p className="mt-3 text-xs text-muted-foreground">
+                Case-sensitive. Share exactly as shown.
               </p>
             </div>
 
-            <div className="rounded-[26px] border border-border bg-secondary p-5">
-              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-card text-primary shadow-card">
+            {/* Info card */}
+            <div className="flex flex-col gap-3 rounded-2xl border border-border bg-secondary/60 p-5">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-primary text-white shadow-glow">
                 <ShieldIcon className="h-5 w-5" />
               </div>
-              <p className="mt-4 text-sm font-semibold text-foreground">
-                Workspace isolation stays intact
-              </p>
-              <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                Users joining with this code are attached only to this organization.
-              </p>
+              <div>
+                <p className="text-sm font-semibold text-foreground">Workspace isolation</p>
+                <p className="mt-1 text-xs leading-5 text-muted-foreground">
+                  Users joining with this code are scoped exclusively to this organization. No data is shared across workspaces.
+                </p>
+              </div>
+              <div className="mt-auto rounded-xl border border-border bg-white px-3 py-2 text-xs text-muted-foreground">
+                Rotate the code anytime to invalidate previously shared invites.
+              </div>
             </div>
           </div>
 
-          <div className="mt-6 rounded-[26px] border border-border bg-secondary px-5 py-4">
-            <p className="text-sm leading-7 text-muted-foreground">
-              Share the code with employees who need access. Rotate it anytime if
-              you need to invalidate a previously shared invite.
-            </p>
-          </div>
-
-          {error ? <p className="mt-4 text-sm text-destructive">{error}</p> : null}
-          {success ? <p className="mt-4 text-sm text-success">{success}</p> : null}
+          {/* Alerts */}
+          {(error || success) && (
+            <div className="px-5 pb-5 lg:px-6 lg:pb-6">
+              {error && (
+                <div className="rounded-xl border border-destructive/20 bg-destructive/5 px-4 py-3 text-sm text-destructive">
+                  {error}
+                </div>
+              )}
+              {success && (
+                <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+                  {success}
+                </div>
+              )}
+            </div>
+          )}
         </section>
       </div>
     </WorkspaceShell>

@@ -236,4 +236,105 @@
       opacity: 0.35;
     }
   }
+
+  /* Aurora orb animations */
+  @keyframes aurora-1 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(40px, -40px) scale(1.08); }
+    66% { transform: translate(-25px, 25px) scale(0.94); }
+  }
+
+  @keyframes aurora-2 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    40% { transform: translate(-35px, 20px) scale(1.06); }
+    70% { transform: translate(20px, -30px) scale(1.1); }
+  }
+
+  @keyframes aurora-3 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(15px, 35px) scale(0.92); }
+  }
+
+  /* Trust bar marquee */
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* Shimmer gradient text */
+  @keyframes shimmer-text {
+    0% { background-position: 0% center; }
+    100% { background-position: -200% center; }
+  }
+
+  .animate-aurora-1 { animation: aurora-1 14s ease-in-out infinite; }
+  .animate-aurora-2 { animation: aurora-2 18s ease-in-out infinite; }
+  .animate-aurora-3 { animation: aurora-3 22s ease-in-out infinite; }
+  .animate-marquee { animation: marquee 28s linear infinite; }
+
+  .animate-shimmer-text {
+    background-image: linear-gradient(
+      90deg,
+      hsl(243 75% 45%),
+      hsl(270 91% 55%),
+      hsl(200 80% 50%),
+      hsl(243 75% 45%)
+    );
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: shimmer-text 5s linear infinite;
+  }
+
+  /* Walkthrough step progress bar */
+  @keyframes walkthrough-bar {
+    from { width: 0%; }
+    to { width: 100%; }
+  }
+
+  /* Hero rotating rings */
+  @keyframes spin-slow {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+  @keyframes spin-slow-reverse {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(-360deg); }
+  }
+  .animate-spin-slow         { animation: spin-slow 32s linear infinite; }
+  .animate-spin-slow-reverse { animation: spin-slow-reverse 44s linear infinite; }
+
+  /* Hero beam scan */
+  @keyframes beam-scan {
+    0%   { transform: translateY(-100px); opacity: 0; }
+    12%  { opacity: 1; }
+    88%  { opacity: 1; }
+    100% { transform: translateY(100px); opacity: 0; }
+  }
+  .animate-beam-scan { animation: beam-scan 9s ease-in-out infinite; }
+
+  /* Animated preview — answer slide-up */
+  @keyframes answer-in {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .animate-answer-in { animation: answer-in 0.45s cubic-bezier(0.16, 1, 0.3, 1) both; }
+
+  /* Animated preview — tag pop-in */
+  @keyframes tag-in {
+    from { opacity: 0; transform: scale(0.88) translateY(4px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+  }
+  .animate-tag-in { animation: tag-in 0.35s cubic-bezier(0.16, 1, 0.3, 1) both; }
+
+  /* Subtle dot grid background */
+  .bg-dot-grid {
+    background-image: radial-gradient(
+      circle,
+      hsl(240 6% 65% / 0.28) 1px,
+      transparent 1px
+    );
+    background-size: 26px 26px;
+  }
 }

@@ -26,6 +26,7 @@ faiss-cpu==1.8.0
 
 # OpenAI
 openai==1.12.0
+httpx==0.27.2
 pinecone>=5.0.0
 
 # Uploads

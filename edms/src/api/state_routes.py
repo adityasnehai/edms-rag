@@ -59,8 +59,11 @@ def get_recent_searches(user=Depends(get_current_user)):
 
 @router.post("/recent-searches")
 def add_recent_search(payload: RecentSearchPayload, user=Depends(get_current_user)):
+    query = payload.query.strip()
+    if not query:
+        raise HTTPException(status_code=400, detail="Query cannot be empty")
     enforce_rate_limit(f"org:{user['org_id']}:user:{user['id']}", "read")
-    save_recent_search(user["id"], user["org_id"], payload.query.strip(), payload.result, limit=5)
+    save_recent_search(user["id"], user["org_id"], query, payload.result, limit=5)
     return {"status": "ok"}
 
 

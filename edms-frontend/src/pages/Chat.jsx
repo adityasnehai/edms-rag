@@ -5,11 +5,14 @@ import {
   fetchChatThreads,
   saveChatThread as saveChatThreadApi,
 } from "../api/state";
-import { streamChat } from "../api/chatStream";
+import { sendChat, streamChat } from "../api/chatStream";
 import ChatBubble from "../components/ChatBubble";
 import ChatInput from "../components/ChatInput";
 import WorkspaceShell from "../components/WorkspaceShell";
-import { getAuthPayload } from "../utils/auth";
+import {
+  containsStaleIndexError,
+  sanitizeChatMessages,
+} from "../utils/chatSanitizer";
 import {
   ChatIcon,
   ClockIcon,
@@ -27,53 +30,32 @@ const SUGGESTIONS = [
 ];
 
 function createThreadId() {
-  if (typeof crypto !== "undefined" && crypto.randomUUID) {
-    return crypto.randomUUID();
-  }
-
+  if (typeof crypto !== "undefined" && crypto.randomUUID) return crypto.randomUUID();
   return `chat-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
 }
 
 function buildThreadTitle(text) {
   const normalized = (text || "").trim().replace(/\s+/g, " ");
-  if (!normalized) {
-    return "New chat";
-  }
-
-  if (normalized.length <= 58) {
-    return normalized;
-  }
-
+  if (!normalized) return "New chat";
+  if (normalized.length <= 58) return normalized;
   return `${normalized.slice(0, 57).trimEnd()}…`;
 }
 
 function buildThreadPreview(messages) {
-  const latestMessage = [...messages]
-    .reverse()
-    .find((message) => message?.content?.trim());
-
-  if (!latestMessage) {
-    return "Saved workspace conversation";
-  }
-
+  const latestMessage = [...messages].reverse().find((m) => m?.content?.trim());
+  if (!latestMessage) return "Saved workspace conversation";
   const normalized = latestMessage.content.trim().replace(/\s+/g, " ");
-  if (normalized.length <= 78) {
-    return normalized;
-  }
-
+  if (normalized.length <= 78) return normalized;
   return `${normalized.slice(0, 77).trimEnd()}…`;
 }
 
 function sanitizeMessages(messages) {
-  if (!Array.isArray(messages)) {
-    return [];
-  }
-
-  return messages
-    .filter((message) => message && typeof message === "object")
-    .map((message) => ({
-      role: message.role === "assistant" ? "assistant" : "user",
-      content: typeof message.content === "string" ? message.content : "",
+  if (!Array.isArray(messages)) return [];
+  return sanitizeChatMessages(messages)
+    .filter((m) => m && typeof m === "object")
+    .map((m) => ({
+      role: m.role === "assistant" ? "assistant" : "user",
+      content: typeof m.content === "string" ? m.content : "",
     }));
 }
 
@@ -87,25 +69,12 @@ function sortThreadsByRecent(threads) {
 
 function normalizeThread(thread, index) {
   const messages = sanitizeMessages(thread?.messages);
-  const firstUserMessage =
-    messages.find((message) => message.role === "user" && message.content.trim())
-      ?.content || "";
-  const createdAt =
-    typeof thread?.createdAt === "string"
-      ? thread.createdAt
-      : new Date(Date.now() - index).toISOString();
-  const updatedAt =
-    typeof thread?.updatedAt === "string" ? thread.updatedAt : createdAt;
-
+  const firstUserMessage = messages.find((m) => m.role === "user" && m.content.trim())?.content || "";
+  const createdAt = typeof thread?.createdAt === "string" ? thread.createdAt : new Date(Date.now() - index).toISOString();
+  const updatedAt = typeof thread?.updatedAt === "string" ? thread.updatedAt : createdAt;
   return {
-    id:
-      typeof thread?.id === "string" && thread.id.trim()
-        ? thread.id
-        : createThreadId(),
-    title:
-      typeof thread?.title === "string" && thread.title.trim()
-        ? thread.title
-        : buildThreadTitle(firstUserMessage),
+    id: typeof thread?.id === "string" && thread.id.trim() ? thread.id : createThreadId(),
+    title: typeof thread?.title === "string" && thread.title.trim() ? thread.title : buildThreadTitle(firstUserMessage),
     messages,
     createdAt,
     updatedAt,
@@ -113,72 +82,55 @@ function normalizeThread(thread, index) {
 }
 
 function normalizeStoredChatState(value) {
-  if (!value || typeof value !== "object") {
-    return { threads: [], activeThreadId: null };
-  }
-
+  if (!value || typeof value !== "object") return { threads: [], activeThreadId: null };
   const threads = sortThreadsByRecent(
-    (Array.isArray(value.threads) ? value.threads : []).map((thread, index) =>
-      normalizeThread(thread, index),
-    ),
+    (Array.isArray(value.threads) ? value.threads : []).map((t, i) => normalizeThread(t, i)),
   );
   const activeThreadId =
-    typeof value.activeThreadId === "string" &&
-    threads.some((thread) => thread.id === value.activeThreadId)
+    typeof value.activeThreadId === "string" && threads.some((t) => t.id === value.activeThreadId)
       ? value.activeThreadId
       : threads[0]?.id || null;
-
   return { threads, activeThreadId };
 }
 
+function sanitizeThreads(threads) {
+  return (Array.isArray(threads) ? threads : [])
+    .map((thread) => ({
+      ...thread,
+      messages: sanitizeChatMessages(thread?.messages || []),
+    }))
+    .filter((thread) => thread.messages.length > 0);
+}
+
 function formatThreadTime(timestamp) {
-  if (!timestamp) {
-    return "";
-  }
-
+  if (!timestamp) return "";
   const date = new Date(timestamp);
-  if (Number.isNaN(date.getTime())) {
-    return "";
-  }
-
+  if (Number.isNaN(date.getTime())) return "";
   const now = new Date();
   const sameDay = date.toDateString() === now.toDateString();
-
-  return new Intl.DateTimeFormat(
-    undefined,
-    sameDay
-      ? { hour: "numeric", minute: "2-digit" }
-      : { month: "short", day: "numeric" },
-  ).format(date);
+  return new Intl.DateTimeFormat(undefined, sameDay ? { hour: "numeric", minute: "2-digit" } : { month: "short", day: "numeric" }).format(date);
 }
 
 function appendAssistantChunk(messages, chunk) {
+  if (containsStaleIndexError(chunk)) {
+    return sanitizeChatMessages(messages);
+  }
   const nextMessages = [...messages];
   const lastIndex = nextMessages.length - 1;
-
-  if (lastIndex < 0) {
-    return nextMessages;
-  }
-
-  const lastMessage = nextMessages[lastIndex];
-  nextMessages[lastIndex] = {
-    ...lastMessage,
-    content: `${lastMessage.content || ""}${chunk}`,
-  };
-
-  return nextMessages;
+  if (lastIndex < 0) return nextMessages;
+  nextMessages[lastIndex] = { ...nextMessages[lastIndex], content: `${nextMessages[lastIndex].content || ""}${chunk}` };
+  return sanitizeChatMessages(nextMessages);
 }
 
 export default function Chat() {
-  const payload = getAuthPayload();
   const [threads, setThreads] = useState([]);
   const [activeThreadId, setActiveThreadId] = useState(null);
   const [isStreaming, setIsStreaming] = useState(false);
+  const [threadMenuOpen, setThreadMenuOpen] = useState(false);
   const bottomRef = useRef(null);
 
-  const activeThread =
-    threads.find((thread) => thread.id === activeThreadId) || null;
-  const messages = activeThread?.messages || [];
+  const activeThread = threads.find((t) => t.id === activeThreadId) || null;
+  const messages = sanitizeChatMessages(activeThread?.messages || []);
   const activeThreadUpdatedAt = activeThread?.updatedAt || null;
 
   useEffect(() => {
@@ -194,190 +146,154 @@ export default function Chat() {
         setThreads(normalized.threads);
         setActiveThreadId(normalized.activeThreadId);
       } catch {
-        if (!cancelled) {
-          setThreads([]);
-          setActiveThreadId(null);
-        }
+        if (!cancelled) { setThreads([]); setActiveThreadId(null); }
       }
     }
     loadThreads();
-    return () => {
-      cancelled = true;
-    };
+    return () => { cancelled = true; };
   }, []);
 
   useEffect(() => {
-    if (activeThreadId && !threads.some((thread) => thread.id === activeThreadId)) {
+    if (activeThreadId && !threads.some((t) => t.id === activeThreadId)) {
       setActiveThreadId(threads[0]?.id || null);
     }
   }, [activeThreadId, threads]);
+
+  useEffect(() => {
+    if (threads.some((thread) => thread.messages.some((message) => containsStaleIndexError(message?.content)))) {
+      setThreads((prev) => sortThreadsByRecent(sanitizeThreads(prev)));
+    }
+  }, [threads]);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [activeThreadId, activeThreadUpdatedAt]);
 
   function startNewChat() {
-    if (isStreaming) {
-      return;
+    if (!isStreaming) {
+      setActiveThreadId(null);
+      setThreadMenuOpen(false);
     }
-
-    setActiveThreadId(null);
   }
 
   async function deleteThread(threadId) {
-    if (!threadId || isStreaming) {
-      return;
-    }
-
-    const remainingThreads = threads.filter((thread) => thread.id !== threadId);
-    setThreads(remainingThreads);
-    try {
-      await deleteChatThreadApi(threadId);
-    } catch (error) {
-      void error;
-    }
-
-    if (activeThreadId === threadId) {
-      setActiveThreadId(remainingThreads[0]?.id || null);
-    }
+    if (!threadId || isStreaming) return;
+    const remaining = threads.filter((t) => t.id !== threadId);
+    setThreads(remaining);
+    try { await deleteChatThreadApi(threadId); } catch { /* ignore */ }
+    if (activeThreadId === threadId) setActiveThreadId(remaining[0]?.id || null);
+    setThreadMenuOpen(false);
   }
 
-  function clearActiveChat() {
-    if (!activeThreadId) {
-      return;
-    }
-
-    deleteThread(activeThreadId);
-  }
+  function clearActiveChat() { if (activeThreadId) deleteThread(activeThreadId); }
 
   async function sendMessage(text) {
     const messageText = text.trim();
-    if (!messageText || isStreaming) {
-      return;
-    }
+    if (!messageText || isStreaming) return;
 
     const timestamp = new Date().toISOString();
     const userMsg = { role: "user", content: messageText };
     const assistantMsg = { role: "assistant", content: "" };
-    const currentThread =
-      threads.find((thread) => thread.id === activeThreadId) || null;
+    const currentThread = threads.find((t) => t.id === activeThreadId) || null;
     const history = currentThread?.messages || [];
-
     let targetThreadId = currentThread?.id || null;
 
     if (!targetThreadId) {
       targetThreadId = createThreadId();
-      const newThread = {
-        id: targetThreadId,
-        title: buildThreadTitle(messageText),
-        messages: [userMsg, assistantMsg],
-        createdAt: timestamp,
-        updatedAt: timestamp,
-      };
-
-      setThreads((previous) =>
-        sortThreadsByRecent([
-          newThread,
-          ...previous.filter((thread) => thread.id !== targetThreadId),
-        ]),
-      );
+      const newThread = { id: targetThreadId, title: buildThreadTitle(messageText), messages: [userMsg, assistantMsg], createdAt: timestamp, updatedAt: timestamp };
+      setThreads((prev) => sortThreadsByRecent([newThread, ...prev.filter((t) => t.id !== targetThreadId)]));
       setActiveThreadId(targetThreadId);
     } else {
-      setThreads((previous) =>
-        sortThreadsByRecent(
-          previous.map((thread) =>
-            thread.id === targetThreadId
-              ? {
-                  ...thread,
-                  title:
-                    thread.messages.length === 0
-                      ? buildThreadTitle(messageText)
-                      : thread.title,
-                  updatedAt: timestamp,
-                  messages: [...thread.messages, userMsg, assistantMsg],
-                }
-              : thread,
-          ),
-        ),
+      setThreads((prev) =>
+        sortThreadsByRecent(prev.map((t) =>
+          t.id === targetThreadId
+            ? { ...t, title: t.messages.length === 0 ? buildThreadTitle(messageText) : t.title, updatedAt: timestamp, messages: [...t.messages, userMsg, assistantMsg] }
+            : t,
+        )),
       );
     }
 
     setIsStreaming(true);
     const persistThread = async (threadId) => {
-      const thread = threads.find((item) => item.id === threadId)
-        || (threadId === targetThreadId
-          ? (currentThread
-            ? {
-                ...currentThread,
-                messages: [...history, userMsg, assistantMsg],
-              }
-            : {
-                id: targetThreadId,
-                title: buildThreadTitle(messageText),
-                messages: [userMsg, assistantMsg],
-                createdAt: timestamp,
-                updatedAt: timestamp,
-              })
-          : null);
-      if (thread) {
-        try {
-          await saveChatThreadApi(thread);
-        } catch (error) {
-          void error;
-        }
-      }
+      const thread = threads.find((item) => item.id === threadId) || (threadId === targetThreadId
+        ? (currentThread
+          ? { ...currentThread, messages: [...history, userMsg, assistantMsg] }
+          : { id: targetThreadId, title: buildThreadTitle(messageText), messages: [userMsg, assistantMsg], createdAt: timestamp, updatedAt: timestamp })
+        : null);
+      if (thread) { try { await saveChatThreadApi(thread); } catch { /* ignore */ } }
     };
 
     try {
-      await streamChat(messageText, history, (chunk) => {
-        setThreads((previous) =>
-          sortThreadsByRecent(
-            previous.map((thread) =>
-              thread.id === targetThreadId
-                ? {
-                    ...thread,
-                    updatedAt: new Date().toISOString(),
-                    messages: appendAssistantChunk(thread.messages, chunk),
-                  }
-                : thread,
-            ),
-          ),
+      let assistantContent = "";
+      const streamedContent = await streamChat(messageText, history, (chunk) => {
+        if (!containsStaleIndexError(chunk)) {
+          assistantContent += chunk;
+        }
+        setThreads((prev) =>
+          sortThreadsByRecent(sanitizeThreads(prev.map((t) =>
+            t.id === targetThreadId
+              ? { ...t, updatedAt: new Date().toISOString(), messages: appendAssistantChunk(t.messages, chunk) }
+              : t,
+          ))),
         );
       });
-      const finishedThread = (
-        threads.find((thread) => thread.id === targetThreadId) || {
-          id: targetThreadId,
-          title: buildThreadTitle(messageText),
-          messages: [...history, userMsg, assistantMsg],
-          createdAt: timestamp,
-          updatedAt: new Date().toISOString(),
-        }
-      );
-      await saveChatThreadApi(finishedThread);
-    } catch (error) {
-      setThreads((previous) =>
-        sortThreadsByRecent(
-          previous.map((thread) => {
-            if (thread.id !== targetThreadId) {
-              return thread;
-            }
+      assistantContent = assistantContent || streamedContent || "";
 
-            const nextMessages = [...thread.messages];
+      if (!assistantContent.trim()) {
+        const fallbackResult = await sendChat(messageText, history);
+        const fallbackAnswer = sanitizeChatMessages([
+          { role: "assistant", content: fallbackResult?.answer || "" },
+        ])[0]?.content || "";
+
+        assistantContent = fallbackAnswer.trim()
+          ? fallbackAnswer
+          : "I did not receive an answer from the backend. Please try again.";
+
+        setThreads((prev) =>
+          sortThreadsByRecent(sanitizeThreads(prev.map((t) => {
+            if (t.id !== targetThreadId) return t;
+            const nextMessages = [...t.messages];
             const lastIndex = nextMessages.length - 1;
             if (lastIndex >= 0) {
               nextMessages[lastIndex] = {
                 ...nextMessages[lastIndex],
-                content: error.message || "Chat failed. Please try again.",
+                content: assistantContent,
               };
             }
-
             return {
-              ...thread,
+              ...t,
               updatedAt: new Date().toISOString(),
               messages: nextMessages,
             };
-          }),
-        ),
+          }))),
+        );
+      }
+
+      const finishedThread = {
+        ...(currentThread || {
+          id: targetThreadId,
+          title: buildThreadTitle(messageText),
+          createdAt: timestamp,
+        }),
+        id: targetThreadId,
+        title: currentThread?.title || buildThreadTitle(messageText),
+        messages: sanitizeChatMessages([
+          ...history,
+          userMsg,
+          { role: "assistant", content: assistantContent },
+        ]),
+        updatedAt: new Date().toISOString(),
+      };
+      await saveChatThreadApi(finishedThread);
+    } catch (error) {
+      setThreads((prev) =>
+        sortThreadsByRecent(prev.map((t) => {
+          if (t.id !== targetThreadId) return t;
+          const nextMessages = [...t.messages];
+          const lastIndex = nextMessages.length - 1;
+          if (lastIndex >= 0) nextMessages[lastIndex] = { ...nextMessages[lastIndex], content: error.message || "Chat failed. Please try again." };
+          return { ...t, updatedAt: new Date().toISOString(), messages: nextMessages };
+        })),
       );
       await persistThread(targetThreadId);
     } finally {
@@ -387,220 +303,215 @@ export default function Chat() {
 
   return (
     <WorkspaceShell mainClassName="flex min-h-0 flex-1 flex-col">
-      <div className="sticky top-0 z-10 border-b border-border bg-background/90 backdrop-blur">
-        <div className="container flex flex-col gap-4 py-5 lg:flex-row lg:items-end lg:justify-between">
+      {/* Top bar */}
+      <div className="sticky top-0 z-10 border-b border-border bg-white/80 backdrop-blur-xl">
+        <div className="container flex flex-col gap-3 py-4 lg:flex-row lg:items-center lg:justify-between">
           <div>
-            <p className="text-[11px] uppercase tracking-[0.28em] text-primary">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-primary">
               Persistent Chat
             </p>
-            <h1 className="mt-2 text-3xl font-semibold tracking-tight text-foreground">
-              Search with full conversation history
+            <h1 className="mt-1 text-xl font-bold tracking-tight text-foreground lg:text-2xl">
+              Workspace conversation
             </h1>
-            <p className="mt-3 max-w-2xl text-sm leading-7 text-muted-foreground">
-              Chats stay attached to {payload?.org_name || "this workspace"} so
-              you can reopen previous conversations any time.
-            </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3">
-            <button
-              type="button"
-              onClick={startNewChat}
-              disabled={isStreaming}
-              className="inline-flex items-center justify-center gap-2 rounded-2xl border border-primary/15 bg-accent px-5 py-3 text-sm font-semibold text-accent-foreground shadow-card transition hover:border-primary/30 disabled:cursor-not-allowed disabled:opacity-50"
-            >
-              <PlusIcon className="h-4 w-4" />
-              New Chat
-            </button>
-
-            <button
-              type="button"
-              onClick={clearActiveChat}
-              disabled={isStreaming || !activeThreadId}
-              className="inline-flex items-center justify-center gap-2 rounded-2xl border border-border bg-card px-5 py-3 text-sm font-semibold text-foreground shadow-card transition hover:bg-secondary disabled:cursor-not-allowed disabled:opacity-50"
-            >
-              <TrashIcon className="h-4 w-4" />
-              Clear Chat
-            </button>
-          </div>
+          <button
+            type="button"
+            onClick={startNewChat}
+            disabled={isStreaming}
+            className="inline-flex w-fit items-center gap-2 rounded-xl bg-gradient-primary px-4 py-2.5 text-sm font-semibold text-white shadow-glow transition hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            <PlusIcon className="h-4 w-4" />
+            New Chat
+          </button>
         </div>
       </div>
 
       <div className="flex-1 overflow-y-auto">
-        <div className="container py-6 lg:py-8">
-          <div className="grid gap-6 xl:grid-cols-[300px_minmax(0,1fr)]">
-            <aside className="min-w-0">
-              <div className="rounded-[28px] border border-border bg-card p-5 shadow-card">
-                <div className="flex items-center justify-between gap-3">
-                  <div>
-                    <p className="text-[11px] uppercase tracking-[0.24em] text-muted-foreground">
-                      Chats
-                    </p>
-                    <h2 className="mt-2 text-lg font-semibold text-foreground">
-                      Saved conversations
-                    </h2>
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={startNewChat}
-                    disabled={isStreaming}
-                    className="inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-border bg-background text-foreground transition hover:bg-secondary disabled:cursor-not-allowed disabled:opacity-50"
-                    aria-label="Create a new chat"
-                  >
-                    <PlusIcon className="h-4 w-4" />
-                  </button>
+        <div className="container max-w-5xl py-5 lg:py-6">
+          <section className="animate-fade-up overflow-hidden rounded-[28px] border border-border bg-white/85 shadow-card backdrop-blur-sm">
+            <div className="flex flex-col gap-3 border-b border-border bg-white/70 px-4 py-4 sm:flex-row sm:items-center sm:justify-between lg:px-5">
+              <div className="min-w-0">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="inline-flex items-center rounded-full bg-gradient-primary px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-white">
+                    Active Chat
+                  </span>
+                  {activeThread?.updatedAt && (
+                    <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-secondary px-3 py-1 text-xs text-muted-foreground">
+                      <ClockIcon className="h-3.5 w-3.5" />
+                      {formatThreadTime(activeThread.updatedAt)}
+                    </span>
+                  )}
                 </div>
+                <h2 className="mt-2 truncate text-base font-semibold text-foreground">
+                  {activeThread?.title || "New workspace conversation"}
+                </h2>
+              </div>
 
-                {activeThreadId === null ? (
-                  <div className="mt-4 rounded-2xl border border-primary/20 bg-accent px-4 py-3 text-sm text-accent-foreground">
-                    New chat ready. Ask a question to save it here.
-                  </div>
-                ) : null}
+              <div className="relative flex flex-wrap items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setThreadMenuOpen((open) => !open)}
+                  className="inline-flex items-center gap-2 rounded-xl border border-border bg-white px-3 py-2 text-sm font-medium text-foreground transition hover:bg-secondary"
+                >
+                  <ChatIcon className="h-4 w-4 text-primary" />
+                  Conversations
+                  <span className="rounded-full bg-secondary px-1.5 py-0.5 text-[10px] text-muted-foreground">
+                    {threads.length}
+                  </span>
+                </button>
+                <button
+                  type="button"
+                  onClick={clearActiveChat}
+                  disabled={isStreaming || !activeThreadId}
+                  className="inline-flex items-center gap-2 rounded-xl border border-border bg-white px-3 py-2 text-sm font-medium text-foreground transition hover:bg-secondary disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  <TrashIcon className="h-4 w-4" />
+                  Clear
+                </button>
 
-                {threads.length === 0 ? (
-                  <div className="mt-4 rounded-2xl border border-dashed border-border bg-background px-4 py-6 text-sm leading-6 text-muted-foreground">
-                    No saved chats yet. Start a new conversation and it will stay
-                    available in this list.
-                  </div>
-                ) : (
-                  <div className="mt-4 space-y-2">
-                    {threads.map((thread) => {
-                      const isActive = thread.id === activeThreadId;
+                {threadMenuOpen && (
+                  <div className="absolute right-0 top-12 z-30 w-[min(24rem,calc(100vw-2rem))] overflow-hidden rounded-2xl border border-border bg-white shadow-2xl">
+                    <div className="flex items-center justify-between border-b border-border px-4 py-3">
+                      <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                        Conversations
+                      </p>
+                      <button
+                        type="button"
+                        onClick={startNewChat}
+                        disabled={isStreaming}
+                        className="inline-flex items-center gap-1.5 rounded-lg bg-gradient-primary px-2.5 py-1.5 text-xs font-semibold text-white disabled:opacity-50"
+                      >
+                        <PlusIcon className="h-3.5 w-3.5" />
+                        New
+                      </button>
+                    </div>
 
-                      return (
-                        <div
-                          key={thread.id}
-                          className={[
-                            "flex items-start gap-2 rounded-2xl border p-3 transition",
-                            isActive
-                              ? "border-primary/20 bg-accent shadow-sm"
-                              : "border-border bg-background hover:border-primary/15 hover:bg-secondary/60",
-                          ].join(" ")}
-                        >
-                          <button
-                            type="button"
-                            onClick={() => setActiveThreadId(thread.id)}
-                            className="min-w-0 flex-1 text-left"
-                          >
-                            <div className="flex items-start justify-between gap-3">
-                              <p className="line-clamp-2 text-sm font-semibold leading-6 text-foreground">
-                                {thread.title}
-                              </p>
-                              <span className="shrink-0 text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
-                                {formatThreadTime(thread.updatedAt)}
-                              </span>
-                            </div>
-
-                            <p className="mt-1 line-clamp-2 text-sm leading-6 text-muted-foreground">
-                              {buildThreadPreview(thread.messages)}
-                            </p>
-                          </button>
-
-                          <button
-                            type="button"
-                            onClick={() => deleteThread(thread.id)}
-                            disabled={isStreaming}
-                            className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-transparent text-muted-foreground transition hover:border-border hover:bg-card hover:text-destructive disabled:cursor-not-allowed disabled:opacity-50"
-                            aria-label={`Delete ${thread.title}`}
-                          >
-                            <TrashIcon className="h-4 w-4" />
-                          </button>
+                    <div className="max-h-80 overflow-y-auto p-2">
+                      {activeThreadId === null && (
+                        <div className="mb-2 rounded-xl border border-primary/20 bg-accent px-3 py-2 text-xs text-accent-foreground">
+                          New chat ready — send a message to save it.
                         </div>
-                      );
-                    })}
+                      )}
+                      {threads.length === 0 ? (
+                        <div className="rounded-xl border border-dashed border-border bg-secondary/50 px-4 py-6 text-center text-xs text-muted-foreground">
+                          No saved conversations yet.
+                        </div>
+                      ) : (
+                        <div className="space-y-1">
+                          {threads.map((thread) => {
+                            const active = thread.id === activeThreadId;
+                            return (
+                              <div
+                                key={thread.id}
+                                className={`flex items-start gap-2 rounded-xl border p-3 transition ${
+                                  active
+                                    ? "border-primary/20 bg-accent"
+                                    : "border-transparent hover:border-border hover:bg-secondary/60"
+                                }`}
+                              >
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    setActiveThreadId(thread.id);
+                                    setThreadMenuOpen(false);
+                                  }}
+                                  className="min-w-0 flex-1 text-left"
+                                >
+                                  <div className="flex items-start justify-between gap-2">
+                                    <p className="line-clamp-1 text-xs font-semibold text-foreground">
+                                      {thread.title}
+                                    </p>
+                                    <span className="shrink-0 text-[10px] text-muted-foreground">
+                                      {formatThreadTime(thread.updatedAt)}
+                                    </span>
+                                  </div>
+                                  <p className="mt-0.5 line-clamp-1 text-xs text-muted-foreground">
+                                    {buildThreadPreview(thread.messages)}
+                                  </p>
+                                </button>
+
+                                <button
+                                  type="button"
+                                  onClick={() => deleteThread(thread.id)}
+                                  disabled={isStreaming}
+                                  className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-muted-foreground transition hover:bg-destructive/10 hover:text-destructive disabled:cursor-not-allowed disabled:opacity-50"
+                                  aria-label={`Delete ${thread.title}`}
+                                >
+                                  <TrashIcon className="h-3.5 w-3.5" />
+                                </button>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      )}
+                    </div>
                   </div>
                 )}
               </div>
-            </aside>
+            </div>
 
-            <section className="min-w-0">
+            <div className="min-h-[48vh] bg-white/55 p-4 sm:p-5">
               {messages.length === 0 ? (
-                <div className="animate-fade-up space-y-8">
-                  <div className="rounded-[32px] border border-border bg-card p-8 text-center shadow-card">
-                    <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-[20px] bg-gradient-primary text-primary-foreground shadow-glow">
-                      <SparkleIcon className="h-6 w-6" />
-                    </div>
-                    <h2 className="mt-5 text-2xl font-semibold tracking-tight text-foreground">
+                <div className="space-y-5">
+                  <div className="rounded-[24px] border border-border bg-white/80 p-7 text-center">
+                    <h2 className="text-xl font-semibold tracking-tight text-foreground">
                       Ask your workspace anything
                     </h2>
-                    <p className="mx-auto mt-3 max-w-2xl text-sm leading-7 text-muted-foreground">
-                      Search ADRs, tickets, diagrams, notes, and postmortems in
-                      one thread, then come back to the same conversation later.
+                    <p className="mx-auto mt-2 max-w-lg text-sm leading-7 text-muted-foreground">
+                      Search ADRs, tickets, diagrams, notes, and postmortems in one focused thread.
                     </p>
                   </div>
 
-                  <div className="grid gap-3 md:grid-cols-2">
+                  <div className="grid gap-3 sm:grid-cols-2">
                     {SUGGESTIONS.map((suggestion, index) => (
                       <button
                         key={suggestion}
                         type="button"
                         onClick={() => sendMessage(suggestion)}
-                        className="rounded-3xl border border-border bg-card p-5 text-left shadow-card transition hover:-translate-y-0.5 hover:border-primary/20 hover:shadow-lg"
+                        className="flex items-start gap-3 rounded-[20px] border border-border bg-white/80 p-4 text-left shadow-sm backdrop-blur-sm transition hover:-translate-y-0.5 hover:border-primary/20 hover:shadow-md"
                       >
-                        <div className="flex items-start gap-3">
-                          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-accent text-primary">
-                            {index % 2 === 0 ? (
-                              <ChatIcon className="h-5 w-5" />
-                            ) : (
-                              <SearchIcon className="h-5 w-5" />
-                            )}
-                          </div>
-                          <div>
-                            <p className="text-sm font-medium leading-6 text-foreground">
-                              {suggestion}
-                            </p>
-                          </div>
+                        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-accent text-primary">
+                          {index % 2 === 0 ? <ChatIcon className="h-4 w-4" /> : <SearchIcon className="h-4 w-4" />}
                         </div>
+                        <p className="text-sm font-medium leading-6 text-foreground">{suggestion}</p>
                       </button>
                     ))}
                   </div>
+                  <div ref={bottomRef} />
                 </div>
               ) : (
-                <div className="rounded-[32px] border border-border bg-card p-5 shadow-card sm:p-6">
-                  <div className="flex flex-col gap-3 border-b border-border pb-5 sm:flex-row sm:items-start sm:justify-between">
-                    <div>
-                      <p className="text-[11px] uppercase tracking-[0.24em] text-primary">
-                        Active Chat
-                      </p>
-                      <h2 className="mt-2 text-xl font-semibold text-foreground">
-                        {activeThread?.title || "Workspace conversation"}
-                      </h2>
+                <div className="space-y-5">
+                  {messages.map((message, index) => (
+                    <ChatBubble
+                      key={`${activeThread?.id || "chat"}-${index}`}
+                      role={message.role}
+                      text={message.content}
+                      isLoading={
+                        isStreaming &&
+                        message.role === "assistant" &&
+                        index === messages.length - 1 &&
+                        !message.content?.trim()
+                      }
+                    />
+                  ))}
+
+                  {isStreaming && (
+                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                      <SparkleIcon className="h-3.5 w-3.5 animate-pulse-soft text-primary" />
+                      EDMS is analyzing evidence…
                     </div>
+                  )}
 
-                    <div className="inline-flex items-center gap-2 rounded-full border border-border bg-background px-3 py-2 text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
-                      <ClockIcon className="h-3.5 w-3.5" />
-                      {formatThreadTime(activeThread?.updatedAt)}
-                    </div>
-                  </div>
-
-                  <div className="mt-6 space-y-6">
-                    {messages.map((message, index) => (
-                      <ChatBubble
-                        key={`${activeThread?.id || "chat"}-${index}`}
-                        role={message.role}
-                        text={message.content}
-                      />
-                    ))}
-
-                    {isStreaming ? (
-                      <p className="text-xs uppercase tracking-[0.24em] text-muted-foreground">
-                        EDMS is analyzing evidence...
-                      </p>
-                    ) : null}
-
-                    <div ref={bottomRef} />
-                  </div>
+                  <div ref={bottomRef} />
                 </div>
               )}
+            </div>
 
-              {messages.length === 0 ? <div ref={bottomRef} /> : null}
-            </section>
-          </div>
+            <ChatInput onSend={sendMessage} disabled={isStreaming} embedded />
+          </section>
         </div>
       </div>
-
-      <ChatInput onSend={sendMessage} disabled={isStreaming} />
     </WorkspaceShell>
   );
 }

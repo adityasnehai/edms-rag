@@ -11,6 +11,8 @@ from src.runtime_config import (
     REFRESH_TOKEN_EXPIRE_DAYS,
 )
 
+STALE_INDEX_ERROR_TEXT = "The knowledge index is currently unavailable."
+
 
 def _hash_secret(value: str) -> str:
     return hashlib.sha256((value or "").encode("utf-8")).hexdigest()
@@ -26,6 +28,28 @@ def _json_load(value):
     if isinstance(value, (dict, list)):
         return value
     return json.loads(value)
+
+
+def _contains_stale_index_error(value) -> bool:
+    return isinstance(value, str) and STALE_INDEX_ERROR_TEXT in value
+
+
+def _sanitize_chat_messages(messages) -> list:
+    if not isinstance(messages, list):
+        return []
+    return [
+        message
+        for message in messages
+        if not _contains_stale_index_error((message or {}).get("content"))
+    ]
+
+
+def _sanitize_search_result(result):
+    if not isinstance(result, dict):
+        return result
+    if _contains_stale_index_error(result.get("answer")):
+        return None
+    return result
 
 
 def init_state_tables() -> None:
@@ -131,16 +155,6 @@ def init_state_tables() -> None:
             """,
         )
         execute(cursor, "CREATE INDEX IF NOT EXISTS idx_recent_searches_user ON recent_searches(user_id, saved_at DESC)")
-        execute(
-            cursor,
-            """
-            CREATE TABLE IF NOT EXISTS evaluation_results (
-                org_slug TEXT PRIMARY KEY,
-                result_json TEXT NOT NULL,
-                updated_at TEXT NOT NULL
-            )
-            """,
-        )
         conn.commit()
     finally:
         conn.close()
@@ -316,25 +330,33 @@ def list_chat_threads(user_id: int, org_id: int) -> List[Dict]:
             (user_id, org_id),
         )
         rows = fetchall(cursor)
-        return [
-            {
+        threads = []
+        for row in rows:
+            messages = _sanitize_chat_messages(_json_load(row["messages_json"]) or [])
+            if not messages:
+                continue
+            threads.append({
                 "id": row["id"],
                 "title": row["title"],
-                "messages": _json_load(row["messages_json"]) or [],
+                "messages": messages,
                 "createdAt": row["created_at"],
                 "updatedAt": row["updated_at"],
-            }
-            for row in rows
-        ]
+            })
+        return threads
     finally:
         conn.close()
 
 
 def upsert_chat_thread(user_id: int, org_id: int, thread: Dict) -> Dict:
+    sanitized_messages = _sanitize_chat_messages(thread.get("messages") or [])
+    thread = {
+        **thread,
+        "messages": sanitized_messages,
+    }
     payload = {
         "id": thread["id"],
         "title": thread["title"],
-        "messages_json": json.dumps(thread.get("messages") or [], ensure_ascii=True),
+        "messages_json": json.dumps(sanitized_messages, ensure_ascii=True),
         "created_at": thread.get("createdAt") or utcnow_iso(),
         "updated_at": thread.get("updatedAt") or utcnow_iso(),
     }
@@ -399,20 +421,24 @@ def list_recent_searches(user_id: int, org_id: int, limit: int = 5) -> List[Dict
             (user_id, org_id, limit),
         )
         rows = fetchall(cursor)
-        return [
-            {
+        items = []
+        for row in rows:
+            result = _sanitize_search_result(_json_load(row["result_json"]))
+            if row["result_json"] and result is None:
+                continue
+            items.append({
                 "id": row["id"],
                 "query": row["query"],
-                "result": _json_load(row["result_json"]),
+                "result": result,
                 "savedAt": row["saved_at"],
-            }
-            for row in rows
-        ]
+            })
+        return items
     finally:
         conn.close()
 
 
 def save_recent_search(user_id: int, org_id: int, query: str, result: Dict | None, limit: int = 5) -> None:
+    result = _sanitize_search_result(result)
     saved_at = utcnow_iso()
     conn = connect()
     try:
@@ -450,52 +476,5 @@ def clear_recent_searches(user_id: int, org_id: int) -> None:
         cursor = conn.cursor()
         execute(cursor, "DELETE FROM recent_searches WHERE user_id = ? AND org_id = ?", (user_id, org_id))
         conn.commit()
-    finally:
-        conn.close()
-
-
-def save_eval_result(org_slug: str, result: Dict):
-    conn = connect()
-    try:
-        cursor = conn.cursor()
-        payload = json.dumps(result, ensure_ascii=True)
-        if is_postgres_url():
-            execute(
-                cursor,
-                """
-                INSERT INTO evaluation_results (org_slug, result_json, updated_at)
-                VALUES (?, ?, ?)
-                ON CONFLICT (org_slug) DO UPDATE SET
-                    result_json = EXCLUDED.result_json,
-                    updated_at = EXCLUDED.updated_at
-                """,
-                (org_slug, payload, utcnow_iso()),
-            )
-        else:
-            execute(
-                cursor,
-                """
-                INSERT INTO evaluation_results (org_slug, result_json, updated_at)
-                VALUES (?, ?, ?)
-                ON CONFLICT(org_slug) DO UPDATE SET
-                    result_json = excluded.result_json,
-                    updated_at = excluded.updated_at
-                """,
-                (org_slug, payload, utcnow_iso()),
-            )
-        conn.commit()
-    finally:
-        conn.close()
-
-
-def get_eval_result(org_slug: str) -> Optional[Dict]:
-    conn = connect()
-    try:
-        cursor = conn.cursor()
-        execute(cursor, "SELECT result_json FROM evaluation_results WHERE org_slug = ?", (org_slug,))
-        row = fetchone(cursor)
-        if not row:
-            return None
-        return _json_load(row["result_json"])
     finally:
         conn.close()

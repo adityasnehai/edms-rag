@@ -4,30 +4,32 @@ import { logoutSession } from "../api/auth";
 import { clearSession, getAuthPayload, getRefreshToken } from "../utils/auth";
 import {
   BuildingIcon,
-  ChartIcon,
   ChatIcon,
+  FolderIcon,
   LibraryIcon,
   LogoutIcon,
   SearchIcon,
-  ShieldIcon,
+  SidebarCollapseIcon,
   UploadIcon,
 } from "./AppIcons";
 
-export default function Sidebar() {
+export default function Sidebar({ onHide }) {
   const navigate = useNavigate();
   const location = useLocation();
   const { recent, clearRecent } = useRecentSearches();
 
   const payload = getAuthPayload();
   const adminUser = payload?.role === "admin";
+  const displayName = payload?.sub?.split("@")[0] || "user";
+  const initials = displayName.slice(0, 2).toUpperCase();
 
   async function logout() {
     const refreshToken = getRefreshToken();
     if (refreshToken) {
       try {
         await logoutSession(refreshToken);
-      } catch (error) {
-        void error;
+      } catch {
+        /* ignore */
       }
     }
     clearSession();
@@ -47,56 +49,83 @@ export default function Sidebar() {
   const adminItems = [
     { path: "/admin/access", label: "Company Access", Icon: BuildingIcon },
     { path: "/admin", label: "Upload Data", Icon: UploadIcon },
-    { path: "/admin/eval", label: "Evaluation", Icon: ChartIcon },
+    { path: "/admin/data", label: "Data Manager", Icon: FolderIcon },
   ];
 
   function navButtonClass(active) {
     return [
-      "group flex w-full items-center gap-3 rounded-xl border px-3 py-2.5 text-sm transition",
+      "group flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-150",
       active
-        ? "border-primary/20 bg-accent text-accent-foreground shadow-sm"
-        : "border-transparent text-sidebar-foreground hover:border-border hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+        ? "bg-gradient-primary text-white shadow-sm shadow-primary/20"
+        : "text-sidebar-foreground hover:bg-white hover:text-foreground hover:shadow-sm",
     ].join(" ");
   }
 
   return (
-    <aside className="w-full shrink-0 border-b border-sidebar-border bg-sidebar lg:flex lg:min-h-screen lg:w-72 lg:flex-col lg:border-b-0 lg:border-r">
+    <aside className="relative z-20 w-full shrink-0 border-b border-sidebar-border bg-white/95 text-foreground shadow-[0_18px_60px_-42px_rgba(15,23,42,0.35)] backdrop-blur-xl lg:sticky lg:top-0 lg:flex lg:h-screen lg:w-72 lg:flex-col lg:border-b-0 lg:border-r">
+      {/* Header / Logo */}
       <div className="flex h-16 items-center justify-between border-b border-sidebar-border px-5">
         <button
           type="button"
           onClick={() => navigate("/dashboard")}
           className="flex items-center gap-3 text-left"
         >
-          <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-primary text-primary-foreground shadow-glow">
-            <ShieldIcon className="h-5 w-5" />
-          </div>
+          <img
+            src="/edms-favicon.png"
+            alt="EDMS"
+            className="h-9 w-9 rounded-xl border border-border/60 object-cover shadow-glow"
+            loading="eager"
+          />
           <div>
-            <p className="text-sm font-semibold text-foreground">EDMS</p>
-            <p className="text-xs text-muted-foreground">Enterprise memory</p>
+            <p className="text-sm font-bold text-foreground">EDMS</p>
           </div>
         </button>
 
-        <span className="rounded-full border border-border bg-card px-2.5 py-1 text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
-          {adminUser ? "Admin" : "User"}
-        </span>
-      </div>
-
-      <div className="px-4 pt-4">
-        <div className="rounded-2xl border border-border bg-card p-4 shadow-card">
-          <p className="text-[11px] uppercase tracking-[0.24em] text-muted-foreground">
-            Workspace
-          </p>
-          <p className="mt-2 text-base font-semibold text-foreground">
-            {payload?.org_name || "Enterprise Decision Memory"}
-          </p>
-          <p className="mt-1 text-sm text-muted-foreground">
-            {payload?.sub || "workspace@edms.ai"}
-          </p>
+        <div className="flex items-center gap-2">
+          <span
+            className={`rounded-full px-2.5 py-1 text-[10px] font-semibold uppercase ${
+              adminUser
+                ? "bg-primary/10 text-primary"
+                : "bg-secondary text-muted-foreground"
+            }`}
+          >
+            {adminUser ? "Admin" : "User"}
+          </span>
+          <button
+            type="button"
+            onClick={onHide}
+            className="inline-flex h-8 w-8 items-center justify-center rounded-xl border border-border bg-white text-muted-foreground transition hover:border-primary/20 hover:bg-accent hover:text-primary"
+            aria-label="Hide sidebar"
+            title="Hide sidebar"
+          >
+            <SidebarCollapseIcon className="h-4 w-4" />
+          </button>
         </div>
       </div>
 
+      {/* Workspace / User card */}
+      <div className="px-4 pt-4">
+        <div className="flex items-center gap-3 rounded-2xl border border-primary/10 bg-accent/45 p-3">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-primary text-[11px] font-bold text-white shadow-sm">
+            {initials}
+          </div>
+          <div className="min-w-0">
+            <p className="truncate text-sm font-semibold text-foreground">
+              {payload?.org_name || "Enterprise Memory"}
+            </p>
+            <p className="truncate text-xs text-muted-foreground">
+              {payload?.sub || "workspace@edms.ai"}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Primary navigation */}
       <div className="px-3 py-4">
-        <div className="flex gap-2 overflow-x-auto pb-1 lg:flex-col lg:overflow-visible">
+        <p className="mb-2 px-2 text-[10px] font-semibold uppercase text-muted-foreground/70">
+          Navigation
+        </p>
+        <div className="flex gap-2 overflow-x-auto pb-1 lg:flex-col lg:gap-1 lg:overflow-visible">
           {primaryItems.map((item) => (
             <button
               key={item.path}
@@ -104,19 +133,22 @@ export default function Sidebar() {
               onClick={() => navigate(item.path)}
               className={navButtonClass(isActive(item.path))}
             >
-              <item.Icon className="h-4 w-4 shrink-0" />
+              <item.Icon
+                className={`h-4 w-4 shrink-0 ${isActive(item.path) ? "text-white" : "text-muted-foreground group-hover:text-foreground"}`}
+              />
               <span className="whitespace-nowrap">{item.label}</span>
             </button>
           ))}
         </div>
       </div>
 
+      {/* Admin navigation */}
       {adminUser && (
         <div className="border-t border-sidebar-border px-3 py-4">
-          <p className="px-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-muted-foreground">
+          <p className="mb-2 px-2 text-[10px] font-semibold uppercase text-muted-foreground/70">
             Admin Tools
           </p>
-          <div className="mt-3 flex gap-2 overflow-x-auto pb-1 lg:flex-col lg:overflow-visible">
+          <div className="flex gap-2 overflow-x-auto pb-1 lg:flex-col lg:gap-1 lg:overflow-visible">
             {adminItems.map((item) => (
               <button
                 key={item.path}
@@ -124,7 +156,9 @@ export default function Sidebar() {
                 onClick={() => navigate(item.path)}
                 className={navButtonClass(isActive(item.path))}
               >
-                <item.Icon className="h-4 w-4 shrink-0" />
+                <item.Icon
+                  className={`h-4 w-4 shrink-0 ${isActive(item.path) ? "text-white" : "text-muted-foreground group-hover:text-foreground"}`}
+                />
                 <span className="whitespace-nowrap">{item.label}</span>
               </button>
             ))}
@@ -132,46 +166,49 @@ export default function Sidebar() {
         </div>
       )}
 
+      {/* Recent searches */}
       {recent.length > 0 && (
         <div className="hidden border-t border-sidebar-border px-4 py-4 lg:block">
-          <div className="mb-3 flex items-center justify-between">
-            <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-muted-foreground">
-              Recent Searches
+          <div className="mb-2 flex items-center justify-between">
+            <span className="text-[10px] font-semibold uppercase text-muted-foreground/70">
+              Recent
             </span>
             <button
               type="button"
               onClick={clearRecent}
-              className="text-xs text-muted-foreground transition hover:text-foreground"
+              className="text-xs text-muted-foreground transition hover:text-destructive"
             >
               Clear
             </button>
           </div>
 
-          <div className="space-y-2">
-            {recent.map((entry, i) => (
+          <div className="space-y-0.5">
+            {recent.slice(0, 5).map((entry, i) => (
               <button
                 key={`${entry.query}-${i}`}
                 type="button"
                 onClick={() =>
                   navigate(`/dashboard?query=${encodeURIComponent(entry.query)}`)
                 }
-                className="w-full rounded-xl border border-border bg-card px-3 py-2 text-left text-sm text-sidebar-foreground shadow-sm transition hover:border-primary/20 hover:bg-accent hover:text-accent-foreground"
+                className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left transition hover:bg-secondary"
               >
-                <div className="truncate">{entry.query}</div>
+                <SearchIcon className="h-3 w-3 shrink-0 text-muted-foreground" />
+                <span className="truncate text-xs text-muted-foreground">{entry.query}</span>
               </button>
             ))}
           </div>
         </div>
       )}
 
+      {/* Sign out */}
       <div className="mt-auto border-t border-sidebar-border p-4">
         <button
           type="button"
           onClick={logout}
-          className="flex w-full items-center justify-center gap-2 rounded-2xl border border-border bg-card px-4 py-3 text-sm font-semibold text-foreground shadow-card transition hover:border-destructive/20 hover:text-destructive"
+          className="flex w-full items-center justify-center gap-2 rounded-xl border border-border bg-card px-4 py-2.5 text-sm font-medium text-muted-foreground transition hover:border-destructive/30 hover:bg-destructive/5 hover:text-destructive"
         >
           <LogoutIcon className="h-4 w-4" />
-          Sign Out
+          Sign out
         </button>
       </div>
     </aside>

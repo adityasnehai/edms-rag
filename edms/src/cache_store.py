@@ -51,8 +51,22 @@ def _redis_cache_key(org_slug: str, namespace: str, key: str) -> str:
     return f"{REDIS_KEY_PREFIX}:cache:{org_slug}:{namespace}:{key}"
 
 
+def _json_safe(value: Any) -> Any:
+    if isinstance(value, (bytes, bytearray, memoryview)):
+        payload = bytes(value)
+        return {
+            "__bytes_sha256__": hashlib.sha256(payload).hexdigest(),
+            "length": len(payload),
+        }
+    if isinstance(value, dict):
+        return {str(key): _json_safe(item) for key, item in value.items()}
+    if isinstance(value, (list, tuple, set)):
+        return [_json_safe(item) for item in value]
+    return value
+
+
 def _stable_json(value: Any) -> str:
-    return json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=True)
+    return json.dumps(_json_safe(value), sort_keys=True, separators=(",", ":"), ensure_ascii=True)
 
 
 def stable_hash(value: Any) -> str:

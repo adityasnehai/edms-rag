@@ -108,6 +108,17 @@ def _create_users_table(cursor):
     execute(cursor, "CREATE INDEX IF NOT EXISTS idx_users_org_id ON users(org_id)")
 
 
+def _ensure_users_schema(cursor):
+    if is_postgres_url():
+        execute(cursor, "ALTER TABLE users ADD COLUMN IF NOT EXISTS email_verified_at TEXT")
+        return
+
+    execute(cursor, "PRAGMA table_info(users)")
+    existing_columns = {row["name"] for row in fetchall(cursor)}
+    if "email_verified_at" not in existing_columns:
+        execute(cursor, "ALTER TABLE users ADD COLUMN email_verified_at TEXT")
+
+
 def _fetch_organization(cursor, clause: str, value) -> Optional[Dict]:
     execute(
         cursor,
@@ -236,6 +247,7 @@ def init_db():
         cursor = conn.cursor()
         _create_organizations_table(cursor)
         _create_users_table(cursor)
+        _ensure_users_schema(cursor)
         conn.commit()
     finally:
         conn.close()

@@ -23,7 +23,7 @@ This repo is intentionally portfolio-friendly for a 1 YOE engineer:
 - Hybrid retrieval with vector + lexical search + reranking
 - Search answers with linked evidence
 - Persistent chat threads and recent searches
-- Evaluation, monitoring, and CI wiring
+- Monitoring and CI wiring
 
 ## Stack
 - Frontend: React, Vite, Tailwind CSS, React Router
@@ -64,7 +64,7 @@ Current production-oriented behaviors:
 
 ## Project Structure
 ```text
-p1/
+edms-rag/
 ├── .github/workflows/ci.yml
 ├── docker-compose.yml
 ├── README.md
@@ -75,7 +75,6 @@ p1/
 │   └── src/
 │       ├── api/
 │       ├── auth/
-│       ├── eval/
 │       ├── ingestion/
 │       ├── multimodal/
 │       ├── retrieval/
@@ -117,14 +116,14 @@ VITE_API_BASE=http://127.0.0.1:8001 npm run dev -- --host 127.0.0.1 --port 5173
 ## Production Stack
 Use this stack for a real deployment:
 - Frontend: Vercel
-- Backend API: EC2, Render, Railway, or Fly.io
-- Worker: Celery worker on the same cloud stack
-- Database: Postgres
-- Cache and queue: Redis
+- Backend API: Render Web Service (Docker)
+- Worker: Render Background Worker (Celery)
+- Database: Neon Postgres
+- Cache and queue: Upstash Redis
 - Vector store: Pinecone
-- Lexical retrieval: Elasticsearch/OpenSearch
-- Object storage: S3 or MinIO
-- Reverse proxy: NGINX
+- Object storage: Cloudflare R2
+- Error monitoring: Sentry
+- Runtime logs: Render Logs (structured JSON)
 
 The repo already includes:
 - Docker Compose for local production-style services
@@ -176,56 +175,35 @@ GitHub Actions runs:
 - backend import validation
 - backend Docker build
 
-## GitHub First
-If you are moving this repo to GitHub first, do it in this order:
+## Deployment Order
+Use this sequence:
 
-1. Initialize the repository locally and push to a new GitHub repo
-2. Add GitHub Actions secrets before enabling production deploy jobs
-3. Keep `main` as the protected deployment branch
-4. Run CI on every push and PR before any cloud deployment
+1. Push to GitHub (`main` protected, PR required)
+2. Create Neon Postgres
+3. Create Upstash Redis
+4. Create Pinecone index
+5. Create Cloudflare R2 bucket
+6. Deploy backend API on Render
+7. Deploy Celery worker on Render
+8. Deploy frontend on Vercel
+9. Attach Sentry (frontend + backend)
+10. Run end-to-end smoke test
 
-Recommended GitHub secrets for later production deployment:
+Recommended GitHub/Cloud secrets:
 - `JWT_SECRET`
 - `OPENAI_API_KEY`
 - `COHERE_API_KEY`
 - `PINECONE_API_KEY`
-- `GLITCHTIP_DSN`
+- `SENTRY_DSN`
 - `DATABASE_URL`
 - `REDIS_URL`
 - `CELERY_BROKER_URL`
 - `CELERY_RESULT_BACKEND`
-- `ELASTICSEARCH_URL`
-- `S3_BUCKET`
-- `S3_REGION`
-- `S3_ACCESS_KEY_ID`
-- `S3_SECRET_ACCESS_KEY`
-- `AWS_ACCESS_KEY_ID`
-- `AWS_SECRET_ACCESS_KEY`
-- `AWS_REGION`
-
-## Production Move
-For a simple 1 YOE-friendly production path:
-
-- Frontend: `Vercel`
-- Backend + worker: `AWS EC2`
-- Database: `Postgres`
-- Cache and queue: `Redis`
-- Files: `S3`
-- Vector search: `Pinecone`
-- Lexical search: `Elasticsearch`
-- Error tracking: `GlitchTip`
-- Metrics: `Prometheus + Grafana`
-- Worker visibility: `Flower`
-- Uptime: `Uptime Kuma`
-
-Best rollout order:
-1. GitHub
-2. CI
-3. AWS infra
-4. backend + worker deploy
-5. frontend deploy
-6. monitoring
-7. smoke test
+- `R2_BUCKET`
+- `R2_REGION`
+- `R2_ACCESS_KEY_ID`
+- `R2_SECRET_ACCESS_KEY`
+- `R2_ENDPOINT_URL`
 
 ## Notes
 - The codebase is production-shaped, but real production confidence still depends on live infra validation.

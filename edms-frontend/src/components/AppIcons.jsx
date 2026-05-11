@@ -226,3 +226,23 @@ export function CheckIcon({ className }) {
     </IconBase>
   );
 }
+
+export function SidebarCollapseIcon({ className }) {
+  return (
+    <IconBase className={className}>
+      <rect x="3" y="4" width="18" height="16" rx="2" />
+      <path d="M9 4v16" />
+      <path d="m16 9-3 3 3 3" />
+    </IconBase>
+  );
+}
+
+export function SidebarExpandIcon({ className }) {
+  return (
+    <IconBase className={className}>
+      <rect x="3" y="4" width="18" height="16" rx="2" />
+      <path d="M9 4v16" />
+      <path d="m13 9 3 3-3 3" />
+    </IconBase>
+  );
+}

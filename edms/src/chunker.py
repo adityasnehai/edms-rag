@@ -3,6 +3,7 @@ from typing import List, Dict
 IMPORTANT_SECTIONS = {
     # ADRs
     "context",
+    "decision",
     "rationale",
     "consequences",
     "considered_options",
@@ -16,10 +17,12 @@ IMPORTANT_SECTIONS = {
     # Meeting notes
     "discussion_summary",
     "decisions_made",
+    "action_items",
 
     # Postmortems
     "incident_summary",
     "root_cause",
+    "resolution",
     "lessons_learned",
 
     # Tickets
@@ -51,7 +54,7 @@ def create_chunks(docs: List[Dict]) -> List[Dict]:
                     continue
 
                 chunks.append({
-                    "chunk_id": f"{doc['doc_id']}-{section}",
+                    "chunk_id": f"{doc['data_type']}:{doc['doc_id']}:{section}",
                     "org_id": doc.get("org_id"),
                     "doc_id": doc["doc_id"],
                     "data_type": doc["data_type"],
@@ -72,7 +75,7 @@ def create_chunks(docs: List[Dict]) -> List[Dict]:
                 continue
 
             chunks.append({
-                "chunk_id": f"{doc['doc_id']}-vision",
+                "chunk_id": f"{doc['data_type']}:{doc['doc_id']}:{doc.get('section_type', 'vision_summary')}",
                 "org_id": doc.get("org_id"),
                 "doc_id": doc["doc_id"],
                 "data_type": doc["data_type"],     # usually "images"

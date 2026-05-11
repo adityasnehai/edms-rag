@@ -11,7 +11,20 @@ class BM25Index:
 
     def __init__(self, chunks: List[Dict]):
         self.chunks = chunks
-        self.corpus = [tokenize(c.get("text", "")) for c in chunks]
+        self.corpus = [
+            tokenize(
+                " ".join(
+                    [
+                        c.get("doc_id", ""),
+                        c.get("data_type", ""),
+                        c.get("section_type", ""),
+                        c.get("metadata", {}).get("title", ""),
+                        c.get("text", ""),
+                    ]
+                )
+            )
+            for c in chunks
+        ]
         self.bm25 = BM25Okapi(self.corpus) if self.corpus else None
 
     def search(

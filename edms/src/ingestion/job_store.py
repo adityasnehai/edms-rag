@@ -2,6 +2,7 @@ import json
 from typing import Dict, List, Optional
 from uuid import uuid4
 
+from src.data_types import canonicalize_data_type
 from src.db import connect, execute, fetchall, fetchone, utcnow_iso
 
 VALID_JOB_STATUSES = {"queued", "running", "completed", "failed"}
@@ -15,7 +16,7 @@ def _row_to_job(row) -> Optional[Dict]:
         "org_id": row["org_id"],
         "org_slug": row["org_slug"],
         "trigger_source": row["trigger_source"],
-        "data_type": row["data_type"],
+        "data_type": canonicalize_data_type(row["data_type"]),
         "status": row["status"],
         "uploaded_files": json.loads(row["uploaded_files"]) if row.get("uploaded_files") else [],
         "error_text": row.get("error_text"),
@@ -60,12 +61,13 @@ def create_ingestion_job(org_id: int, org_slug: str, trigger_source: str, data_t
     conn = connect()
     try:
         cursor = conn.cursor()
+        canonical_data_type = canonicalize_data_type(data_type)
         job = {
             "id": uuid4().hex,
             "org_id": org_id,
             "org_slug": org_slug,
             "trigger_source": trigger_source,
-            "data_type": data_type,
+            "data_type": canonical_data_type,
             "status": "queued",
             "uploaded_files": uploaded_files,
             "created_at": utcnow_iso(),
@@ -192,6 +194,40 @@ def list_ingestion_jobs(org_id: int, limit: int = 10) -> List[Dict]:
             (org_id, limit),
         )
         return [_row_to_job(row) for row in fetchall(cursor)]
+    finally:
+        conn.close()
+
+
+def latest_completed_uploads_by_data_type(org_id: int, limit: int = 100) -> Dict[str, Dict]:
+    conn = connect()
+    try:
+        cursor = conn.cursor()
+        execute(
+            cursor,
+            """
+            SELECT *
+            FROM ingestion_jobs
+            WHERE org_id = ?
+              AND trigger_source = 'upload'
+              AND status = 'completed'
+              AND data_type IS NOT NULL
+            ORDER BY completed_at DESC, created_at DESC, id DESC
+            LIMIT ?
+            """,
+            (org_id, limit),
+        )
+        latest: Dict[str, Dict] = {}
+        for row in fetchall(cursor):
+            job = _row_to_job(row)
+            if not job or not job["data_type"] or job["data_type"] in latest:
+                continue
+            latest[job["data_type"]] = {
+                "job_id": job["id"],
+                "uploaded_at": job.get("completed_at") or job.get("created_at"),
+                "uploaded_count": len(job.get("uploaded_files") or []),
+                "files": job.get("uploaded_files") or [],
+            }
+        return latest
     finally:
         conn.close()
 

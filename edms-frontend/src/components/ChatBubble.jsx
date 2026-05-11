@@ -1,46 +1,71 @@
 import FormattedContent from "./FormattedContent";
 import { SparkleIcon } from "./AppIcons";
+import { sanitizeChatContent } from "../utils/chatSanitizer";
 
-export default function ChatBubble({ role, text }) {
+function TypingDots({ isUser }) {
+  return (
+    <span className="inline-flex items-center gap-1.5 py-1">
+      {[0, 120, 240].map((delay) => (
+        <span
+          key={delay}
+          className={[
+            "h-2 w-2 rounded-full animate-pulse",
+            isUser ? "bg-white/70" : "bg-primary/70",
+          ].join(" ")}
+          style={{ animationDelay: `${delay}ms` }}
+        />
+      ))}
+    </span>
+  );
+}
+
+export default function ChatBubble({ role, text, isLoading = false }) {
   const isUser = role === "user";
-  const content = text || "";
+  const content = sanitizeChatContent(text);
+
+  if (!content && !isLoading) {
+    return null;
+  }
 
   return (
-    <div className={`flex ${isUser ? "justify-end" : "justify-start"}`}>
+    <div className={`flex items-end gap-3 ${isUser ? "justify-end" : "justify-start"}`}>
       {!isUser && (
-        <div className="mr-3 mt-1 hidden h-8 w-8 shrink-0 items-center justify-center rounded-2xl bg-gradient-primary text-primary-foreground shadow-glow sm:flex">
+        <div className="mb-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-gradient-primary text-white shadow-glow">
           <SparkleIcon className="h-4 w-4" />
         </div>
       )}
 
       <div
         className={[
-          "max-w-[88%] rounded-[22px] px-5 py-4 text-sm leading-relaxed shadow-card",
+          "max-w-[82%] rounded-2xl px-4 py-3.5 text-sm leading-relaxed",
           isUser
-            ? "rounded-tr-md bg-secondary text-secondary-foreground"
-            : "rounded-tl-md border border-border bg-card text-foreground",
+            ? "rounded-br-sm bg-gradient-primary text-white shadow-glow/40"
+            : "rounded-bl-sm border border-border bg-white text-foreground shadow-sm",
         ].join(" ")}
       >
-        <div
+        <p
           className={[
-            "mb-2 text-[11px] uppercase tracking-[0.28em]",
-            isUser ? "text-muted-foreground" : "text-primary",
+            "mb-1.5 text-[10px] font-semibold uppercase tracking-[0.22em]",
+            isUser ? "text-white/70" : "text-primary",
           ].join(" ")}
         >
           {isUser ? "You" : "EDMS"}
-        </div>
+        </p>
+
         {content ? (
           <FormattedContent
             text={content}
-            paragraphClassName={isUser ? "text-sm leading-7 text-secondary-foreground" : "text-sm leading-7 text-slate-700"}
-            listClassName={isUser ? "space-y-2 pl-5 text-sm leading-7 text-secondary-foreground" : "space-y-2 pl-5 text-sm leading-7 text-slate-700"}
-            headingClassName={isUser ? "text-slate-900" : "text-slate-900"}
-            strongClassName={isUser ? "text-slate-900" : "text-slate-900"}
+            paragraphClassName={isUser ? "text-sm leading-7 text-white/95" : "text-sm leading-7 text-slate-700"}
+            listClassName={isUser ? "space-y-1.5 pl-4 text-sm leading-7 text-white/95" : "space-y-1.5 pl-4 text-sm leading-7 text-slate-700"}
+            headingClassName={isUser ? "text-white font-semibold" : "text-slate-900 font-semibold"}
+            strongClassName={isUser ? "text-white font-semibold" : "text-slate-900 font-semibold"}
           />
         ) : (
-          <span className="text-muted-foreground">…</span>
+          <TypingDots isUser={isUser} />
         )}
       </div>
+
+      {isUser && <div className="mb-1 h-8 w-8 shrink-0" />}
     </div>
   );
 }

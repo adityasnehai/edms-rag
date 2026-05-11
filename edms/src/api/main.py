@@ -34,6 +34,24 @@ app.add_middleware(
     allow_origins=CORS_ALLOW_ORIGINS or [
         "http://localhost:5173",
         "http://127.0.0.1:5173",
+        "http://localhost:5174",
+        "http://127.0.0.1:5174",
+        "http://localhost:5175",
+        "http://127.0.0.1:5175",
+        "http://localhost:5176",
+        "http://127.0.0.1:5176",
+        "http://localhost:5177",
+        "http://127.0.0.1:5177",
+        "http://localhost:5178",
+        "http://127.0.0.1:5178",
+        "http://localhost:5180",
+        "http://127.0.0.1:5180",
+        "http://localhost:5181",
+        "http://127.0.0.1:5181",
+        "http://localhost:5182",
+        "http://127.0.0.1:5182",
+        "http://localhost:5183",
+        "http://127.0.0.1:5183",
     ],
     allow_origin_regex=None
     if PRODUCTION_MODE
@@ -88,9 +106,12 @@ async def global_exception_handler(request: Request, exc: Exception):
 # -------------------------
 from src.api.auth_routes import router as auth_router
 from src.api.admin_routes import router as admin_router
-from src.api.chat_routes import router as chat_router
+from src.api.chat_routes import (
+    router as chat_router,
+    _fallback_file_retrieval,
+    _should_use_file_fallback_first,
+)
 from src.api.evidence_routes import router as evidence_router
-from src.api.eval_routes import router as eval_router
 from src.api.state_routes import router as state_router
 from src.api.stats_routes import router as stats_router
 
@@ -104,9 +125,8 @@ from src.auth.models import (
 )
 from src.auth.auth import hash_password
 from src.api.index_manager import (
-    get_bm25_index,
     get_index_metadata,
-    get_vector_store,
+    ensure_org_search_indexes,
     rebuild_all_vector_stores,
 )
 from src.ingestion.pipeline import start_ingestion_worker
@@ -150,7 +170,6 @@ def _validated_query(query: str) -> str:
 app.include_router(auth_router)
 app.include_router(admin_router)
 app.include_router(stats_router)
-app.include_router(eval_router)
 app.include_router(evidence_router)
 app.include_router(chat_router)
 app.include_router(state_router)
@@ -193,7 +212,12 @@ def startup_event():
                 admin_role,
                 organization["id"],
             )
-    threading.Thread(target=rebuild_all_vector_stores, daemon=True).start()
+    rebuild_on_startup = os.getenv(
+        "REBUILD_ON_STARTUP",
+        "1" if PRODUCTION_MODE else "0",
+    ).strip().lower() in {"1", "true", "yes"}
+    if rebuild_on_startup:
+        threading.Thread(target=rebuild_all_vector_stores, daemon=True).start()
 
 # -------------------------
 # HEALTH
@@ -244,33 +268,64 @@ def search(
     enforce_rate_limit(f"org:{user['org_id']}:user:{user['id']}", "search")
     org_slug = user["org_slug"]
     meta = get_index_metadata(org_slug)
+    retrieved = None
     with request_capacity_guard():
-        try:
-            with stage_timer("search_retrieval", route="/search", user_id=user["id"], org_id=user["org_id"], org_slug=org_slug):
-                store = get_vector_store(org_slug)
-                try:
-                    bm25_index = get_bm25_index(org_slug)
-                except Exception:
-                    bm25_index = None
-                retrieved = retrieve_chunks(
-                    cleaned_query,
-                    store,
-                    bm25_index=bm25_index,
-                    top_k=sanitize_top_k(top_k),
+        if _should_use_file_fallback_first(meta):
+            with stage_timer("search_file_retrieval", route="/search", user_id=user["id"], org_id=user["org_id"], org_slug=org_slug):
+                retrieved = _fallback_file_retrieval(
+                    query=cleaned_query,
                     org_slug=org_slug,
-                    index_version=meta.get("index_version"),
+                    org_id=user["org_id"],
+                    top_k=top_k,
                 )
-        except Exception:
-            status = meta.get("status", "unavailable")
-            pipeline_status = meta.get("pipeline_status", "idle")
-            return {
-                "query": cleaned_query,
-                "answer": (
-                    "The knowledge index is currently unavailable. "
-                    f"Current status: {status}. Pipeline: {pipeline_status}. Please try again shortly."
-                ),
-                "evidence": [],
-            }
+
+        if retrieved is None:
+            try:
+                with stage_timer("search_retrieval", route="/search", user_id=user["id"], org_id=user["org_id"], org_slug=org_slug):
+                    store, bm25_index, meta = ensure_org_search_indexes(
+                        org_slug,
+                        user["org_id"],
+                    )
+                    retrieved = retrieve_chunks(
+                        cleaned_query,
+                        store,
+                        bm25_index=bm25_index,
+                        top_k=sanitize_top_k(top_k),
+                        org_slug=org_slug,
+                        index_version=meta.get("index_version"),
+                    )
+            except Exception as exc:
+                log_event(
+                    40,
+                    "search_retrieval_failed",
+                    route="/search",
+                    user_id=user["id"],
+                    org_id=user["org_id"],
+                    org_slug=org_slug,
+                    error_type=exc.__class__.__name__,
+                )
+                retrieved = _fallback_file_retrieval(
+                    query=cleaned_query,
+                    org_slug=org_slug,
+                    org_id=user["org_id"],
+                    top_k=top_k,
+                )
+                meta = get_index_metadata(org_slug)
+                if not retrieved:
+                    return {
+                        "query": cleaned_query,
+                        "answer": (
+                            "I could not find workspace content for this query yet. "
+                            "Upload data or try again after indexing finishes."
+                        ),
+                        "evidence": [],
+                    }
+
+    if _should_use_file_fallback_first(meta) and retrieved:
+        meta = {
+            **meta,
+            "index_version": f"file-fallback:{org_slug}",
+        }
 
     if not retrieved:
         return {
@@ -308,33 +363,62 @@ def search_stream(
     enforce_rate_limit(f"org:{user['org_id']}:user:{user['id']}", "search")
     org_slug = user["org_slug"]
     meta = get_index_metadata(org_slug)
+    retrieved = None
 
     try:
         with request_capacity_guard():
-            with stage_timer("search_stream_retrieval", route="/search/stream", user_id=user["id"], org_id=user["org_id"], org_slug=org_slug):
-                store = get_vector_store(org_slug)
-                try:
-                    bm25_index = get_bm25_index(org_slug)
-                except Exception:
-                    bm25_index = None
-                retrieved = retrieve_chunks(
-                    cleaned_query,
-                    store,
-                    bm25_index=bm25_index,
-                    top_k=sanitize_top_k(data.top_k),
-                    org_slug=org_slug,
-                    index_version=meta.get("index_version"),
-                )
-    except Exception:
-        retrieved = None
+            if _should_use_file_fallback_first(meta):
+                with stage_timer("search_stream_file_retrieval", route="/search/stream", user_id=user["id"], org_id=user["org_id"], org_slug=org_slug):
+                    retrieved = _fallback_file_retrieval(
+                        query=cleaned_query,
+                        org_slug=org_slug,
+                        org_id=user["org_id"],
+                        top_k=data.top_k,
+                    )
+
+            if retrieved is None:
+                with stage_timer("search_stream_retrieval", route="/search/stream", user_id=user["id"], org_id=user["org_id"], org_slug=org_slug):
+                    store, bm25_index, meta = ensure_org_search_indexes(
+                        org_slug,
+                        user["org_id"],
+                    )
+                    retrieved = retrieve_chunks(
+                        cleaned_query,
+                        store,
+                        bm25_index=bm25_index,
+                        top_k=sanitize_top_k(data.top_k),
+                        org_slug=org_slug,
+                        index_version=meta.get("index_version"),
+                    )
+    except Exception as exc:
+        log_event(
+            40,
+            "search_stream_retrieval_failed",
+            route="/search/stream",
+            user_id=user["id"],
+            org_id=user["org_id"],
+            org_slug=org_slug,
+            error_type=exc.__class__.__name__,
+        )
+        retrieved = _fallback_file_retrieval(
+            query=cleaned_query,
+            org_slug=org_slug,
+            org_id=user["org_id"],
+            top_k=data.top_k,
+        )
+        meta = get_index_metadata(org_slug)
+
+    if _should_use_file_fallback_first(meta) and retrieved:
+        meta = {
+            **meta,
+            "index_version": f"file-fallback:{org_slug}",
+        }
 
     def event_generator():
         if retrieved is None:
-            status = meta.get("status", "unavailable")
-            pipeline_status = meta.get("pipeline_status", "idle")
             yield (
-                "The knowledge index is currently unavailable. "
-                f"Current status: {status}. Pipeline: {pipeline_status}. Please try again shortly."
+                "I could not find workspace content for this query yet. "
+                "Upload data or try again after indexing finishes."
             )
             return
 

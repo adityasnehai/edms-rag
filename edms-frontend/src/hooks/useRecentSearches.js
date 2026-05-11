@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import {
   clearRecentSearches,
@@ -38,28 +38,28 @@ export default function useRecentSearches() {
     };
   }, []);
 
-  async function addRecent(query, result = null) {
+  const addRecent = useCallback(async (query, result = null) => {
     const cleanedQuery = (query || "").trim();
     if (!cleanedQuery) {
       return;
     }
     await saveRecentSearch(cleanedQuery, result);
     window.dispatchEvent(new Event(RECENT_UPDATED_EVENT));
-  }
+  }, []);
 
-  function getRecent(query) {
+  const getRecent = useCallback((query) => {
     const cleanedQuery = (query || "").trim();
     if (!cleanedQuery) {
       return null;
     }
     return recent.find((entry) => entry.query === cleanedQuery) || null;
-  }
+  }, [recent]);
 
-  async function clearRecent() {
+  const clearRecent = useCallback(async () => {
     await clearRecentSearches();
     setRecent([]);
     window.dispatchEvent(new Event(RECENT_UPDATED_EVENT));
-  }
+  }, []);
 
   return { recent, loaded, addRecent, getRecent, clearRecent };
 }

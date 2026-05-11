@@ -4,9 +4,11 @@ import { clearSession, getRefreshToken, setSession } from "../utils/auth";
 
 export async function apiFetch(url, options = {}) {
   const token = localStorage.getItem("access_token");
+  const isFormData =
+    typeof FormData !== "undefined" && options.body instanceof FormData;
 
   const headers = {
-    "Content-Type": "application/json",
+    ...(isFormData ? {} : { "Content-Type": "application/json" }),
     ...(token ? { Authorization: `Bearer ${token}` } : {}),
     ...options.headers,
   };

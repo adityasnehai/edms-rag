@@ -1,11 +1,38 @@
-function renderInlineText(value, strongClassName) {
-  const parts = value.split(/(\*\*[^*]+\*\*)/g);
+function escapeRegExp(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function renderHighlightedSegments(text, highlightQuery) {
+  const query = (highlightQuery || "").trim();
+  if (!query) {
+    return [text];
+  }
+  const regex = new RegExp(`(${escapeRegExp(query)})`, "gi");
+  return text.split(regex).map((part, index) => {
+    if (!part) return null;
+    if (part.toLowerCase() === query.toLowerCase()) {
+      return (
+        <mark
+          key={`hl-${index}`}
+          className="rounded bg-amber-200/80 px-0.5 text-slate-900"
+        >
+          {part}
+        </mark>
+      );
+    }
+    return <span key={`tx-${index}`}>{part}</span>;
+  });
+}
+
+function renderInlineText(value, strongClassName, highlightQuery) {
+  const cleanValue = value.replace(/^#{1,6}\s+/, "");
+  const parts = cleanValue.split(/(\*\*[^*]+\*\*)/g);
 
   return parts.map((part, index) => {
     if (part.startsWith("**") && part.endsWith("**")) {
       return (
         <strong key={index} className={`font-semibold ${strongClassName}`.trim()}>
-          {part.slice(2, -2)}
+          {renderHighlightedSegments(part.slice(2, -2), highlightQuery)}
         </strong>
       );
     }
@@ -13,7 +40,7 @@ function renderInlineText(value, strongClassName) {
     const withBreaks = part.split("\n");
     return withBreaks.map((segment, segmentIndex) => (
       <span key={`${index}-${segmentIndex}`}>
-        {segment}
+        {renderHighlightedSegments(segment, highlightQuery)}
         {segmentIndex < withBreaks.length - 1 ? <br /> : null}
       </span>
     ));
@@ -26,7 +53,9 @@ function Heading({ level, children, className }) {
       ? "text-xl font-semibold"
       : level === 2
         ? "text-lg font-semibold"
-        : "text-base font-semibold";
+        : level === 3
+          ? "text-base font-semibold"
+          : "text-sm font-semibold uppercase tracking-[0.08em]";
   const resolvedClassName = `${baseClassName} ${className}`.trim();
 
   if (level === 1) return <h2 className={resolvedClassName}>{children}</h2>;
@@ -36,6 +65,7 @@ function Heading({ level, children, className }) {
 
 export default function FormattedContent({
   text,
+  highlightQuery = "",
   className = "",
   paragraphClassName = "text-sm leading-7 text-slate-700",
   listClassName = "space-y-2 pl-5 text-sm leading-7 text-slate-700",
@@ -63,7 +93,7 @@ export default function FormattedContent({
           return null;
         }
 
-        const headingMatch = lines[0].match(/^(#{1,3})\s+(.+)$/);
+        const headingMatch = lines[0].match(/^(#{1,6})\s+(.+)$/);
         if (headingMatch) {
           const level = headingMatch[1].length;
           const body = lines.slice(1).join("\n");
@@ -71,10 +101,10 @@ export default function FormattedContent({
           return (
             <div key={index} className="space-y-2">
               <Heading level={level} className={headingClassName}>
-                {renderInlineText(headingMatch[2], strongClassName)}
+                {renderInlineText(headingMatch[2], strongClassName, highlightQuery)}
               </Heading>
               {body ? (
-                <p className={paragraphClassName}>{renderInlineText(body, strongClassName)}</p>
+                <p className={paragraphClassName}>{renderInlineText(body, strongClassName, highlightQuery)}</p>
               ) : null}
             </div>
           );
@@ -85,7 +115,7 @@ export default function FormattedContent({
             <ul key={index} className={listClassName}>
               {lines.map((line, lineIndex) => (
                 <li key={lineIndex} className="list-disc marker:text-primary">
-                  {renderInlineText(line.replace(/^[-*]\s+/, ""), strongClassName)}
+                  {renderInlineText(line.replace(/^[-*]\s+/, ""), strongClassName, highlightQuery)}
                 </li>
               ))}
             </ul>
@@ -97,7 +127,7 @@ export default function FormattedContent({
             <ol key={index} className={listClassName}>
               {lines.map((line, lineIndex) => (
                 <li key={lineIndex} className="list-decimal marker:text-primary">
-                  {renderInlineText(line.replace(/^\d+\.\s+/, ""), strongClassName)}
+                  {renderInlineText(line.replace(/^\d+\.\s+/, ""), strongClassName, highlightQuery)}
                 </li>
               ))}
             </ol>
@@ -106,7 +136,7 @@ export default function FormattedContent({
 
         return (
           <p key={index} className={paragraphClassName}>
-            {renderInlineText(lines.join("\n"), strongClassName)}
+            {renderInlineText(lines.join("\n"), strongClassName, highlightQuery)}
           </p>
         );
       })}
