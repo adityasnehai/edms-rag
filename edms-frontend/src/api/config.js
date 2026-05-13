@@ -1,8 +1,8 @@
 const HARD_PINNED_API_BASE = "https://edms-api-e2bc.onrender.com";
 const configuredApiBase = HARD_PINNED_API_BASE;
 const commonBackendPorts = [8000, 8001, 8002, 8010, 8011, 8012];
-const FETCH_ATTEMPT_TIMEOUT_MS = 3200;
-const FETCH_TOTAL_TIMEOUT_MS = 14000;
+const FETCH_ATTEMPT_TIMEOUT_MS = 60000;
+const FETCH_TOTAL_TIMEOUT_MS = 120000;
 const FETCH_RETRY_DELAY_MS = 250;
 const FETCH_MAX_CYCLES = 3;
 const LAST_WORKING_API_BASE_KEY = "edms:last_api_base";
