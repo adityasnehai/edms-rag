@@ -4,9 +4,15 @@ on:
   push:
     branches:
       - main
-      - master
-      - develop
   pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
 
 jobs:
   backend:
@@ -18,6 +24,15 @@ jobs:
       ALLOW_DOTENV: "0"
       APP_ENV: development
       JWT_SECRET: test-jwt-secret
+      DATABASE_URL: sqlite:///data/ci.db
+      REDIS_URL: redis://127.0.0.1:6379/0
+      CELERY_BROKER_URL: redis://127.0.0.1:6379/1
+      CELERY_RESULT_BACKEND: redis://127.0.0.1:6379/2
+      VECTOR_BACKEND: pinecone
+      LEXICAL_BACKEND: local_bm25
+      OBJECT_STORAGE_BACKEND: local
+      OPENAI_API_KEY: test-openai-key
+      PINECONE_API_KEY: test-pinecone-key
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -41,10 +56,27 @@ jobs:
           pip install -r requirements.txt
 
       - name: Compile backend
-        run: python -m py_compile $(find src -name '*.py' -print)
+        run: python -m compileall src
 
       - name: Import backend app
         run: python -c "import sys; sys.path.insert(0, '.'); import src.api.main; print('backend import ok')"
+
+      - name: Smoke test backend
+        run: |
+          python -m uvicorn src.api.main:app --host 127.0.0.1 --port 8019 > /tmp/edms-ci.log 2>&1 &
+          server_pid=$!
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:8019/live >/dev/null && curl -fsS http://127.0.0.1:8019/ready >/dev/null; then
+              kill $server_pid
+              wait $server_pid || true
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/edms-ci.log
+          kill $server_pid || true
+          wait $server_pid || true
+          exit 1
 
       - name: Build backend Docker image
         run: docker build -t edms-backend-ci .
