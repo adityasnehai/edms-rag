@@ -1,4 +1,5 @@
-const configuredApiBase = import.meta.env.VITE_API_BASE?.trim();
+const HARD_PINNED_API_BASE = "https://edms-api-e2bc.onrender.com";
+const configuredApiBase = HARD_PINNED_API_BASE;
 const commonBackendPorts = [8000, 8001, 8002, 8010, 8011, 8012];
 const FETCH_ATTEMPT_TIMEOUT_MS = 3200;
 const FETCH_TOTAL_TIMEOUT_MS = 14000;
@@ -133,8 +134,8 @@ function getApiBaseCandidates() {
   return localCandidates;
 }
 
-export const API_BASE = normalizeApiBase(configuredApiBase || getDefaultApiBase());
-export const API_BASE_CANDIDATES = getApiBaseCandidates();
+export const API_BASE = normalizeApiBase(HARD_PINNED_API_BASE);
+export const API_BASE_CANDIDATES = [API_BASE];
 export const API_UNAVAILABLE_ERROR_TEXT = API_UNAVAILABLE_ERROR;
 
 export function buildApiUrl(path, base = API_BASE) {
