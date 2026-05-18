@@ -125,6 +125,11 @@ GLITCHTIP_DSN = os.getenv("GLITCHTIP_DSN", "").strip()
 SENTRY_DSN = os.getenv("SENTRY_DSN", "").strip()
 ERROR_TRACKING_DSN = GLITCHTIP_DSN or SENTRY_DSN
 SENTRY_ENVIRONMENT = os.getenv("SENTRY_ENVIRONMENT", APP_ENV).strip()
+OTEL_SERVICE_NAME = os.getenv("OTEL_SERVICE_NAME", "edms-api").strip()
+OTEL_EXPORTER_OTLP_ENDPOINT = os.getenv("OTEL_EXPORTER_OTLP_ENDPOINT", "").strip()
+OTEL_EXPORTER_OTLP_HEADERS = os.getenv("OTEL_EXPORTER_OTLP_HEADERS", "").strip()
+OTEL_EXPORTER_OTLP_INSECURE = os.getenv("OTEL_EXPORTER_OTLP_INSECURE", "0").strip() in {"1", "true", "yes"}
+OTEL_TRACES_ENABLED = os.getenv("OTEL_TRACES_ENABLED", "1").strip() in {"1", "true", "yes"}
 
 DEFAULT_TOP_K = max(1, _int_env("RETRIEVAL_TOP_K", 3))
 MAX_TOP_K = max(DEFAULT_TOP_K, _int_env("RETRIEVAL_MAX_TOP_K", 10))

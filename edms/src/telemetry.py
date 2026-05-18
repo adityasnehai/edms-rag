@@ -8,13 +8,53 @@ from contextvars import ContextVar
 from logging.handlers import RotatingFileHandler
 from typing import Any
 
-from src.runtime_config import ENABLE_METRICS, ERROR_TRACKING_DSN, LOG_JSON, LOG_LEVEL, SENTRY_ENVIRONMENT
+from src.runtime_config import (
+    ENABLE_METRICS,
+    ERROR_TRACKING_DSN,
+    LOG_JSON,
+    LOG_LEVEL,
+    OTEL_EXPORTER_OTLP_ENDPOINT,
+    OTEL_EXPORTER_OTLP_HEADERS,
+    OTEL_SERVICE_NAME,
+    OTEL_TRACES_ENABLED,
+    SENTRY_ENVIRONMENT,
+)
 
 request_id_var: ContextVar[str] = ContextVar("request_id", default="-")
+
+try:
+    from opentelemetry import trace as otel_trace
+    from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
+    from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
+    from opentelemetry.instrumentation.httpx import HTTPXClientInstrumentor
+    from opentelemetry.instrumentation.logging import LoggingInstrumentor
+    from opentelemetry.instrumentation.requests import RequestsInstrumentor
+    from opentelemetry.sdk.resources import Resource
+    from opentelemetry.sdk.trace import TracerProvider
+    from opentelemetry.sdk.trace.export import BatchSpanProcessor
+except Exception:  # pragma: no cover - optional dependency
+    otel_trace = None
+    OTLPSpanExporter = None
+    FastAPIInstrumentor = None
+    HTTPXClientInstrumentor = None
+    LoggingInstrumentor = None
+    RequestsInstrumentor = None
+    Resource = None
+    TracerProvider = None
+    BatchSpanProcessor = None
 
 
 class JsonFormatter(logging.Formatter):
     def format(self, record: logging.LogRecord) -> str:
+        trace_id = getattr(record, "otelTraceID", None)
+        span_id = getattr(record, "otelSpanID", None)
+        if not trace_id and otel_trace is not None:
+            span = otel_trace.get_current_span()
+            if span is not None:
+                context = span.get_span_context()
+                if context is not None and context.is_valid:
+                    trace_id = f"{context.trace_id:032x}"
+                    span_id = f"{context.span_id:016x}"
         payload = {
             "timestamp": self.formatTime(record, "%Y-%m-%dT%H:%M:%S"),
             "level": record.levelname,
@@ -22,6 +62,10 @@ class JsonFormatter(logging.Formatter):
             "message": record.getMessage(),
             "request_id": getattr(record, "request_id", request_id_var.get("-")),
         }
+        if trace_id:
+            payload["trace_id"] = trace_id
+        if span_id:
+            payload["span_id"] = span_id
         for key in (
             "event",
             "route",
@@ -89,6 +133,55 @@ def init_sentry() -> None:
         integrations=[FastApiIntegration()],
         traces_sample_rate=0.1,
     )
+
+
+def _parse_otlp_headers(raw_headers: str) -> dict[str, str]:
+    headers: dict[str, str] = {}
+    for item in raw_headers.split(","):
+        if "=" not in item:
+            continue
+        key, value = item.split("=", 1)
+        key = key.strip()
+        value = value.strip()
+        if key:
+            headers[key] = value
+    return headers
+
+
+def init_opentelemetry(app: Any | None = None) -> None:
+    if not OTEL_TRACES_ENABLED or not OTEL_EXPORTER_OTLP_ENDPOINT:
+        return
+    if (
+        otel_trace is None
+        or OTLPSpanExporter is None
+        or FastAPIInstrumentor is None
+        or HTTPXClientInstrumentor is None
+        or LoggingInstrumentor is None
+        or RequestsInstrumentor is None
+        or Resource is None
+        or TracerProvider is None
+        or BatchSpanProcessor is None
+    ):
+        return
+    resource = Resource.create(
+        {
+            "service.name": OTEL_SERVICE_NAME,
+            "service.namespace": "edms",
+            "deployment.environment": SENTRY_ENVIRONMENT,
+        }
+    )
+    provider = TracerProvider(resource=resource)
+    exporter = OTLPSpanExporter(
+        endpoint=OTEL_EXPORTER_OTLP_ENDPOINT,
+        headers=_parse_otlp_headers(OTEL_EXPORTER_OTLP_HEADERS) or None,
+    )
+    provider.add_span_processor(BatchSpanProcessor(exporter))
+    otel_trace.set_tracer_provider(provider)
+    LoggingInstrumentor().instrument(set_logging_format=False)
+    RequestsInstrumentor().instrument()
+    HTTPXClientInstrumentor().instrument()
+    if app is not None:
+        FastAPIInstrumentor.instrument_app(app, tracer_provider=provider)
 
 
 logger = logging.getLogger("edms")

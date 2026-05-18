@@ -146,7 +146,7 @@ from src.generator import generate_answer, stream_answer
 from src.traffic_control import enforce_rate_limit, request_capacity_guard
 from src.state_store import init_state_tables
 from src.storage import validate_production_storage
-from src.telemetry import CONTENT_TYPE_LATEST, configure_logging, init_sentry, log_event, metrics_payload, observe_http, set_request_id, stage_timer
+from src.telemetry import CONTENT_TYPE_LATEST, configure_logging, init_opentelemetry, init_sentry, log_event, metrics_payload, observe_http, set_request_id, stage_timer
 from src.cache_store import _get_redis_client
 import requests
 
@@ -181,6 +181,7 @@ app.include_router(state_router)
 def startup_event():
     configure_logging()
     init_sentry()
+    init_opentelemetry(app)
     os.makedirs("data", exist_ok=True)
     if PRODUCTION_MODE:
         if not REDIS_URL:
