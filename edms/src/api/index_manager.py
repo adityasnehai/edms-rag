@@ -20,6 +20,7 @@ from src.pinecone_store import PineconeVectorStore
 from src.retrieval.bm25_index import BM25Index
 from src.retrieval.elasticsearch_index import ElasticsearchBM25Index
 from src.runtime_config import FAISS_INDEX_TYPE, LEXICAL_BACKEND, VECTOR_BACKEND
+from src.telemetry import log_event
 from src.traffic_control import distributed_lock
 from src.vector_store import VectorStore
 
@@ -146,6 +147,17 @@ def rebuild_vector_store(
             "vector_index_type": FAISS_INDEX_TYPE,
         })
         _mark_meta_job(meta, job_id, "running")
+        log_event(
+            20,
+            "index_rebuild_started",
+            event="index",
+            org_slug=org_slug,
+            org_id=org_id,
+            job_id=job_id,
+            trigger_source=trigger_source,
+            changed_files=meta["changed_files"],
+            removed_files=meta["removed_files"],
+        )
 
         try:
             docs = parse_org_folder(org_slug=org_slug, org_id=org_id)
@@ -174,6 +186,20 @@ def rebuild_vector_store(
                 invalidate_org_caches(
                     org_slug,
                     namespaces=("query_embedding", "retrieval", "answer"),
+                )
+                log_event(
+                    20,
+                    "index_rebuild_completed",
+                    event="index",
+                    org_slug=org_slug,
+                    org_id=org_id,
+                    job_id=job_id,
+                    trigger_source=trigger_source,
+                    index_status=meta["status"],
+                    pipeline_status=meta.get("pipeline_status"),
+                    total_chunks=0,
+                    new_embeddings=0,
+                    cached_embeddings=0,
                 )
                 return dict(meta)
 
@@ -266,6 +292,20 @@ def rebuild_vector_store(
                 org_slug,
                 namespaces=("query_embedding", "retrieval", "answer"),
             )
+            log_event(
+                20,
+                "index_rebuild_completed",
+                event="index",
+                org_slug=org_slug,
+                org_id=org_id,
+                job_id=job_id,
+                trigger_source=trigger_source,
+                index_status=meta["status"],
+                pipeline_status=meta.get("pipeline_status"),
+                total_chunks=meta["total_chunks"],
+                new_embeddings=meta.get("new_embeddings", 0),
+                cached_embeddings=meta.get("cached_embeddings", 0),
+            )
         except Exception as exc:
             vector_stores.pop(org_slug, None)
             bm25_indexes.pop(org_slug, None)
@@ -288,6 +328,16 @@ def rebuild_vector_store(
             invalidate_org_caches(
                 org_slug,
                 namespaces=("query_embedding", "retrieval", "answer"),
+            )
+            log_event(
+                40,
+                "index_rebuild_failed",
+                event="index",
+                org_slug=org_slug,
+                org_id=org_id,
+                job_id=job_id,
+                trigger_source=trigger_source,
+                error_type=exc.__class__.__name__,
             )
 
         return dict(meta)

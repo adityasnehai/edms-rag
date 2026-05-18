@@ -68,6 +68,7 @@ def _fallback_file_retrieval(
         log_event(
             30,
             "chat_file_fallback_used",
+            event="chat",
             org_slug=org_slug,
             retrieved_chunks=len(results),
         )
@@ -89,6 +90,7 @@ def chat(
     org_slug = user["org_slug"]
     meta = get_index_metadata(org_slug)
     retrieved = None
+    query_length = len(message)
     with request_capacity_guard():
         if _should_use_file_fallback_first(meta):
             with stage_timer("chat_file_retrieval", route="/chat", user_id=user["id"], org_id=user["org_id"], org_slug=org_slug):
@@ -122,6 +124,9 @@ def chat(
                     user_id=user["id"],
                     org_id=user["org_id"],
                     org_slug=org_slug,
+                    query_length=query_length,
+                    index_status=meta.get("status"),
+                    pipeline_status=meta.get("pipeline_status"),
                     error_type=exc.__class__.__name__,
                 )
                 retrieved = _fallback_file_retrieval(
@@ -165,7 +170,7 @@ def chat(
             org_slug=org_slug,
             index_version=meta.get("index_version"),
         )
-    log_event(20, "chat_completed", route="/chat", user_id=user["id"], org_id=user["org_id"], org_slug=org_slug, retrieved_chunks=len(retrieved), top_k=sanitize_top_k(data.top_k))
+    log_event(20, "chat_completed", event="chat", route="/chat", user_id=user["id"], org_id=user["org_id"], org_slug=org_slug, query_length=query_length, retrieved_chunks=len(retrieved), top_k=sanitize_top_k(data.top_k), index_status=meta.get("status"), pipeline_status=meta.get("pipeline_status"))
     return result
 
 
@@ -180,6 +185,7 @@ def chat_stream(
     org_slug = user["org_slug"]
     meta = get_index_metadata(org_slug)
     retrieved = None
+    query_length = len(message)
     try:
         with request_capacity_guard():
             if _should_use_file_fallback_first(meta):
@@ -213,6 +219,9 @@ def chat_stream(
             user_id=user["id"],
             org_id=user["org_id"],
             org_slug=org_slug,
+            query_length=query_length,
+            index_status=meta.get("status"),
+            pipeline_status=meta.get("pipeline_status"),
             error_type=exc.__class__.__name__,
         )
         meta = get_index_metadata(org_slug)
@@ -252,6 +261,8 @@ def chat_stream(
         ):
             yield token
             time.sleep(0.01)
+
+        log_event(20, "chat_stream_completed", event="chat", route="/chat/stream", user_id=user["id"], org_id=user["org_id"], org_slug=org_slug, query_length=query_length, retrieved_chunks=len(retrieved), index_status=meta.get("status"), pipeline_status=meta.get("pipeline_status"))
 
     return StreamingResponse(
         event_generator(),

@@ -23,13 +23,24 @@ class JsonFormatter(logging.Formatter):
             "request_id": getattr(record, "request_id", request_id_var.get("-")),
         }
         for key in (
+            "event",
             "route",
             "method",
             "status_code",
             "latency_ms",
+            "client_ip",
+            "user_agent",
             "user_id",
             "org_id",
             "org_slug",
+            "organization",
+            "data_type",
+            "filename",
+            "file_count",
+            "uploaded_count",
+            "query_length",
+            "result_count",
+            "outcome",
             "stage",
             "stage_latency_ms",
             "job_id",
@@ -39,6 +50,8 @@ class JsonFormatter(logging.Formatter):
             "retrieved_chunks",
             "cache_hit",
             "fallback_used",
+            "index_status",
+            "pipeline_status",
         ):
             value = getattr(record, key, None)
             if value is not None:

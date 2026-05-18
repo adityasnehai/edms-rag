@@ -269,6 +269,7 @@ def search(
     org_slug = user["org_slug"]
     meta = get_index_metadata(org_slug)
     retrieved = None
+    query_length = len(cleaned_query)
     with request_capacity_guard():
         if _should_use_file_fallback_first(meta):
             with stage_timer("search_file_retrieval", route="/search", user_id=user["id"], org_id=user["org_id"], org_slug=org_slug):
@@ -302,6 +303,9 @@ def search(
                     user_id=user["id"],
                     org_id=user["org_id"],
                     org_slug=org_slug,
+                    query_length=query_length,
+                    index_status=meta.get("status"),
+                    pipeline_status=meta.get("pipeline_status"),
                     error_type=exc.__class__.__name__,
                 )
                 retrieved = _fallback_file_retrieval(
@@ -346,6 +350,20 @@ def search(
             org_slug=org_slug,
             index_version=meta.get("index_version"),
         )
+    log_event(
+        20,
+        "search_completed",
+        event="search",
+        route="/search",
+        user_id=user["id"],
+        org_id=user["org_id"],
+        org_slug=org_slug,
+        query_length=query_length,
+        result_count=len(result.get("evidence", [])),
+        retrieved_chunks=len(retrieved),
+        index_status=meta.get("status"),
+        pipeline_status=meta.get("pipeline_status"),
+    )
 
     return {
         "query": cleaned_query,
@@ -364,6 +382,7 @@ def search_stream(
     org_slug = user["org_slug"]
     meta = get_index_metadata(org_slug)
     retrieved = None
+    query_length = len(cleaned_query)
 
     try:
         with request_capacity_guard():
@@ -398,6 +417,9 @@ def search_stream(
             user_id=user["id"],
             org_id=user["org_id"],
             org_slug=org_slug,
+            query_length=query_length,
+            index_status=meta.get("status"),
+            pipeline_status=meta.get("pipeline_status"),
             error_type=exc.__class__.__name__,
         )
         retrieved = _fallback_file_retrieval(
@@ -437,6 +459,20 @@ def search_stream(
             index_version=meta.get("index_version"),
         ):
             yield token
+
+        log_event(
+            20,
+            "search_stream_completed",
+            event="search",
+            route="/search/stream",
+            user_id=user["id"],
+            org_id=user["org_id"],
+            org_slug=org_slug,
+            query_length=query_length,
+            retrieved_chunks=len(retrieved),
+            index_status=meta.get("status"),
+            pipeline_status=meta.get("pipeline_status"),
+        )
 
     from fastapi.responses import StreamingResponse
 

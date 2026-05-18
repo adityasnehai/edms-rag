@@ -162,6 +162,16 @@ def get_admin_organization(admin=Depends(require_admin)):
 @router.post("/organization/invite-code/rotate")
 def rotate_organization_invite_code(admin=Depends(require_admin)):
     organization = rotate_invite_code(admin["org_id"])
+    log_event(
+        20,
+        "invite_code_rotated",
+        event="admin",
+        route="/admin/organization/invite-code/rotate",
+        user_id=admin["id"],
+        org_id=organization["id"],
+        org_slug=organization["slug"],
+        organization=organization["name"],
+    )
     return {
         "organization": {
             "id": organization["id"],
@@ -342,6 +352,17 @@ async def upload_document(
     enforce_rate_limit(f"org:{organization['id']}:user:{admin['id']}", "upload")
     data_type = _validate_data_type(data_type)
     org_path = get_org_data_path(organization["slug"])
+    log_event(
+        20,
+        "upload_started",
+        event="upload",
+        route="/admin/upload",
+        user_id=admin["id"],
+        org_id=organization["id"],
+        org_slug=organization["slug"],
+        organization=organization["name"],
+        data_type=data_type,
+    )
     form = await request.form()
     uploads: List[UploadFile] = [
         item for item in form.getlist("files") if _looks_like_upload(item)
@@ -395,6 +416,21 @@ async def upload_document(
             )
             meta = get_index_metadata(organization["slug"])
             log_event(20, "upload_queued", route="/admin/upload", user_id=admin["id"], org_id=organization["id"], org_slug=organization["slug"], job_id=job["id"])
+            log_event(
+                20,
+                "upload_completed",
+                event="upload",
+                route="/admin/upload",
+                user_id=admin["id"],
+                org_id=organization["id"],
+                org_slug=organization["slug"],
+                organization=organization["name"],
+                data_type=data_type,
+                uploaded_count=len(saved_files),
+                index_status=meta["status"],
+                pipeline_status=meta.get("pipeline_status"),
+                job_id=job["id"],
+            )
 
             return {
                 "status": "queued",
@@ -447,6 +483,21 @@ async def upload_document(
         )
         meta = get_index_metadata(organization["slug"])
         log_event(20, "upload_queued", route="/admin/upload", user_id=admin["id"], org_id=organization["id"], org_slug=organization["slug"], job_id=job["id"])
+        log_event(
+            20,
+            "upload_completed",
+            event="upload",
+            route="/admin/upload",
+            user_id=admin["id"],
+            org_id=organization["id"],
+            org_slug=organization["slug"],
+            organization=organization["name"],
+            data_type=data_type,
+            uploaded_count=len(saved_files),
+            index_status=meta["status"],
+            pipeline_status=meta.get("pipeline_status"),
+            job_id=job["id"],
+        )
 
         return {
             "status": "queued",
