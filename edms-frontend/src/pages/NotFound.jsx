@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import usePageTitle from "../hooks/usePageTitle";
-import { clearSession, getAuthPayload } from "../utils/auth";
+import { getAuthPayload } from "../utils/auth";
 
 export default function NotFound() {
   usePageTitle("Page Not Found");

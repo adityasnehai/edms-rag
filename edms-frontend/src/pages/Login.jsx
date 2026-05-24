@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { loginUser, registerUser } from "../api/auth";
 import { clearSession, setSession } from "../utils/auth";
