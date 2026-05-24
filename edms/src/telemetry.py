@@ -5,7 +5,6 @@ import sys
 import time
 from contextlib import contextmanager
 from contextvars import ContextVar
-from logging.handlers import RotatingFileHandler
 from typing import Any
 
 from src.runtime_config import (
@@ -111,12 +110,7 @@ def configure_logging() -> None:
     formatter = JsonFormatter() if LOG_JSON else logging.Formatter("%(asctime)s %(levelname)s %(name)s %(message)s")
     stream_handler = logging.StreamHandler(sys.stdout)
     stream_handler.setFormatter(formatter)
-    handlers = [stream_handler]
-    os.makedirs("logs", exist_ok=True)
-    file_handler = RotatingFileHandler("logs/edms.log", maxBytes=5 * 1024 * 1024, backupCount=5)
-    file_handler.setFormatter(formatter)
-    handlers.append(file_handler)
-    root.handlers = handlers
+    root.handlers = [stream_handler]
 
 
 def init_sentry() -> None:
