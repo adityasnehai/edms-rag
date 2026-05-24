@@ -27,3 +27,8 @@ edms/.git_backup_nested/
 *.db
 *.sqlite
 *.sqlite3
+
+# Generated / local tooling
+recording/
+screenshots/
+record_workflow.py
