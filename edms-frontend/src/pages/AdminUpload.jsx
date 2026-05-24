@@ -3,6 +3,7 @@ import { Navigate } from "react-router-dom";
 
 import { fetchDataTypeSummary, fetchIngestionJob, uploadDocument } from "../api/admin";
 import WorkspaceShell from "../components/WorkspaceShell";
+import usePageTitle from "../hooks/usePageTitle";
 import { getAuthPayload } from "../utils/auth";
 import {
   CheckIcon,
@@ -154,6 +155,7 @@ function formatTimestamp(value) {
 }
 
 export default function AdminUpload() {
+  usePageTitle("Upload Data");
   const token = localStorage.getItem("access_token");
   const payload = getAuthPayload();
   const fileInputRef = useRef(null);

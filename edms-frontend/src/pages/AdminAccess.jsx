@@ -6,10 +6,12 @@ import {
   rotateOrganizationInviteCode,
 } from "../api/admin";
 import WorkspaceShell from "../components/WorkspaceShell";
+import usePageTitle from "../hooks/usePageTitle";
 import { getAuthPayload } from "../utils/auth";
 import { CopyIcon, RotateIcon, ShieldIcon, CheckIcon } from "../components/AppIcons";
 
 export default function AdminAccess() {
+  usePageTitle("Company Access");
   const token = localStorage.getItem("access_token");
   const payload = getAuthPayload();
 

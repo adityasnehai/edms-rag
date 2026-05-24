@@ -9,6 +9,7 @@ import {
   replaceDataFile,
 } from "../api/admin";
 import WorkspaceShell from "../components/WorkspaceShell";
+import usePageTitle from "../hooks/usePageTitle";
 import { getAuthPayload } from "../utils/auth";
 import {
   CheckIcon,
@@ -82,6 +83,7 @@ function itemTimestamp(item) {
 }
 
 export default function AdminDataManager() {
+  usePageTitle("Data Manager");
   const token = localStorage.getItem("access_token");
   const payload = getAuthPayload();
   const fileInputRef = useRef(null);

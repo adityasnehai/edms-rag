@@ -9,6 +9,7 @@ import { sendChat, streamChat } from "../api/chatStream";
 import ChatBubble from "../components/ChatBubble";
 import ChatInput from "../components/ChatInput";
 import WorkspaceShell from "../components/WorkspaceShell";
+import usePageTitle from "../hooks/usePageTitle";
 import {
   containsStaleIndexError,
   sanitizeChatMessages,
@@ -123,6 +124,7 @@ function appendAssistantChunk(messages, chunk) {
 }
 
 export default function Chat() {
+  usePageTitle("Chat");
   const [threads, setThreads] = useState([]);
   const [activeThreadId, setActiveThreadId] = useState(null);
   const [isStreaming, setIsStreaming] = useState(false);

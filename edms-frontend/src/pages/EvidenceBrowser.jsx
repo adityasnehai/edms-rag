@@ -4,6 +4,7 @@ import { fetchApi } from "../api/config";
 import { fetchStats } from "../api/stats";
 import EvidenceItem from "../components/EvidenceItem";
 import WorkspaceShell from "../components/WorkspaceShell";
+import usePageTitle from "../hooks/usePageTitle";
 import { FolderIcon, SearchIcon, SparkleIcon } from "../components/AppIcons";
 
 const FILTERS = [
@@ -42,6 +43,7 @@ function itemTimestamp(item) {
 }
 
 export default function EvidenceBrowser() {
+  usePageTitle("Evidence");
   const token = localStorage.getItem("access_token");
   const [items, setItems] = useState([]);
   const [filter, setFilter] = useState("all");

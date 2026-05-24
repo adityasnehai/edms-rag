@@ -10,71 +10,36 @@ import EvidenceBrowser from "./pages/EvidenceBrowser";
 import AdminAccess from "./pages/AdminAccess";
 import AdminDataManager from "./pages/AdminDataManager";
 import AdminUpload from "./pages/AdminUpload";
+import NotFound from "./pages/NotFound";
 
 import ProtectedRoute from "./components/ProtectedRoute";
+import ErrorBoundary from "./components/ErrorBoundary";
+import { ToastProvider } from "./components/Toast";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <BrowserRouter>
-      <Routes>
+    <ErrorBoundary>
+      <ToastProvider>
+        <BrowserRouter>
+          <Routes>
+            {/* Public */}
+            <Route path="/" element={<Login />} />
 
-        {/* Public */}
-        <Route path="/" element={<Login />} />
+            {/* User routes */}
+            <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+            <Route path="/chat" element={<ProtectedRoute><Chat /></ProtectedRoute>} />
+            <Route path="/evidence" element={<ProtectedRoute><EvidenceBrowser /></ProtectedRoute>} />
 
-        {/* User routes */}
-        <Route
-          path="/dashboard"
-          element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          }
-        />
+            {/* Admin routes */}
+            <Route path="/admin/access" element={<ProtectedRoute requireAdmin><AdminAccess /></ProtectedRoute>} />
+            <Route path="/admin" element={<ProtectedRoute requireAdmin><AdminUpload /></ProtectedRoute>} />
+            <Route path="/admin/data" element={<ProtectedRoute requireAdmin><AdminDataManager /></ProtectedRoute>} />
 
-        <Route
-          path="/chat"
-          element={
-            <ProtectedRoute>
-              <Chat />
-            </ProtectedRoute>
-          }
-        />
-
-        <Route
-          path="/evidence"
-          element={
-            <ProtectedRoute>
-              <EvidenceBrowser />
-            </ProtectedRoute>
-          }
-        />
-
-        {/* Admin routes */}
-        <Route
-          path="/admin/access"
-          element={
-            <ProtectedRoute requireAdmin>
-              <AdminAccess />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/admin"
-          element={
-            <ProtectedRoute requireAdmin>
-              <AdminUpload />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/admin/data"
-          element={
-            <ProtectedRoute requireAdmin>
-              <AdminDataManager />
-            </ProtectedRoute>
-          }
-        />
-      </Routes>
-    </BrowserRouter>
+            {/* 404 */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </ToastProvider>
+    </ErrorBoundary>
   </React.StrictMode>
 );

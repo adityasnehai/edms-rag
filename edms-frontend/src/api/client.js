@@ -47,6 +47,7 @@ export async function apiFetch(url, options = {}) {
       }
     }
     clearSession();
+    sessionStorage.setItem("edms:session-expired", "1");
     window.location.href = "/";
     throw new Error("Session expired");
   }

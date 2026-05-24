@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { loginUser, registerUser } from "../api/auth";
 import { clearSession, setSession } from "../utils/auth";
@@ -267,6 +267,20 @@ export default function Login() {
   const [copyStatus, setCopyStatus] = useState("");
   const [authOpen, setAuthOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [sessionExpiredBanner, setSessionExpiredBanner] = useState(false);
+
+  // Set page title
+  useEffect(() => {
+    document.title = "EDMS — Company Knowledge Search";
+  }, []);
+
+  // Show banner if session expired
+  useEffect(() => {
+    if (sessionStorage.getItem("edms:session-expired")) {
+      sessionStorage.removeItem("edms:session-expired");
+      setSessionExpiredBanner(true);
+    }
+  }, []);
 
   const isRegister = mode === "register";
   const isAdminSignup = isRegister && accountType === "admin";
@@ -351,6 +365,21 @@ export default function Login() {
   return (
     <div className="relative min-h-screen bg-background text-foreground overflow-x-hidden">
       <PageBackground />
+
+      {/* Session expired notification */}
+      {sessionExpiredBanner && (
+        <div className="fixed left-1/2 top-4 z-[80] w-full max-w-sm -translate-x-1/2 px-4">
+          <div className="flex items-center gap-3 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 shadow-lg">
+            <svg className="h-4 w-4 shrink-0 text-amber-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
+              <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" /><path d="M12 9v4m0 4h.01" />
+            </svg>
+            <p className="flex-1 text-sm font-medium text-amber-800">Session expired — please sign in again.</p>
+            <button type="button" onClick={() => setSessionExpiredBanner(false)} className="text-amber-600 transition hover:text-amber-900" aria-label="Dismiss">
+              <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round"><path d="M18 6L6 18M6 6l12 12" /></svg>
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Signup result modal */}
       {signupResult && (
@@ -577,7 +606,7 @@ export default function Login() {
             <div className="container">
               <div className="mx-auto max-w-2xl text-center">
                 <span className="inline-block rounded-full border border-primary/20 bg-accent px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.15em] text-primary">Features</span>
-                <h2 className="mt-4 text-3xl font-bold md:text-4xl">Everything needed to make company records searchable.</h2>
+                <h2 className="mt-4 text-3xl font-bold md:text-4xl">Everything needed to make company records searchable</h2>
                 <p className="mt-4 leading-relaxed text-muted-foreground">Upload records once. EDMS handles indexing, evidence, access control, and follow-up chat in the same workspace.</p>
               </div>
               <div className="mt-14 grid items-stretch gap-5 sm:grid-cols-2 xl:grid-cols-4">
@@ -1011,7 +1040,7 @@ function TeamScenariosSection() {
       <div className="container">
         <div className="mx-auto max-w-2xl text-center">
           <span className="inline-block rounded-full border border-primary/20 bg-accent px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.15em] text-primary">Use cases</span>
-          <h2 className="mt-4 text-3xl font-bold md:text-4xl">Built for teams that manage decisions.</h2>
+          <h2 className="mt-4 text-3xl font-bold md:text-4xl">Built for teams that manage decisions</h2>
           <p className="mt-4 leading-relaxed text-muted-foreground">Different teams, same problem: company knowledge is scattered. EDMS brings it together.</p>
         </div>
 
@@ -1073,11 +1102,20 @@ function FaqItem({ question, answer }) {
   const [open, setOpen] = useState(false);
   return (
     <div className={`rounded-2xl border transition-all duration-200 ${open ? "border-primary/20 bg-accent/30 shadow-sm" : "border-border bg-card hover:border-border/80"}`}>
-      <button type="button" onClick={() => setOpen((o) => !o)} className="flex w-full items-center justify-between px-6 py-5 text-left">
+      <button
+        type="button"
+        onClick={() => setOpen((o) => !o)}
+        aria-expanded={open}
+        className="flex w-full items-center justify-between px-6 py-5 text-left"
+      >
         <span className="pr-4 text-[0.95rem] font-semibold text-foreground">{question}</span>
         <ChevronDownIcon className={`h-5 w-5 shrink-0 text-muted-foreground transition-transform duration-200 ${open ? "rotate-180 text-primary" : ""}`} />
       </button>
-      {open && <div className="px-6 pb-5"><p className="text-sm leading-7 text-muted-foreground">{answer}</p></div>}
+      <div className={`overflow-hidden transition-[max-height] duration-300 ease-in-out ${open ? "max-h-60" : "max-h-0"}`}>
+        <div className="px-6 pb-5">
+          <p className="text-sm leading-7 text-muted-foreground">{answer}</p>
+        </div>
+      </div>
     </div>
   );
 }
@@ -1092,7 +1130,7 @@ function CTASection({ openAuth }) {
           <div className="relative">
             <h2 className="mx-auto max-w-2xl text-3xl font-bold leading-tight text-white md:text-5xl">
               Make company records searchable{" "}
-              <span style={{ background: "linear-gradient(135deg,#a78bfa,#60a5fa)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+              <span className="text-gradient" style={{ "--gradient-text": "linear-gradient(135deg,#a78bfa,#60a5fa)" }}>
                 in one secure workspace.
               </span>
             </h2>

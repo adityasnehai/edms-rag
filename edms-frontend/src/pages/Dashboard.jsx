@@ -8,6 +8,7 @@ import EvidenceItem from "../components/EvidenceItem";
 import FormattedContent from "../components/FormattedContent";
 import WorkspaceShell from "../components/WorkspaceShell";
 import useRecentSearches from "../hooks/useRecentSearches";
+import usePageTitle from "../hooks/usePageTitle";
 import { getAuthPayload } from "../utils/auth";
 import { SearchIcon, SparkleIcon } from "../components/AppIcons";
 
@@ -145,6 +146,24 @@ export default function Dashboard() {
 
   const evidence = useMemo(() => result?.evidence ?? [], [result]);
 
+  usePageTitle("Search");
+
+  // "/" shortcut focuses the search input
+  useEffect(() => {
+    function handleKey(e) {
+      if (
+        e.key === "/" &&
+        document.activeElement?.tagName !== "INPUT" &&
+        document.activeElement?.tagName !== "TEXTAREA"
+      ) {
+        e.preventDefault();
+        inputRef.current?.focus();
+      }
+    }
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, []);
+
   if (!payload) return null;
 
   return (
@@ -158,7 +177,7 @@ export default function Dashboard() {
 
         {/* Search card */}
         <section
-          className="animate-fade-up rounded-2xl border border-border bg-white shadow-sm"
+          className="animate-fade-up rounded-2xl border border-border bg-card shadow-sm"
           style={{ animationDelay: "110ms" }}
         >
           <div className="p-4 lg:p-5">
@@ -190,7 +209,7 @@ export default function Dashboard() {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-              placeholder="Ask about ADRs, RFCs, meeting notes, tickets, postmortems, or images..."
+              placeholder="Ask about ADRs, RFCs, meeting notes, tickets, postmortems… (press / to focus)"
               className="min-w-0 flex-1 border-0 bg-transparent text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
             />
             <button
@@ -242,7 +261,7 @@ export default function Dashboard() {
 
         {/* Loading state */}
         {loading && (
-          <section className="rounded-2xl border border-primary/10 bg-white p-4 shadow-sm">
+          <section className="rounded-2xl border border-primary/10 bg-card p-4 shadow-sm">
             <div className="flex items-center gap-3.5">
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-primary shadow-sm">
                 <SparkleIcon className="h-5 w-5 animate-pulse-soft text-white" />
@@ -266,7 +285,7 @@ export default function Dashboard() {
         {result && (
           <div className="space-y-4">
             {/* Answer card */}
-            <section className="rounded-2xl border border-border bg-white p-4 shadow-sm lg:p-5">
+            <section className="rounded-2xl border border-border bg-card p-4 shadow-sm lg:p-5">
               <div className="flex flex-wrap items-start justify-between gap-4">
                 <div className="flex-1 min-w-0">
                   <span className="inline-flex items-center rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-emerald-700">
@@ -299,7 +318,7 @@ export default function Dashboard() {
             </section>
 
             {/* Evidence cards */}
-            <section className="rounded-2xl border border-border bg-white p-4 shadow-sm lg:p-5">
+            <section className="rounded-2xl border border-border bg-card p-4 shadow-sm lg:p-5">
               <div className="mb-4 flex items-center justify-between">
                 <div>
                   <h3 className="text-base font-semibold text-foreground">
@@ -312,17 +331,30 @@ export default function Dashboard() {
               </div>
 
               {evidence.length > 0 ? (
-                <div className="-mx-1 overflow-x-auto pb-3">
-                  <div className="flex snap-x snap-mandatory gap-4 px-1">
-                  {evidence.map((item, idx) => (
-                    <EvidenceItem
-                      key={`${item.doc_id}-${item.section_type}-${idx}`}
-                      item={item}
-                      variant="search"
-                    />
-                  ))}
+                <>
+                  {/* Mobile: vertical stack */}
+                  <div className="flex flex-col gap-3 sm:hidden">
+                    {evidence.map((item, idx) => (
+                      <EvidenceItem
+                        key={`${item.doc_id}-${item.section_type}-${idx}`}
+                        item={item}
+                        variant="search"
+                      />
+                    ))}
                   </div>
-                </div>
+                  {/* Desktop: horizontal scroll */}
+                  <div className="-mx-1 hidden overflow-x-auto pb-3 sm:block">
+                    <div className="flex snap-x snap-mandatory gap-4 px-1">
+                      {evidence.map((item, idx) => (
+                        <EvidenceItem
+                          key={`${item.doc_id}-${item.section_type}-${idx}`}
+                          item={item}
+                          variant="search"
+                        />
+                      ))}
+                    </div>
+                  </div>
+                </>
               ) : (
                 <div className="rounded-2xl border border-dashed border-border bg-secondary/50 px-5 py-12 text-center">
                   <p className="text-sm text-muted-foreground">

@@ -2,9 +2,48 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#4f46e5" />
+
+    <!-- SEO -->
+    <title>EDMS — Company Knowledge Search</title>
+    <meta name="description" content="Search ADRs, RFCs, meeting notes, postmortems, tickets, and diagrams with evidence-backed answers. Invite-based workspace access for enterprise teams." />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="EDMS — Company Knowledge Search" />
+    <meta property="og:description" content="Search company records with linked evidence. Grounded answers from ADRs, RFCs, postmortems, tickets, and more." />
+    <meta property="og:image" content="/og-image.png" />
+    <meta property="og:url" content="https://edms.app" />
+    <meta property="og:site_name" content="EDMS" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="EDMS — Company Knowledge Search" />
+    <meta name="twitter:description" content="Search company records with linked evidence. Grounded answers from ADRs, RFCs, postmortems, tickets, and more." />
+    <meta name="twitter:image" content="/og-image.png" />
+
+    <!-- Favicon -->
     <link rel="icon" type="image/png" href="/edms-favicon.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>edms-frontend</title>
+    <link rel="apple-touch-icon" href="/edms-favicon.png" />
+
+    <!-- Google Fonts — preconnect first, then stylesheet (non-blocking) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+    <!-- Structured data -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "EDMS",
+        "description": "Enterprise Document Memory System — evidence-backed RAG search for company knowledge.",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "Web"
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>
