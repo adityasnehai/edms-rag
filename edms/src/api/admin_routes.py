@@ -21,7 +21,7 @@ from src.runtime_config import (
     ORG_MAX_STORAGE_BYTES,
     UPLOAD_MAX_FILES_PER_REQUEST,
 )
-from src.storage import delete_file, exists, iter_files, org_storage_stats, read_bytes, write_bytes
+from src.storage import delete_file, exists, iter_file_metadata, iter_files, org_storage_stats, read_bytes, write_bytes
 from src.tenancy import ensure_org_directories, get_org_data_path
 from src.telemetry import log_event, stage_timer
 from src.traffic_control import enforce_rate_limit, request_capacity_guard
@@ -121,7 +121,7 @@ def _validate_payload_for_type(data_type: str, upload: UploadFile) -> tuple[str,
     return filename, payload
 
 
-def _file_record(org_slug: str, rel_path: str, payload: bytes) -> dict | None:
+def _file_record(org_slug: str, rel_path: str, size_bytes: int) -> dict | None:
     parts = rel_path.split("/")
     if len(parts) < 2:
         return None
@@ -141,7 +141,7 @@ def _file_record(org_slug: str, rel_path: str, payload: bytes) -> dict | None:
         "data_type": data_type,
         "filename": filename,
         "path": rel_path,
-        "size_bytes": len(payload),
+        "size_bytes": size_bytes,
         "updated_at": stat.st_mtime if stat else None,
     }
 
@@ -218,11 +218,11 @@ def list_admin_data_files(
     query_text = (q or "").strip().lower()
     items = []
 
-    for rel_path, payload in iter_files(
+    for rel_path, size_bytes in iter_file_metadata(
         organization["slug"],
         suffixes=(".md", ".png", ".jpg", ".jpeg"),
     ):
-        record = _file_record(organization["slug"], rel_path, payload)
+        record = _file_record(organization["slug"], rel_path, size_bytes)
         if not record:
             continue
         if selected_type and record["data_type"] != selected_type:

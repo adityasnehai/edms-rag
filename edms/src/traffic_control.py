@@ -58,10 +58,11 @@ def enforce_rate_limit(identifier: str, route_name: str) -> None:
         except Exception:
             pass
 
-    import time
-
     now = time.time()
     with _local_counter_lock:
+        expired = [k for k, (_, exp) in _local_counters.items() if isinstance(exp, float) and now >= exp]
+        for k in expired:
+            _local_counters.pop(k, None)
         count, expires_at = _local_counters.get(redis_key, (0, now + RATE_LIMIT_WINDOW_SECONDS))
         if now >= expires_at:
             count = 0

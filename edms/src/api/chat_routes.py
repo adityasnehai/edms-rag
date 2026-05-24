@@ -2,7 +2,6 @@ from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
 from typing import List, Dict
 from fastapi.responses import StreamingResponse
-import time
 
 from src.auth.dependencies import get_current_user
 from src.api.index_manager import (
@@ -260,7 +259,6 @@ def chat_stream(
             index_version=meta.get("index_version"),
         ):
             yield token
-            time.sleep(0.01)
 
         log_event(20, "chat_stream_completed", event="chat", route="/chat/stream", user_id=user["id"], org_id=user["org_id"], org_slug=org_slug, query_length=query_length, retrieved_chunks=len(retrieved), index_status=meta.get("status"), pipeline_status=meta.get("pipeline_status"))
 

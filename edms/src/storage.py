@@ -162,6 +162,44 @@ def iter_files(org_slug: str, suffixes: tuple[str, ...] | None = None) -> Iterab
         continuation_token = response.get("NextContinuationToken")
 
 
+def iter_file_metadata(org_slug: str, suffixes: tuple[str, ...] | None = None) -> Iterable[tuple[str, int]]:
+    """Yield (rel_path, size_bytes) without reading file contents."""
+    base_path = ensure_org_storage(org_slug)
+    yielded = set()
+
+    for root, _, files in os.walk(base_path):
+        for filename in files:
+            rel_path = os.path.relpath(os.path.join(root, filename), base_path).replace("\\", "/")
+            if suffixes and not rel_path.lower().endswith(tuple(ext.lower() for ext in suffixes)):
+                continue
+            yielded.add(rel_path)
+            size = os.path.getsize(os.path.join(root, filename))
+            yield rel_path, size
+
+    if not _s3_enabled():
+        return
+
+    client = _get_s3_client()
+    prefix = _object_key(org_slug, "")
+    continuation_token = None
+    while True:
+        kwargs = {"Bucket": S3_BUCKET, "Prefix": prefix}
+        if continuation_token:
+            kwargs["ContinuationToken"] = continuation_token
+        response = client.list_objects_v2(**kwargs)
+        for item in response.get("Contents", []):
+            key = item["Key"]
+            rel_path = key[len(prefix):].lstrip("/")
+            if not rel_path or rel_path in yielded:
+                continue
+            if suffixes and not rel_path.lower().endswith(tuple(ext.lower() for ext in suffixes)):
+                continue
+            yield rel_path, item["Size"]
+        if not response.get("IsTruncated"):
+            break
+        continuation_token = response.get("NextContinuationToken")
+
+
 def org_storage_stats(org_slug: str) -> dict:
     total_files = 0
     total_bytes = 0
