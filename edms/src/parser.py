@@ -7,7 +7,6 @@ from src.storage import iter_files
 def parse_org_folder(
     org_slug: str,
     org_id: int,
-    base_path: str | None = None,
 ) -> List[Dict]:
     documents: List[Dict] = []
     for rel, payload in iter_files(org_slug, suffixes=(".md", ".txt")):
@@ -20,7 +19,6 @@ def parse_org_folder(
             continue
 
         if data_type == "images":
-            data_type = "images"
             section_type = "vision_summary"
             doc_id = fname.replace(".txt", "")
         else:

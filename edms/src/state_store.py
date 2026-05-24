@@ -247,7 +247,12 @@ def revoke_all_user_sessions(user_id: int) -> None:
         conn.close()
 
 
+_TOKEN_TABLES = {"email_verification_tokens", "password_reset_tokens"}
+
+
 def create_one_time_token(table_name: str, user_id: int, *, expires_at: str) -> str:
+    if table_name not in _TOKEN_TABLES:
+        raise ValueError(f"Invalid token table: {table_name}")
     token = secrets.token_urlsafe(32)
     conn = connect()
     try:
@@ -267,6 +272,8 @@ def create_one_time_token(table_name: str, user_id: int, *, expires_at: str) -> 
 
 
 def consume_one_time_token(table_name: str, token: str) -> Optional[Dict]:
+    if table_name not in _TOKEN_TABLES:
+        raise ValueError(f"Invalid token table: {table_name}")
     conn = connect()
     try:
         cursor = conn.cursor()

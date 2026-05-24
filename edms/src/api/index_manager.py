@@ -99,8 +99,6 @@ def _build_vector_backend(org_slug: str, embedded_chunks):
             return store, "pinecone", None
         except Exception as exc:
             warning = f"Vector backend fell back to faiss: {exc}"
-        else:
-            warning = None
     else:
         warning = None
 
