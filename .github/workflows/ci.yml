@@ -23,7 +23,7 @@ jobs:
     env:
       ALLOW_DOTENV: "0"
       APP_ENV: development
-      JWT_SECRET: test-jwt-secret
+      JWT_SECRET: ci-only-jwt-secret-not-used-in-production-at-all
       DATABASE_URL: sqlite:///data/ci.db
       REDIS_URL: ""
       CELERY_BROKER_URL: ""
