@@ -275,10 +275,10 @@ def request_password_reset(data: EmailRequest):
     email = _clean_email(data.email)
     user = get_user_by_email(email)
     if user:
-        token = create_password_reset_token(user["id"])
+        create_password_reset_token(user["id"])
         log_event(20, "password_reset_requested", event="auth", outcome="success", email_hash=_email_hash(email), user_id=user["id"], org_id=user["org_id"])
-        return {"status": "ok", "reset_token": token}
-    log_event(30, "password_reset_requested", event="auth", outcome="unknown_email", email_hash=_email_hash(email))
+    else:
+        log_event(30, "password_reset_requested", event="auth", outcome="unknown_email", email_hash=_email_hash(email))
     return {"status": "ok"}
 
 
@@ -303,10 +303,10 @@ def request_email_verification(data: EmailRequest):
     email = _clean_email(data.email)
     user = get_user_by_email(email)
     if user and not user.get("email_verified_at"):
-        token = create_email_verification_token(user["id"])
+        create_email_verification_token(user["id"])
         log_event(20, "email_verification_requested", event="auth", outcome="success", email_hash=_email_hash(email), user_id=user["id"], org_id=user["org_id"])
-        return {"status": "ok", "verification_token": token}
-    log_event(30, "email_verification_requested", event="auth", outcome="ignored_or_verified", email_hash=_email_hash(email))
+    else:
+        log_event(30, "email_verification_requested", event="auth", outcome="ignored_or_verified", email_hash=_email_hash(email))
     return {"status": "ok"}
 
 

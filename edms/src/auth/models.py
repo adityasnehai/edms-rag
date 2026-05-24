@@ -119,7 +119,12 @@ def _ensure_users_schema(cursor):
         execute(cursor, "ALTER TABLE users ADD COLUMN email_verified_at TEXT")
 
 
+_ORG_FETCH_COLUMNS = {"id", "slug", "invite_code"}
+
+
 def _fetch_organization(cursor, clause: str, value) -> Optional[Dict]:
+    if clause not in _ORG_FETCH_COLUMNS:
+        raise ValueError(f"Invalid column: {clause}")
     execute(
         cursor,
         f"""

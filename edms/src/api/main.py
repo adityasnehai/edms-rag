@@ -183,6 +183,9 @@ def startup_event():
     init_sentry()
     init_opentelemetry(app)
     os.makedirs("data", exist_ok=True)
+    jwt_secret = os.getenv("JWT_SECRET", "")
+    if not jwt_secret or jwt_secret in {"change-me", "secret", "test-jwt-secret"}:
+        raise RuntimeError("JWT_SECRET must be set to a strong secret value")
     if PRODUCTION_MODE:
         if not REDIS_URL:
             raise RuntimeError("Production requires REDIS_URL")
@@ -253,7 +256,14 @@ def ready():
 
 
 @app.get("/metrics")
-def metrics():
+def metrics(request: Request):
+    metrics_token = os.getenv("METRICS_API_KEY", "")
+    if metrics_token:
+        auth_header = request.headers.get("Authorization", "")
+        query_token = request.query_params.get("token", "")
+        provided = auth_header.removeprefix("Bearer ").strip() or query_token
+        if provided != metrics_token:
+            return JSONResponse(status_code=403, content={"detail": "Forbidden"})
     return Response(content=metrics_payload(), media_type=CONTENT_TYPE_LATEST)
 
 # -------------------------
