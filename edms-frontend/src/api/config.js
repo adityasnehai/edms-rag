@@ -1,4 +1,7 @@
 const REMOTE_API_BASE = "https://edms-api-e2bc.onrender.com";
+const CONFIGURED_API_BASE = normalizeApiBase(
+  import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_BASE,
+);
 const FETCH_ATTEMPT_TIMEOUT_MS = 60000;
 const FETCH_TOTAL_TIMEOUT_MS = 120000;
 const FETCH_RETRY_DELAY_MS = 250;
@@ -16,15 +19,9 @@ function normalizeApiBase(base) {
   return (base || "").replace(/\/+$/, "");
 }
 
-function getDefaultApiBase() {
-  return isLocalBrowser() ? "http://127.0.0.1:8000" : "/api";
-}
-
-export const API_BASE = normalizeApiBase(
-  import.meta.env.VITE_API_BASE_URL ||
-    import.meta.env.VITE_API_BASE ||
-    getDefaultApiBase(),
-);
+export const API_BASE = isLocalBrowser()
+  ? normalizeApiBase(CONFIGURED_API_BASE || "http://127.0.0.1:8000")
+  : "/api";
 
 function getApiBaseCandidates() {
   const localCandidates = [
@@ -33,22 +30,17 @@ function getApiBaseCandidates() {
     "http://127.0.0.1:8001",
     "http://localhost:8001",
   ];
-  const envCandidates = [
-    import.meta.env.VITE_API_BASE_URL,
-    import.meta.env.VITE_API_BASE,
+  const prodCandidates = [API_BASE, REMOTE_API_BASE].map((value) => normalizeApiBase(value)).filter(Boolean);
+  const localCandidatesWithEnv = [
+    CONFIGURED_API_BASE,
     typeof window !== "undefined" ? window.localStorage.getItem(LAST_WORKING_API_BASE_KEY) : null,
-    API_BASE,
     REMOTE_API_BASE,
+    ...localCandidates,
   ]
     .map((value) => normalizeApiBase(value))
     .filter(Boolean);
 
-  return Array.from(
-    new Set([
-      ...(isLocalBrowser() ? localCandidates : []),
-      ...envCandidates,
-    ]),
-  );
+  return Array.from(new Set(isLocalBrowser() ? localCandidatesWithEnv : prodCandidates));
 }
 
 export const API_BASE_CANDIDATES = getApiBaseCandidates();
