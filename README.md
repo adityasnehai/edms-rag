@@ -17,7 +17,7 @@ EDMS is built for teams that need the decision trail, not another generic chatbo
 
 <br/>
 
-![EDMS workflow demo](docs/demo.gif)
+![EDMS workflow demo](recording/edms-workflow-github.gif)
 
 </div>
 
@@ -231,7 +231,7 @@ Query
 
 ## Workflow Preview
 
-![EDMS workflow preview](docs/demo.gif)
+![EDMS workflow preview](recording/edms-workflow-github.gif)
 
 ---
 
@@ -240,7 +240,7 @@ Query
 ```
 edms-rag/
 ├── docs/
-│   ├── demo.gif                     # Workflow preview GIF
+│   ├── edms-workflow-github.gif     # MemoStack workflow preview GIF
 ├── edms/                            # FastAPI backend
 │   ├── Dockerfile
 │   ├── requirements.txt
