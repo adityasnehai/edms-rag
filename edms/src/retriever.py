@@ -1,7 +1,9 @@
+from functools import lru_cache
+import time
+from threading import Lock
 from typing import Dict, List, Optional, Tuple
 
 import numpy as np
-import requests
 from openai import OpenAI
 
 from src.cache_store import (
@@ -15,15 +17,16 @@ from src.resilience import retry_with_backoff
 from src.retrieval.bm25_index import BM25Index
 from src.retrieval.text_utils import content_terms, tokenize
 from src.runtime_config import (
-    COHERE_RERANK_MAX_DOC_CHARS,
-    COHERE_RERANK_MODEL,
-    COHERE_RERANK_TIMEOUT_SECONDS,
-    COHERE_RERANK_URL,
     DEFAULT_TOP_K,
     EMBEDDING_MODEL,
     EMBEDDING_TIMEOUT_SECONDS,
     HYBRID_CANDIDATE_MULTIPLIER,
     MAX_TOP_K,
+    RERANKER_BATCH_SIZE,
+    RERANKER_DEGRADE_TTL_SECONDS,
+    RERANKER_MAX_DOC_CHARS,
+    RERANKER_MODEL,
+    RERANKER_SLOW_THRESHOLD_SECONDS,
     OPENAI_TIMEOUT_SECONDS,
     QUERY_EMBEDDING_CACHE_TTL_SECONDS,
     RETRIEVAL_CACHE_TTL_SECONDS,
@@ -37,6 +40,8 @@ from src.vector_store import VectorStore
 
 QUERY_EMBEDDING_NAMESPACE = "query_embedding"
 RETRIEVAL_NAMESPACE = "retrieval"
+_reranker_degraded_until = 0.0
+_reranker_state_lock = Lock()
 
 LOW_SIGNAL_QUERIES = {
     "hi",
@@ -360,6 +365,7 @@ def _lexical_overlap_score(query_terms: set[str], chunk: Dict) -> float:
             chunk.get("data_type", ""),
             chunk.get("section_type", ""),
             chunk.get("metadata", {}).get("title", ""),
+            chunk.get("metadata", {}).get("service", ""),
             chunk.get("text", ""),
         ]
     )
@@ -381,6 +387,10 @@ def _metadata_match_score(query_text: str, query_terms: set[str], chunk: Dict) -
     title_terms = set(content_terms(chunk.get("metadata", {}).get("title", "")))
     if title_terms and query_terms & title_terms:
         score += 0.2
+
+    service_terms = set(content_terms(chunk.get("metadata", {}).get("service", "")))
+    if service_terms and query_terms & service_terms:
+        score += 0.35
 
     section_terms = set(tokenize(chunk.get("section_type", "")))
     if section_terms and query_terms & section_terms:
@@ -407,8 +417,8 @@ def _format_chunk_for_rerank(chunk: Dict) -> str:
     metadata = chunk.get("metadata") or {}
     title = metadata.get("title") or ""
     text = (chunk.get("text") or "").strip()
-    if len(text) > COHERE_RERANK_MAX_DOC_CHARS:
-        text = f"{text[:COHERE_RERANK_MAX_DOC_CHARS].rstrip()}..."
+    if len(text) > RERANKER_MAX_DOC_CHARS:
+        text = f"{text[:RERANKER_MAX_DOC_CHARS].rstrip()}..."
 
     return "\n".join(
         [
@@ -422,57 +432,79 @@ def _format_chunk_for_rerank(chunk: Dict) -> str:
     ).strip()
 
 
-def _cohere_rerank_candidates(
+@lru_cache(maxsize=1)
+def _get_cross_encoder():
+    from sentence_transformers import CrossEncoder
+
+    # Load once per process so reranking stays fast after the first request.
+    return CrossEncoder(RERANKER_MODEL, max_length=RERANKER_MAX_DOC_CHARS)
+
+
+def warmup_reranker() -> bool:
+    try:
+        model = _get_cross_encoder()
+        model.predict(
+            [("warmup", "warmup")],
+            batch_size=1,
+            convert_to_numpy=True,
+            show_progress_bar=False,
+        )
+        return True
+    except Exception:
+        return False
+
+
+def _reranker_is_degraded() -> bool:
+    with _reranker_state_lock:
+        return time.time() < _reranker_degraded_until
+
+
+def _degrade_reranker() -> None:
+    global _reranker_degraded_until
+    with _reranker_state_lock:
+        _reranker_degraded_until = time.time() + RERANKER_DEGRADE_TTL_SECONDS
+
+
+def _local_rerank_candidates(
     query: str,
     candidates: List[Dict],
     top_k: int,
 ) -> List[Dict]:
-    from os import getenv
-
-    api_key = getenv("COHERE_API_KEY")
-    if not api_key or not candidates:
+    if not candidates or _reranker_is_degraded():
         return []
 
-    documents = [
-        _format_chunk_for_rerank(candidate["chunk"])
-        for candidate in candidates
-    ]
-
-    def post_rerank():
-        response = requests.post(
-            COHERE_RERANK_URL,
-            headers={
-                "Authorization": f"Bearer {api_key}",
-                "Content-Type": "application/json",
-            },
-            json={
-                "model": COHERE_RERANK_MODEL,
-                "query": query,
-                "documents": documents,
-                "top_n": top_k,
-            },
-            timeout=COHERE_RERANK_TIMEOUT_SECONDS,
+    try:
+        started_at = time.perf_counter()
+        model = _get_cross_encoder()
+        pairs = [
+            (query, _format_chunk_for_rerank(candidate["chunk"]))
+            for candidate in candidates
+        ]
+        scores = model.predict(
+            pairs,
+            batch_size=RERANKER_BATCH_SIZE,
+            convert_to_numpy=True,
+            show_progress_bar=False,
         )
-        response.raise_for_status()
-        return response
-
-    response = retry_with_backoff(
-        post_rerank,
-        max_attempts=RETRY_MAX_ATTEMPTS,
-        base_delay_seconds=RETRY_BASE_DELAY_SECONDS,
-        max_delay_seconds=RETRY_MAX_DELAY_SECONDS,
-    )
-
-    payload = response.json()
-    results = payload.get("results") or []
-    reranked_chunks = []
-
-    for item in results:
-        index = item.get("index")
-        if isinstance(index, int) and 0 <= index < len(candidates):
-            reranked_chunks.append(candidates[index]["chunk"])
-
-    return reranked_chunks
+        ranked = sorted(
+            zip(scores.tolist(), candidates),
+            key=lambda item: item[0],
+            reverse=True,
+        )
+        elapsed = time.perf_counter() - started_at
+        if elapsed >= RERANKER_SLOW_THRESHOLD_SECONDS:
+            _degrade_reranker()
+            log_event(
+                30,
+                "reranker_degraded",
+                org_slug=None,
+                reason="slow_rerank",
+                elapsed_seconds=round(elapsed, 3),
+            )
+        return [candidate["chunk"] for _, candidate in ranked[:top_k]]
+    except Exception:
+        _degrade_reranker()
+        return []
 
 
 def _heuristic_rerank_candidates(
@@ -594,7 +626,7 @@ def retrieve_chunks(
 
     try:
         with stage_timer("rerank", org_slug=org_slug):
-            reranked_chunks = _cohere_rerank_candidates(
+            reranked_chunks = _local_rerank_candidates(
                 query=query,
                 candidates=candidates,
                 top_k=final_top_k,

@@ -14,7 +14,7 @@ function renderHighlightedSegments(text, highlightQuery) {
       return (
         <mark
           key={`hl-${index}`}
-          className="rounded bg-amber-200/80 px-0.5 text-slate-900"
+          className="rounded bg-[#ffd7a7] px-0.5 text-stone-950"
         >
           {part}
         </mark>
@@ -67,10 +67,10 @@ export default function FormattedContent({
   text,
   highlightQuery = "",
   className = "",
-  paragraphClassName = "text-sm leading-7 text-slate-700",
-  listClassName = "space-y-2 pl-5 text-sm leading-7 text-slate-700",
-  headingClassName = "text-slate-900",
-  strongClassName = "text-slate-900",
+  paragraphClassName = "text-sm leading-7 text-stone-700",
+  listClassName = "space-y-2 pl-5 text-sm leading-7 text-stone-700",
+  headingClassName = "text-stone-950",
+  strongClassName = "text-stone-950",
 }) {
   if (!text) {
     return null;

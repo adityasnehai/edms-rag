@@ -15,7 +15,15 @@ import threading
 import time
 import uuid
 from pydantic import BaseModel, Field
-from src.runtime_config import CORS_ALLOW_ORIGINS, PRODUCTION_MODE
+from src.runtime_config import (
+    CORS_ALLOW_ORIGINS,
+    MAX_REQUEST_BODY_SIZE_BYTES,
+    PRODUCTION_MODE,
+    HF_HOME,
+    SENTENCE_TRANSFORMERS_HOME,
+    TRANSFORMERS_CACHE,
+    RERANKER_WARMUP_ON_STARTUP,
+)
 
 # -------------------------
 # CREATE APP FIRST
@@ -71,17 +79,50 @@ app.add_middleware(
 )
 
 
+def _apply_security_headers(response: Response) -> None:
+    response.headers.setdefault("X-Content-Type-Options", "nosniff")
+    response.headers.setdefault("X-Frame-Options", "DENY")
+    response.headers.setdefault("X-Permitted-Cross-Domain-Policies", "none")
+    response.headers.setdefault("Referrer-Policy", "same-origin")
+    response.headers.setdefault("Permissions-Policy", "camera=(), microphone=(), geolocation=()")
+    response.headers.setdefault("Cache-Control", "no-store")
+    response.headers.setdefault("X-Robots-Tag", "noindex, nofollow")
+    if PRODUCTION_MODE:
+        response.headers.setdefault("Strict-Transport-Security", "max-age=31536000; includeSubDomains")
+
+
 @app.middleware("http")
 async def security_headers_middleware(request: Request, call_next):
     request_id = request.headers.get("x-request-id") or uuid.uuid4().hex
     set_request_id(request_id)
+    content_length = request.headers.get("content-length")
+    if content_length:
+        try:
+            if int(content_length) > MAX_REQUEST_BODY_SIZE_BYTES:
+                observe_request_rejection("body_too_large", request.url.path, request.method)
+                log_event(
+                    30,
+                    "request_too_large",
+                    route=request.url.path,
+                    method=request.method,
+                    content_length=int(content_length),
+                )
+                raise HTTPException(
+                    status_code=413,
+                    detail="Request body is too large",
+                )
+        except ValueError:
+            observe_request_rejection("invalid_content_length", request.url.path, request.method)
+            log_event(
+                30,
+                "request_invalid_content_length",
+                route=request.url.path,
+                method=request.method,
+            )
+            raise HTTPException(status_code=400, detail="Invalid request headers")
     started = time.perf_counter()
     response: Response = await call_next(request)
-    response.headers.setdefault("X-Content-Type-Options", "nosniff")
-    response.headers.setdefault("X-Frame-Options", "DENY")
-    response.headers.setdefault("Referrer-Policy", "same-origin")
-    response.headers.setdefault("Permissions-Policy", "camera=(), microphone=(), geolocation=()")
-    response.headers.setdefault("Cache-Control", "no-store")
+    _apply_security_headers(response)
     response.headers.setdefault("X-Request-Id", request_id)
     elapsed = time.perf_counter() - started
     observe_http(request.url.path, request.method, response.status_code, elapsed)
@@ -106,12 +147,9 @@ async def global_exception_handler(request: Request, exc: Exception):
 # -------------------------
 from src.api.auth_routes import router as auth_router
 from src.api.admin_routes import router as admin_router
-from src.api.chat_routes import (
-    router as chat_router,
-    _fallback_file_retrieval,
-    _should_use_file_fallback_first,
-)
+from src.api.chat_routes import router as chat_router
 from src.api.evidence_routes import router as evidence_router
+from src.api.insights_routes import router as insights_router
 from src.api.state_routes import router as state_router
 from src.api.stats_routes import router as stats_router
 
@@ -124,11 +162,7 @@ from src.auth.models import (
     normalize_role,
 )
 from src.auth.auth import hash_password
-from src.api.index_manager import (
-    get_index_metadata,
-    ensure_org_search_indexes,
-    rebuild_all_vector_stores,
-)
+from src.api.index_manager import get_index_metadata, rebuild_all_vector_stores
 from src.ingestion.pipeline import start_ingestion_worker
 from src.runtime_config import (
     CELERY_BROKER_URL,
@@ -141,12 +175,19 @@ from src.runtime_config import (
     REDIS_URL,
     VECTOR_BACKEND,
 )
-from src.retriever import DEFAULT_TOP_K, MAX_TOP_K, retrieve_chunks, sanitize_top_k
+from src.retriever import DEFAULT_TOP_K, MAX_TOP_K
+from src.retriever import warmup_reranker
 from src.generator import generate_answer, stream_answer
+from src.services.query_flow import (
+    annotate_file_fallback_index_version,
+    get_cached_workspace_insights,
+    fallback_file_retrieval,
+    resolve_query_chunks,
+)
 from src.traffic_control import enforce_rate_limit, request_capacity_guard
 from src.state_store import init_state_tables
 from src.storage import validate_production_storage
-from src.telemetry import CONTENT_TYPE_LATEST, configure_logging, init_opentelemetry, init_sentry, log_event, metrics_payload, observe_http, set_request_id, stage_timer
+from src.telemetry import CONTENT_TYPE_LATEST, configure_logging, init_opentelemetry, init_sentry, log_event, metrics_payload, observe_http, observe_request_rejection, set_request_id, stage_timer
 from src.cache_store import _get_redis_client
 import requests
 
@@ -171,6 +212,7 @@ app.include_router(auth_router)
 app.include_router(admin_router)
 app.include_router(stats_router)
 app.include_router(evidence_router)
+app.include_router(insights_router)
 app.include_router(chat_router)
 app.include_router(state_router)
 
@@ -183,6 +225,9 @@ def startup_event():
     init_sentry()
     init_opentelemetry(app)
     os.makedirs("data", exist_ok=True)
+    os.makedirs(HF_HOME, exist_ok=True)
+    os.makedirs(TRANSFORMERS_CACHE, exist_ok=True)
+    os.makedirs(SENTENCE_TRANSFORMERS_HOME, exist_ok=True)
     jwt_secret = os.getenv("JWT_SECRET", "")
     if not jwt_secret or jwt_secret in {"change-me", "secret", "test-jwt-secret"}:
         raise RuntimeError("JWT_SECRET must be set to a strong secret value")
@@ -222,6 +267,18 @@ def startup_event():
     ).strip().lower() in {"1", "true", "yes"}
     if rebuild_on_startup:
         threading.Thread(target=rebuild_all_vector_stores, daemon=True).start()
+    if RERANKER_WARMUP_ON_STARTUP:
+        def _warmup():
+            ok = warmup_reranker()
+            log_event(
+                20 if ok else 30,
+                "reranker_warmup_completed",
+                org_slug=None,
+                success=ok,
+                model=os.getenv("RERANKER_MODEL", ""),
+            )
+
+        threading.Thread(target=_warmup, daemon=True).start()
 
 # -------------------------
 # HEALTH
@@ -282,65 +339,50 @@ def search(
     retrieved = None
     query_length = len(cleaned_query)
     with request_capacity_guard():
-        if _should_use_file_fallback_first(meta):
-            with stage_timer("search_file_retrieval", route="/search", user_id=user["id"], org_id=user["org_id"], org_slug=org_slug):
-                retrieved = _fallback_file_retrieval(
+        try:
+            with stage_timer("search_retrieval", route="/search", user_id=user["id"], org_id=user["org_id"], org_slug=org_slug):
+                resolution = resolve_query_chunks(
                     query=cleaned_query,
                     org_slug=org_slug,
                     org_id=user["org_id"],
                     top_k=top_k,
                 )
-
-        if retrieved is None:
-            try:
-                with stage_timer("search_retrieval", route="/search", user_id=user["id"], org_id=user["org_id"], org_slug=org_slug):
-                    store, bm25_index, meta = ensure_org_search_indexes(
-                        org_slug,
-                        user["org_id"],
-                    )
-                    retrieved = retrieve_chunks(
-                        cleaned_query,
-                        store,
-                        bm25_index=bm25_index,
-                        top_k=sanitize_top_k(top_k),
-                        org_slug=org_slug,
-                        index_version=meta.get("index_version"),
-                    )
-            except Exception as exc:
-                log_event(
-                    40,
-                    "search_retrieval_failed",
-                    route="/search",
-                    user_id=user["id"],
-                    org_id=user["org_id"],
-                    org_slug=org_slug,
-                    query_length=query_length,
-                    index_status=meta.get("status"),
-                    pipeline_status=meta.get("pipeline_status"),
-                    error_type=exc.__class__.__name__,
+                retrieved = resolution.retrieved
+                meta = annotate_file_fallback_index_version(
+                    resolution.meta,
+                    org_slug,
+                    resolution.used_file_fallback,
                 )
-                retrieved = _fallback_file_retrieval(
-                    query=cleaned_query,
-                    org_slug=org_slug,
-                    org_id=user["org_id"],
-                    top_k=top_k,
-                )
-                meta = get_index_metadata(org_slug)
-                if not retrieved:
-                    return {
-                        "query": cleaned_query,
-                        "answer": (
-                            "I could not find workspace content for this query yet. "
-                            "Upload data or try again after indexing finishes."
-                        ),
-                        "evidence": [],
-                    }
-
-    if _should_use_file_fallback_first(meta) and retrieved:
-        meta = {
-            **meta,
-            "index_version": f"file-fallback:{org_slug}",
-        }
+        except Exception as exc:
+            meta = meta or {}
+            log_event(
+                40,
+                "search_retrieval_failed",
+                route="/search",
+                user_id=user["id"],
+                org_id=user["org_id"],
+                org_slug=org_slug,
+                query_length=query_length,
+                index_status=meta.get("status"),
+                pipeline_status=meta.get("pipeline_status"),
+                error_type=exc.__class__.__name__,
+            )
+            retrieved = fallback_file_retrieval(
+                query=cleaned_query,
+                org_slug=org_slug,
+                org_id=user["org_id"],
+                top_k=top_k,
+            )
+            if not retrieved:
+                return {
+                    "query": cleaned_query,
+                    "answer": (
+                        "I could not find workspace content for this query yet. "
+                        "Upload data or try again after indexing finishes."
+                    ),
+                    "evidence": [],
+                }
+            meta = get_index_metadata(org_slug)
 
     if not retrieved:
         return {
@@ -361,6 +403,13 @@ def search(
             org_slug=org_slug,
             index_version=meta.get("index_version"),
         )
+    intelligence = get_cached_workspace_insights(
+        org_slug=org_slug,
+        org_id=user["org_id"],
+        index_version=meta.get("index_version"),
+        seed_chunks=retrieved,
+        query=cleaned_query,
+    )
     log_event(
         20,
         "search_completed",
@@ -380,6 +429,10 @@ def search(
         "query": cleaned_query,
         "answer": result["answer"],
         "evidence": result["evidence"],
+        "related_evidence": intelligence["related_evidence"],
+        "service_summary": intelligence["service_summary"],
+        "timeline": intelligence["timeline"],
+        "workspace_summary": intelligence["workspace_summary"],
     }
 
 
@@ -397,29 +450,19 @@ def search_stream(
 
     try:
         with request_capacity_guard():
-            if _should_use_file_fallback_first(meta):
-                with stage_timer("search_stream_file_retrieval", route="/search/stream", user_id=user["id"], org_id=user["org_id"], org_slug=org_slug):
-                    retrieved = _fallback_file_retrieval(
-                        query=cleaned_query,
-                        org_slug=org_slug,
-                        org_id=user["org_id"],
-                        top_k=data.top_k,
-                    )
-
-            if retrieved is None:
-                with stage_timer("search_stream_retrieval", route="/search/stream", user_id=user["id"], org_id=user["org_id"], org_slug=org_slug):
-                    store, bm25_index, meta = ensure_org_search_indexes(
-                        org_slug,
-                        user["org_id"],
-                    )
-                    retrieved = retrieve_chunks(
-                        cleaned_query,
-                        store,
-                        bm25_index=bm25_index,
-                        top_k=sanitize_top_k(data.top_k),
-                        org_slug=org_slug,
-                        index_version=meta.get("index_version"),
-                    )
+            with stage_timer("search_stream_retrieval", route="/search/stream", user_id=user["id"], org_id=user["org_id"], org_slug=org_slug):
+                resolution = resolve_query_chunks(
+                    query=cleaned_query,
+                    org_slug=org_slug,
+                    org_id=user["org_id"],
+                    top_k=data.top_k,
+                )
+                retrieved = resolution.retrieved
+                meta = annotate_file_fallback_index_version(
+                    resolution.meta,
+                    org_slug,
+                    resolution.used_file_fallback,
+                )
     except Exception as exc:
         log_event(
             40,
@@ -433,19 +476,13 @@ def search_stream(
             pipeline_status=meta.get("pipeline_status"),
             error_type=exc.__class__.__name__,
         )
-        retrieved = _fallback_file_retrieval(
+        retrieved = fallback_file_retrieval(
             query=cleaned_query,
             org_slug=org_slug,
             org_id=user["org_id"],
             top_k=data.top_k,
         )
         meta = get_index_metadata(org_slug)
-
-    if _should_use_file_fallback_first(meta) and retrieved:
-        meta = {
-            **meta,
-            "index_version": f"file-fallback:{org_slug}",
-        }
 
     def event_generator():
         if retrieved is None:

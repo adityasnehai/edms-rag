@@ -16,6 +16,8 @@ export default {
     extend: {
       fontFamily: {
         sans: ["Inter", "ui-sans-serif", "system-ui", "sans-serif"],
+        heading: ["Inter", "ui-sans-serif", "system-ui", "sans-serif"],
+        mono: ["Cascadia Code", "SFMono-Regular", "Consolas", "ui-monospace", "monospace"],
       },
       colors: {
         border: "hsl(var(--border))",

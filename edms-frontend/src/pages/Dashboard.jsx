@@ -13,8 +13,8 @@ import { getAuthPayload } from "../utils/auth";
 import { SearchIcon, SparkleIcon } from "../components/AppIcons";
 
 const EXAMPLE_QUERIES = [
-  "What changed after the postmortem?",
-  "Who approved the database migration RFC?",
+  "What changed before the outage?",
+  "Which ADR explains the current auth flow?",
 ];
 
 export default function Dashboard() {
@@ -47,9 +47,13 @@ export default function Dashboard() {
       }
     }
 
-    function handleWorkspaceUpdate() { loadStats(); }
+    function handleWorkspaceUpdate() {
+      loadStats();
+    }
     function handleVisibilityChange() {
-      if (document.visibilityState === "visible") loadStats();
+      if (document.visibilityState === "visible") {
+        loadStats();
+      }
     }
 
     loadStats();
@@ -145,7 +149,7 @@ export default function Dashboard() {
   }
 
   const evidence = useMemo(() => result?.evidence ?? [], [result]);
-
+  const relatedEvidence = useMemo(() => result?.related_evidence ?? [], [result]);
   usePageTitle("Search");
 
   // "/" shortcut focuses the search input
@@ -181,81 +185,81 @@ export default function Dashboard() {
           style={{ animationDelay: "110ms" }}
         >
           <div className="p-4 lg:p-5">
-          <div className="mb-4 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
-            <div className="flex items-start gap-3">
-              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-primary shadow-glow">
-                <SparkleIcon className="h-4 w-4 text-white" />
-              </div>
-              <div>
-                <h2 className="text-base font-semibold text-foreground">
-                  Search workspace knowledge
-                </h2>
-                <p className="mt-0.5 text-xs text-muted-foreground">{payload?.org_name || "EDMS"}</p>
+            <div className="mb-4 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+              <div className="flex items-start gap-3">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-[#f48d16]/18 bg-[#fff4e1]">
+                  <SparkleIcon className="h-4 w-4 text-[#a76311]" />
+                </div>
+                <div>
+                  <h2 className="text-base font-semibold text-foreground">
+                    Search incident and decision history
+                  </h2>
+                  <p className="mt-0.5 text-xs text-muted-foreground">{payload?.org_name || "MemoStack"}</p>
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* Input */}
-          <div
-            className={`flex items-center gap-3 rounded-xl border bg-background px-4 py-3 transition-all ${
-              loading
-                ? "border-primary/30 ring-2 ring-primary/10"
-                : "border-border shadow-sm hover:border-primary/25 focus-within:border-primary/30 focus-within:ring-2 focus-within:ring-primary/10"
-            }`}
-          >
-            <SearchIcon className="h-5 w-5 shrink-0 text-muted-foreground" />
-            <input
-              ref={inputRef}
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-              placeholder="Ask about ADRs, RFCs, meeting notes, tickets, postmortems… (press / to focus)"
-              className="min-w-0 flex-1 border-0 bg-transparent text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
-            />
-            <button
-              type="button"
-              onClick={() => handleSearch()}
-              disabled={loading || !query.trim()}
-              className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-gradient-primary px-4 py-2 text-sm font-semibold text-white shadow-glow transition hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-50"
+            {/* Input */}
+            <div
+              className={`flex items-center gap-3 rounded-xl border bg-background px-4 py-3 transition-all ${
+                loading
+                  ? "border-primary/30 ring-2 ring-primary/10"
+                  : "border-border shadow-sm hover:border-primary/25 focus-within:border-primary/30 focus-within:ring-2 focus-within:ring-primary/10"
+              }`}
             >
-              <SearchIcon className="h-4 w-4" />
-              {loading ? "Searching" : "Search"}
-            </button>
-          </div>
-
-          {/* Example queries + actions */}
-          <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
-            <div className="flex flex-wrap gap-2">
-              {EXAMPLE_QUERIES.map((q) => (
-                <button
-                  key={q}
-                  type="button"
-                  onClick={() => { setQuery(q); handleSearch(q); }}
-                  className="rounded-full border border-border bg-slate-50 px-3 py-1.5 text-xs text-muted-foreground transition hover:border-primary/20 hover:bg-accent hover:text-accent-foreground"
-                >
-                  {q}
-                </button>
-              ))}
+              <SearchIcon className="h-5 w-5 shrink-0 text-muted-foreground" />
+              <input
+                ref={inputRef}
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+                placeholder="Ask about incidents, ADRs, RFCs, tickets, and postmortems… (press / to focus)"
+                className="min-w-0 flex-1 border-0 bg-transparent text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
+              />
+              <button
+                type="button"
+                onClick={() => handleSearch()}
+                disabled={loading || !query.trim()}
+                className="inline-flex shrink-0 items-center gap-2 rounded-xl border border-[#f48d16]/22 bg-[#fff4e1] px-4 py-2 text-sm font-semibold text-[#251f19] shadow-sm transition hover:border-[#f48d16]/35 hover:bg-[#ffeed2] disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                <SearchIcon className="h-4 w-4" />
+                {loading ? "Searching" : "Search"}
+              </button>
             </div>
 
-            <div className="flex gap-2">
-              {(result || query) && (
-                <button
-                  type="button"
-                  onClick={clearSearch}
-                  className="rounded-xl border border-border bg-card px-4 py-2 text-sm font-medium text-foreground transition hover:bg-secondary"
-                >
-                  Clear
-                </button>
-              )}
-            </div>
-          </div>
+            {/* Example queries + actions */}
+            <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
+              <div className="flex flex-wrap gap-2">
+                {EXAMPLE_QUERIES.map((q) => (
+                  <button
+                    key={q}
+                    type="button"
+                    onClick={() => { setQuery(q); handleSearch(q); }}
+                    className="rounded-full border border-border bg-secondary/55 px-3 py-1.5 text-xs text-muted-foreground transition hover:border-[#f48d16]/22 hover:bg-[#fff4e1] hover:text-primary"
+                  >
+                    {q}
+                  </button>
+                ))}
+              </div>
 
-          {error && (
-            <div className="mt-4 rounded-xl border border-destructive/20 bg-destructive/5 px-4 py-3 text-sm text-destructive">
-              {error}
+              <div className="flex gap-2">
+                {(result || query) && (
+                  <button
+                    type="button"
+                    onClick={clearSearch}
+                    className="rounded-xl border border-border bg-card px-4 py-2 text-sm font-medium text-foreground transition hover:bg-secondary"
+                  >
+                    Clear
+                  </button>
+                )}
+              </div>
             </div>
-          )}
+
+            {error && (
+              <div className="mt-4 rounded-xl border border-destructive/20 bg-destructive/5 px-4 py-3 text-sm text-destructive">
+                {error}
+              </div>
+            )}
           </div>
         </section>
 
@@ -263,8 +267,8 @@ export default function Dashboard() {
         {loading && (
           <section className="rounded-2xl border border-primary/10 bg-card p-4 shadow-sm">
             <div className="flex items-center gap-3.5">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-primary shadow-sm">
-                <SparkleIcon className="h-5 w-5 animate-pulse-soft text-white" />
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[#f48d16]/18 bg-[#fff4e1]">
+                <SparkleIcon className="h-5 w-5 animate-pulse-soft text-[#a76311]" />
               </div>
               <div>
                 <p className="text-sm font-semibold text-foreground">
@@ -275,8 +279,8 @@ export default function Dashboard() {
                 </p>
               </div>
             </div>
-            <div className="mt-4 h-0.5 overflow-hidden rounded-full bg-primary/10">
-              <div className="h-full w-full rounded-full bg-gradient-to-r from-primary via-violet-400 to-primary bg-[length:200%_100%] animate-line-flow" />
+            <div className="mt-4 h-0.5 overflow-hidden rounded-full bg-[#f4eee4]">
+              <div className="h-full w-full rounded-full bg-[linear-gradient(90deg,rgba(244,141,22,0),rgba(244,141,22,0.45),rgba(244,141,22,0))] bg-[length:200%_100%] animate-line-flow" />
             </div>
           </section>
         )}
@@ -288,7 +292,7 @@ export default function Dashboard() {
             <section className="rounded-2xl border border-border bg-card p-4 shadow-sm lg:p-5">
               <div className="flex flex-wrap items-start justify-between gap-4">
                 <div className="flex-1 min-w-0">
-                  <span className="inline-flex items-center rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-emerald-700">
+                  <span className="inline-flex items-center rounded-full border border-[#f48d16]/22 bg-[#fff4e1] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#a76311]">
                     Answer
                   </span>
                   <h2 className="mt-3 text-lg font-semibold text-foreground">
@@ -306,13 +310,13 @@ export default function Dashboard() {
                 </p>
               )}
 
-              <div className="mt-4 rounded-xl border border-border bg-slate-50 p-4">
+              <div className="mt-4 rounded-xl border border-border bg-secondary/55 p-4">
                 <FormattedContent
                   text={result.answer}
-                  paragraphClassName="text-[15px] leading-8 text-slate-700"
-                  listClassName="space-y-2 pl-5 text-[15px] leading-8 text-slate-700"
-                  headingClassName="text-slate-900"
-                  strongClassName="text-slate-900"
+                  paragraphClassName="text-[15px] leading-8 text-stone-700"
+                  listClassName="space-y-2 pl-5 text-[15px] leading-8 text-stone-700"
+                  headingClassName="text-stone-950"
+                  strongClassName="text-stone-950"
                 />
               </div>
             </section>
@@ -363,6 +367,46 @@ export default function Dashboard() {
                 </div>
               )}
             </section>
+
+            {relatedEvidence.length > 0 && (
+              <section className="rounded-2xl border border-border bg-card p-4 shadow-sm lg:p-5">
+                <div className="mb-4 flex items-center justify-between gap-3">
+                  <div>
+                    <h3 className="text-base font-semibold text-foreground">
+                      Related evidence
+                    </h3>
+                    <p className="mt-0.5 text-xs text-muted-foreground">
+                      Heuristically linked by service, document family, and query overlap.
+                    </p>
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    {relatedEvidence.length} item{relatedEvidence.length !== 1 ? "s" : ""}
+                  </p>
+                </div>
+
+                <div className="flex flex-col gap-3 sm:hidden">
+                  {relatedEvidence.map((item, idx) => (
+                    <EvidenceItem
+                      key={`${item.doc_id}-${item.section_type}-related-${idx}`}
+                      item={item}
+                      variant="search"
+                    />
+                  ))}
+                </div>
+
+                <div className="-mx-1 hidden overflow-x-auto pb-3 sm:block">
+                  <div className="flex snap-x snap-mandatory gap-4 px-1">
+                    {relatedEvidence.map((item, idx) => (
+                      <EvidenceItem
+                        key={`${item.doc_id}-${item.section_type}-related-${idx}`}
+                        item={item}
+                        variant="search"
+                      />
+                    ))}
+                  </div>
+                </div>
+              </section>
+            )}
           </div>
         )}
       </div>

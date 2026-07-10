@@ -1,16 +1,20 @@
-const HARD_PINNED_API_BASE = "https://edms-api-e2bc.onrender.com";
+const FALLBACK_API_BASE = "https://edms-api-e2bc.onrender.com";
 const FETCH_ATTEMPT_TIMEOUT_MS = 60000;
 const FETCH_TOTAL_TIMEOUT_MS = 120000;
 const FETCH_RETRY_DELAY_MS = 250;
 const FETCH_MAX_CYCLES = 3;
 const LAST_WORKING_API_BASE_KEY = "edms:last_api_base";
-const API_UNAVAILABLE_ERROR = "Cannot reach the EDMS API. Start the backend server and try again.";
+const API_UNAVAILABLE_ERROR = "Cannot reach the MemoStack API. Start the backend server and try again.";
 
 function normalizeApiBase(base) {
   return (base || "").replace(/\/+$/, "");
 }
 
-export const API_BASE = normalizeApiBase(HARD_PINNED_API_BASE);
+export const API_BASE = normalizeApiBase(
+  import.meta.env.VITE_API_BASE_URL ||
+    import.meta.env.VITE_API_BASE ||
+    FALLBACK_API_BASE,
+);
 export const API_BASE_CANDIDATES = [API_BASE];
 export const API_UNAVAILABLE_ERROR_TEXT = API_UNAVAILABLE_ERROR;
 

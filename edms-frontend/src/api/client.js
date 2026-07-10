@@ -38,7 +38,7 @@ export async function apiFetch(url, options = {}) {
         if (retryRes.ok) {
           const retryType = retryRes.headers.get("content-type") || "";
           if (!retryType.includes("application/json")) {
-            throw new Error("Invalid API response from the EDMS backend.");
+            throw new Error("Invalid API response from the MemoStack backend.");
           }
           return retryRes.json();
         }
@@ -63,7 +63,7 @@ export async function apiFetch(url, options = {}) {
   }
 
   if (!contentType.includes("application/json")) {
-    throw new Error("Invalid API response from the EDMS backend.");
+    throw new Error("Invalid API response from the MemoStack backend.");
   }
 
   return res.json();

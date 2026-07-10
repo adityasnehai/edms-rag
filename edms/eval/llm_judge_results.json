@@ -1,0 +1,959 @@
+{
+  "summary": {
+    "model": "gpt-4o-mini",
+    "examples": 24,
+    "overall": 3,
+    "groundedness": 3.5,
+    "answer_quality": 3,
+    "citation_quality": 3.5,
+    "abstention_quality": 1.1667,
+    "per_type": {
+      "adrs": {
+        "count": 24,
+        "overall": 3,
+        "groundedness": 3.5,
+        "answer_quality": 3,
+        "citation_quality": 3.5,
+        "abstention_quality": 1.1667
+      }
+    }
+  },
+  "rows": [
+    {
+      "id": "ADR-001:status",
+      "question": "What is the status of ADR-001?",
+      "no_answer": false,
+      "judge": {
+        "groundedness": 2,
+        "answer_quality": 1,
+        "citation_quality": 2,
+        "abstention_quality": 1,
+        "overall": 1,
+        "reason": "Evidence does not mention the status."
+      },
+      "retrieved": [
+        {
+          "chunk_id": "adrs:ADR-001:decision",
+          "doc_id": "ADR-001",
+          "data_type": "adrs",
+          "section_type": "decision",
+          "score": 6.6539,
+          "text": "EDMS will index this record inside the organization workspace and use hybrid retrieval with linked evidence."
+        },
+        {
+          "chunk_id": "adrs:ADR-001:consequences",
+          "doc_id": "ADR-001",
+          "data_type": "adrs",
+          "section_type": "consequences",
+          "score": 6.5414,
+          "text": "Admins must upload records into the correct data type folder. Search results become easier to trace back to the original decision."
+        },
+        {
+          "chunk_id": "postmortems:POSTMORTEM-001:lessons_learned",
+          "doc_id": "POSTMORTEM-001",
+          "data_type": "postmortems",
+          "section_type": "lessons_learned",
+          "score": 6.4361,
+          "text": "Job state should be read from backend ingestion records instead of only relying on initial upload response text."
+        }
+      ]
+    },
+    {
+      "id": "ADR-001:decision",
+      "question": "What decision does ADR-001 make?",
+      "no_answer": false,
+      "judge": {
+        "groundedness": 5,
+        "answer_quality": 5,
+        "citation_quality": 5,
+        "abstention_quality": 5,
+        "overall": 5,
+        "reason": "Evidence directly matches the gold answer."
+      },
+      "retrieved": [
+        {
+          "chunk_id": "adrs:ADR-001:decision",
+          "doc_id": "ADR-001",
+          "data_type": "adrs",
+          "section_type": "decision",
+          "score": 8.5563,
+          "text": "EDMS will index this record inside the organization workspace and use hybrid retrieval with linked evidence."
+        },
+        {
+          "chunk_id": "adrs:ADR-001:consequences",
+          "doc_id": "ADR-001",
+          "data_type": "adrs",
+          "section_type": "consequences",
+          "score": 8.1426,
+          "text": "Admins must upload records into the correct data type folder. Search results become easier to trace back to the original decision."
+        },
+        {
+          "chunk_id": "adrs:ADR-001:content",
+          "doc_id": "ADR-001",
+          "data_type": "adrs",
+          "section_type": "content",
+          "score": 6.5397,
+          "text": "# ADR-001: Standardize EDMS Retrieval Flow\n\nStatus: Accepted\nOwner: Platform Team\nLast Updated: 2026-05-01 10:00 UTC\n\n## Context\nTeams need consistent answers from ADRs, RFCs, meeting notes, postmortems, tickets, and diagrams without leaking data across organizations.\n\n## Decision\nEDMS will index this record inside the organization workspace and use hybrid retrieval with linked evidence.\n\n## Consequences\nAdmins must upload records into the correct data type folder. Search results become easier to trace back to the original decision.\n\n## Considered Options\n- Store all documents in one folder.\n- Keep typed folders and preserve source metadata.\n"
+        }
+      ]
+    },
+    {
+      "id": "ADR-001:consequences",
+      "question": "What consequence does ADR-001 mention?",
+      "no_answer": false,
+      "judge": {
+        "groundedness": 2,
+        "answer_quality": 1,
+        "citation_quality": 2,
+        "abstention_quality": 1,
+        "overall": 1,
+        "reason": "Evidence does not mention the consequence."
+      },
+      "retrieved": [
+        {
+          "chunk_id": "adrs:ADR-001:considered_options",
+          "doc_id": "ADR-001",
+          "data_type": "adrs",
+          "section_type": "considered_options",
+          "score": 6.2555,
+          "text": "- Store all documents in one folder.\n- Keep typed folders and preserve source metadata."
+        },
+        {
+          "chunk_id": "adrs:ADR-001:decision",
+          "doc_id": "ADR-001",
+          "data_type": "adrs",
+          "section_type": "decision",
+          "score": 6.1432,
+          "text": "EDMS will index this record inside the organization workspace and use hybrid retrieval with linked evidence."
+        },
+        {
+          "chunk_id": "adrs:ADR-001:context",
+          "doc_id": "ADR-001",
+          "data_type": "adrs",
+          "section_type": "context",
+          "score": 6.0349,
+          "text": "Teams need consistent answers from ADRs, RFCs, meeting notes, postmortems, tickets, and diagrams without leaking data across organizations."
+        }
+      ]
+    },
+    {
+      "id": "ADR-001:section_summary",
+      "question": "What does ADR-001 say in the consequences section?",
+      "no_answer": false,
+      "judge": {
+        "groundedness": 5,
+        "answer_quality": 5,
+        "citation_quality": 5,
+        "abstention_quality": 5,
+        "overall": 5,
+        "reason": "Evidence directly matches the gold answer."
+      },
+      "retrieved": [
+        {
+          "chunk_id": "adrs:ADR-001:consequences",
+          "doc_id": "ADR-001",
+          "data_type": "adrs",
+          "section_type": "consequences",
+          "score": 9.2486,
+          "text": "Admins must upload records into the correct data type folder. Search results become easier to trace back to the original decision."
+        },
+        {
+          "chunk_id": "adrs:ADR-001:considered_options",
+          "doc_id": "ADR-001",
+          "data_type": "adrs",
+          "section_type": "considered_options",
+          "score": 7.5461,
+          "text": "- Store all documents in one folder.\n- Keep typed folders and preserve source metadata."
+        },
+        {
+          "chunk_id": "adrs:ADR-001:content",
+          "doc_id": "ADR-001",
+          "data_type": "adrs",
+          "section_type": "content",
+          "score": 7.1783,
+          "text": "# ADR-001: Standardize EDMS Retrieval Flow\n\nStatus: Accepted\nOwner: Platform Team\nLast Updated: 2026-05-01 10:00 UTC\n\n## Context\nTeams need consistent answers from ADRs, RFCs, meeting notes, postmortems, tickets, and diagrams without leaking data across organizations.\n\n## Decision\nEDMS will index this record inside the organization workspace and use hybrid retrieval with linked evidence.\n\n## Consequences\nAdmins must upload records into the correct data type folder. Search results become easier to trace back to the original decision.\n\n## Considered Options\n- Store all documents in one folder.\n- Keep typed folders and preserve source metadata.\n"
+        }
+      ]
+    },
+    {
+      "id": "ADR-002:status",
+      "question": "What is the status of ADR-002?",
+      "no_answer": false,
+      "judge": {
+        "groundedness": 2,
+        "answer_quality": 1,
+        "citation_quality": 2,
+        "abstention_quality": 1,
+        "overall": 1,
+        "reason": "Evidence does not mention the status."
+      },
+      "retrieved": [
+        {
+          "chunk_id": "adrs:ADR-002:decision",
+          "doc_id": "ADR-002",
+          "data_type": "adrs",
+          "section_type": "decision",
+          "score": 6.6539,
+          "text": "EDMS will index this record inside the organization workspace and use hybrid retrieval with linked evidence."
+        },
+        {
+          "chunk_id": "adrs:ADR-002:consequences",
+          "doc_id": "ADR-002",
+          "data_type": "adrs",
+          "section_type": "consequences",
+          "score": 6.5414,
+          "text": "Admins must upload records into the correct data type folder. Search results become easier to trace back to the original decision."
+        },
+        {
+          "chunk_id": "postmortems:POSTMORTEM-002:lessons_learned",
+          "doc_id": "POSTMORTEM-002",
+          "data_type": "postmortems",
+          "section_type": "lessons_learned",
+          "score": 6.4361,
+          "text": "Job state should be read from backend ingestion records instead of only relying on initial upload response text."
+        }
+      ]
+    },
+    {
+      "id": "ADR-002:decision",
+      "question": "What decision does ADR-002 make?",
+      "no_answer": false,
+      "judge": {
+        "groundedness": 5,
+        "answer_quality": 5,
+        "citation_quality": 5,
+        "abstention_quality": 5,
+        "overall": 5,
+        "reason": "Evidence directly matches the gold answer."
+      },
+      "retrieved": [
+        {
+          "chunk_id": "adrs:ADR-002:decision",
+          "doc_id": "ADR-002",
+          "data_type": "adrs",
+          "section_type": "decision",
+          "score": 8.5563,
+          "text": "EDMS will index this record inside the organization workspace and use hybrid retrieval with linked evidence."
+        },
+        {
+          "chunk_id": "adrs:ADR-002:consequences",
+          "doc_id": "ADR-002",
+          "data_type": "adrs",
+          "section_type": "consequences",
+          "score": 8.1426,
+          "text": "Admins must upload records into the correct data type folder. Search results become easier to trace back to the original decision."
+        },
+        {
+          "chunk_id": "adrs:ADR-002:content",
+          "doc_id": "ADR-002",
+          "data_type": "adrs",
+          "section_type": "content",
+          "score": 6.5397,
+          "text": "# ADR-002: Standardize EDMS Retrieval Flow\n\nStatus: Accepted\nOwner: Platform Team\nLast Updated: 2026-05-02 10:00 UTC\n\n## Context\nTeams need consistent answers from ADRs, RFCs, meeting notes, postmortems, tickets, and diagrams without leaking data across organizations.\n\n## Decision\nEDMS will index this record inside the organization workspace and use hybrid retrieval with linked evidence.\n\n## Consequences\nAdmins must upload records into the correct data type folder. Search results become easier to trace back to the original decision.\n\n## Considered Options\n- Store all documents in one folder.\n- Keep typed folders and preserve source metadata.\n"
+        }
+      ]
+    },
+    {
+      "id": "ADR-002:consequences",
+      "question": "What consequence does ADR-002 mention?",
+      "no_answer": false,
+      "judge": {
+        "groundedness": 2,
+        "answer_quality": 1,
+        "citation_quality": 2,
+        "abstention_quality": 1,
+        "overall": 1,
+        "reason": "Evidence does not mention the consequence."
+      },
+      "retrieved": [
+        {
+          "chunk_id": "adrs:ADR-002:considered_options",
+          "doc_id": "ADR-002",
+          "data_type": "adrs",
+          "section_type": "considered_options",
+          "score": 6.2555,
+          "text": "- Store all documents in one folder.\n- Keep typed folders and preserve source metadata."
+        },
+        {
+          "chunk_id": "adrs:ADR-002:decision",
+          "doc_id": "ADR-002",
+          "data_type": "adrs",
+          "section_type": "decision",
+          "score": 6.1432,
+          "text": "EDMS will index this record inside the organization workspace and use hybrid retrieval with linked evidence."
+        },
+        {
+          "chunk_id": "adrs:ADR-002:context",
+          "doc_id": "ADR-002",
+          "data_type": "adrs",
+          "section_type": "context",
+          "score": 6.0349,
+          "text": "Teams need consistent answers from ADRs, RFCs, meeting notes, postmortems, tickets, and diagrams without leaking data across organizations."
+        }
+      ]
+    },
+    {
+      "id": "ADR-002:section_summary",
+      "question": "What does ADR-002 say in the consequences section?",
+      "no_answer": false,
+      "judge": {
+        "groundedness": 5,
+        "answer_quality": 5,
+        "citation_quality": 5,
+        "abstention_quality": 5,
+        "overall": 5,
+        "reason": "Evidence directly matches the gold answer."
+      },
+      "retrieved": [
+        {
+          "chunk_id": "adrs:ADR-002:consequences",
+          "doc_id": "ADR-002",
+          "data_type": "adrs",
+          "section_type": "consequences",
+          "score": 9.2486,
+          "text": "Admins must upload records into the correct data type folder. Search results become easier to trace back to the original decision."
+        },
+        {
+          "chunk_id": "adrs:ADR-002:considered_options",
+          "doc_id": "ADR-002",
+          "data_type": "adrs",
+          "section_type": "considered_options",
+          "score": 7.5461,
+          "text": "- Store all documents in one folder.\n- Keep typed folders and preserve source metadata."
+        },
+        {
+          "chunk_id": "adrs:ADR-002:content",
+          "doc_id": "ADR-002",
+          "data_type": "adrs",
+          "section_type": "content",
+          "score": 7.1783,
+          "text": "# ADR-002: Standardize EDMS Retrieval Flow\n\nStatus: Accepted\nOwner: Platform Team\nLast Updated: 2026-05-02 10:00 UTC\n\n## Context\nTeams need consistent answers from ADRs, RFCs, meeting notes, postmortems, tickets, and diagrams without leaking data across organizations.\n\n## Decision\nEDMS will index this record inside the organization workspace and use hybrid retrieval with linked evidence.\n\n## Consequences\nAdmins must upload records into the correct data type folder. Search results become easier to trace back to the original decision.\n\n## Considered Options\n- Store all documents in one folder.\n- Keep typed folders and preserve source metadata.\n"
+        }
+      ]
+    },
+    {
+      "id": "ADR-003:status",
+      "question": "What is the status of ADR-003?",
+      "no_answer": false,
+      "judge": {
+        "groundedness": 2,
+        "answer_quality": 1,
+        "citation_quality": 2,
+        "abstention_quality": 1,
+        "overall": 1,
+        "reason": "Evidence does not support the status answer."
+      },
+      "retrieved": [
+        {
+          "chunk_id": "adrs:ADR-003:decision",
+          "doc_id": "ADR-003",
+          "data_type": "adrs",
+          "section_type": "decision",
+          "score": 6.6539,
+          "text": "EDMS will index this record inside the organization workspace and use hybrid retrieval with linked evidence."
+        },
+        {
+          "chunk_id": "adrs:ADR-003:consequences",
+          "doc_id": "ADR-003",
+          "data_type": "adrs",
+          "section_type": "consequences",
+          "score": 6.5414,
+          "text": "Admins must upload records into the correct data type folder. Search results become easier to trace back to the original decision."
+        },
+        {
+          "chunk_id": "postmortems:POSTMORTEM-003:lessons_learned",
+          "doc_id": "POSTMORTEM-003",
+          "data_type": "postmortems",
+          "section_type": "lessons_learned",
+          "score": 6.4361,
+          "text": "Job state should be read from backend ingestion records instead of only relying on initial upload response text."
+        }
+      ]
+    },
+    {
+      "id": "ADR-003:decision",
+      "question": "What decision does ADR-003 make?",
+      "no_answer": false,
+      "judge": {
+        "groundedness": 5,
+        "answer_quality": 5,
+        "citation_quality": 5,
+        "abstention_quality": 0,
+        "overall": 5,
+        "reason": "Evidence directly matches the decision answer."
+      },
+      "retrieved": [
+        {
+          "chunk_id": "adrs:ADR-003:decision",
+          "doc_id": "ADR-003",
+          "data_type": "adrs",
+          "section_type": "decision",
+          "score": 8.5563,
+          "text": "EDMS will index this record inside the organization workspace and use hybrid retrieval with linked evidence."
+        },
+        {
+          "chunk_id": "adrs:ADR-003:consequences",
+          "doc_id": "ADR-003",
+          "data_type": "adrs",
+          "section_type": "consequences",
+          "score": 8.1426,
+          "text": "Admins must upload records into the correct data type folder. Search results become easier to trace back to the original decision."
+        },
+        {
+          "chunk_id": "adrs:ADR-003:content",
+          "doc_id": "ADR-003",
+          "data_type": "adrs",
+          "section_type": "content",
+          "score": 6.5397,
+          "text": "# ADR-003: Standardize EDMS Retrieval Flow\n\nStatus: Accepted\nOwner: Platform Team\nLast Updated: 2026-05-03 10:00 UTC\n\n## Context\nTeams need consistent answers from ADRs, RFCs, meeting notes, postmortems, tickets, and diagrams without leaking data across organizations.\n\n## Decision\nEDMS will index this record inside the organization workspace and use hybrid retrieval with linked evidence.\n\n## Consequences\nAdmins must upload records into the correct data type folder. Search results become easier to trace back to the original decision.\n\n## Considered Options\n- Store all documents in one folder.\n- Keep typed folders and preserve source metadata.\n"
+        }
+      ]
+    },
+    {
+      "id": "ADR-003:consequences",
+      "question": "What consequence does ADR-003 mention?",
+      "no_answer": false,
+      "judge": {
+        "groundedness": 2,
+        "answer_quality": 1,
+        "citation_quality": 2,
+        "abstention_quality": 1,
+        "overall": 1,
+        "reason": "Evidence does not support the consequence answer."
+      },
+      "retrieved": [
+        {
+          "chunk_id": "adrs:ADR-003:considered_options",
+          "doc_id": "ADR-003",
+          "data_type": "adrs",
+          "section_type": "considered_options",
+          "score": 6.2555,
+          "text": "- Store all documents in one folder.\n- Keep typed folders and preserve source metadata."
+        },
+        {
+          "chunk_id": "adrs:ADR-003:decision",
+          "doc_id": "ADR-003",
+          "data_type": "adrs",
+          "section_type": "decision",
+          "score": 6.1432,
+          "text": "EDMS will index this record inside the organization workspace and use hybrid retrieval with linked evidence."
+        },
+        {
+          "chunk_id": "adrs:ADR-003:context",
+          "doc_id": "ADR-003",
+          "data_type": "adrs",
+          "section_type": "context",
+          "score": 6.0349,
+          "text": "Teams need consistent answers from ADRs, RFCs, meeting notes, postmortems, tickets, and diagrams without leaking data across organizations."
+        }
+      ]
+    },
+    {
+      "id": "ADR-003:section_summary",
+      "question": "What does ADR-003 say in the consequences section?",
+      "no_answer": false,
+      "judge": {
+        "groundedness": 5,
+        "answer_quality": 5,
+        "citation_quality": 5,
+        "abstention_quality": 0,
+        "overall": 5,
+        "reason": "Evidence directly matches the consequences answer."
+      },
+      "retrieved": [
+        {
+          "chunk_id": "adrs:ADR-003:consequences",
+          "doc_id": "ADR-003",
+          "data_type": "adrs",
+          "section_type": "consequences",
+          "score": 9.2486,
+          "text": "Admins must upload records into the correct data type folder. Search results become easier to trace back to the original decision."
+        },
+        {
+          "chunk_id": "adrs:ADR-003:considered_options",
+          "doc_id": "ADR-003",
+          "data_type": "adrs",
+          "section_type": "considered_options",
+          "score": 7.5461,
+          "text": "- Store all documents in one folder.\n- Keep typed folders and preserve source metadata."
+        },
+        {
+          "chunk_id": "adrs:ADR-003:content",
+          "doc_id": "ADR-003",
+          "data_type": "adrs",
+          "section_type": "content",
+          "score": 7.1783,
+          "text": "# ADR-003: Standardize EDMS Retrieval Flow\n\nStatus: Accepted\nOwner: Platform Team\nLast Updated: 2026-05-03 10:00 UTC\n\n## Context\nTeams need consistent answers from ADRs, RFCs, meeting notes, postmortems, tickets, and diagrams without leaking data across organizations.\n\n## Decision\nEDMS will index this record inside the organization workspace and use hybrid retrieval with linked evidence.\n\n## Consequences\nAdmins must upload records into the correct data type folder. Search results become easier to trace back to the original decision.\n\n## Considered Options\n- Store all documents in one folder.\n- Keep typed folders and preserve source metadata.\n"
+        }
+      ]
+    },
+    {
+      "id": "ADR-004:status",
+      "question": "What is the status of ADR-004?",
+      "no_answer": false,
+      "judge": {
+        "groundedness": 2,
+        "answer_quality": 1,
+        "citation_quality": 2,
+        "abstention_quality": 1,
+        "overall": 1,
+        "reason": "Evidence does not support the status answer."
+      },
+      "retrieved": [
+        {
+          "chunk_id": "adrs:ADR-004:decision",
+          "doc_id": "ADR-004",
+          "data_type": "adrs",
+          "section_type": "decision",
+          "score": 6.6539,
+          "text": "EDMS will index this record inside the organization workspace and use hybrid retrieval with linked evidence."
+        },
+        {
+          "chunk_id": "adrs:ADR-004:consequences",
+          "doc_id": "ADR-004",
+          "data_type": "adrs",
+          "section_type": "consequences",
+          "score": 6.5414,
+          "text": "Admins must upload records into the correct data type folder. Search results become easier to trace back to the original decision."
+        },
+        {
+          "chunk_id": "postmortems:POSTMORTEM-004:lessons_learned",
+          "doc_id": "POSTMORTEM-004",
+          "data_type": "postmortems",
+          "section_type": "lessons_learned",
+          "score": 6.4361,
+          "text": "Job state should be read from backend ingestion records instead of only relying on initial upload response text."
+        }
+      ]
+    },
+    {
+      "id": "ADR-004:decision",
+      "question": "What decision does ADR-004 make?",
+      "no_answer": false,
+      "judge": {
+        "groundedness": 5,
+        "answer_quality": 5,
+        "citation_quality": 5,
+        "abstention_quality": 0,
+        "overall": 5,
+        "reason": "Evidence directly matches the decision answer."
+      },
+      "retrieved": [
+        {
+          "chunk_id": "adrs:ADR-004:decision",
+          "doc_id": "ADR-004",
+          "data_type": "adrs",
+          "section_type": "decision",
+          "score": 8.5563,
+          "text": "EDMS will index this record inside the organization workspace and use hybrid retrieval with linked evidence."
+        },
+        {
+          "chunk_id": "adrs:ADR-004:consequences",
+          "doc_id": "ADR-004",
+          "data_type": "adrs",
+          "section_type": "consequences",
+          "score": 8.1426,
+          "text": "Admins must upload records into the correct data type folder. Search results become easier to trace back to the original decision."
+        },
+        {
+          "chunk_id": "adrs:ADR-004:content",
+          "doc_id": "ADR-004",
+          "data_type": "adrs",
+          "section_type": "content",
+          "score": 6.5397,
+          "text": "# ADR-004: Standardize EDMS Retrieval Flow\n\nStatus: Accepted\nOwner: Platform Team\nLast Updated: 2026-05-04 10:00 UTC\n\n## Context\nTeams need consistent answers from ADRs, RFCs, meeting notes, postmortems, tickets, and diagrams without leaking data across organizations.\n\n## Decision\nEDMS will index this record inside the organization workspace and use hybrid retrieval with linked evidence.\n\n## Consequences\nAdmins must upload records into the correct data type folder. Search results become easier to trace back to the original decision.\n\n## Considered Options\n- Store all documents in one folder.\n- Keep typed folders and preserve source metadata.\n"
+        }
+      ]
+    },
+    {
+      "id": "ADR-004:consequences",
+      "question": "What consequence does ADR-004 mention?",
+      "no_answer": false,
+      "judge": {
+        "groundedness": 2,
+        "answer_quality": 1,
+        "citation_quality": 2,
+        "abstention_quality": 1,
+        "overall": 1,
+        "reason": "Evidence does not support the consequence answer."
+      },
+      "retrieved": [
+        {
+          "chunk_id": "adrs:ADR-004:considered_options",
+          "doc_id": "ADR-004",
+          "data_type": "adrs",
+          "section_type": "considered_options",
+          "score": 6.2555,
+          "text": "- Store all documents in one folder.\n- Keep typed folders and preserve source metadata."
+        },
+        {
+          "chunk_id": "adrs:ADR-004:decision",
+          "doc_id": "ADR-004",
+          "data_type": "adrs",
+          "section_type": "decision",
+          "score": 6.1432,
+          "text": "EDMS will index this record inside the organization workspace and use hybrid retrieval with linked evidence."
+        },
+        {
+          "chunk_id": "adrs:ADR-004:context",
+          "doc_id": "ADR-004",
+          "data_type": "adrs",
+          "section_type": "context",
+          "score": 6.0349,
+          "text": "Teams need consistent answers from ADRs, RFCs, meeting notes, postmortems, tickets, and diagrams without leaking data across organizations."
+        }
+      ]
+    },
+    {
+      "id": "ADR-004:section_summary",
+      "question": "What does ADR-004 say in the consequences section?",
+      "no_answer": false,
+      "judge": {
+        "groundedness": 5,
+        "answer_quality": 5,
+        "citation_quality": 5,
+        "abstention_quality": 0,
+        "overall": 5,
+        "reason": "Evidence directly matches the consequences answer."
+      },
+      "retrieved": [
+        {
+          "chunk_id": "adrs:ADR-004:consequences",
+          "doc_id": "ADR-004",
+          "data_type": "adrs",
+          "section_type": "consequences",
+          "score": 9.2486,
+          "text": "Admins must upload records into the correct data type folder. Search results become easier to trace back to the original decision."
+        },
+        {
+          "chunk_id": "adrs:ADR-004:considered_options",
+          "doc_id": "ADR-004",
+          "data_type": "adrs",
+          "section_type": "considered_options",
+          "score": 7.5461,
+          "text": "- Store all documents in one folder.\n- Keep typed folders and preserve source metadata."
+        },
+        {
+          "chunk_id": "adrs:ADR-004:content",
+          "doc_id": "ADR-004",
+          "data_type": "adrs",
+          "section_type": "content",
+          "score": 7.1783,
+          "text": "# ADR-004: Standardize EDMS Retrieval Flow\n\nStatus: Accepted\nOwner: Platform Team\nLast Updated: 2026-05-04 10:00 UTC\n\n## Context\nTeams need consistent answers from ADRs, RFCs, meeting notes, postmortems, tickets, and diagrams without leaking data across organizations.\n\n## Decision\nEDMS will index this record inside the organization workspace and use hybrid retrieval with linked evidence.\n\n## Consequences\nAdmins must upload records into the correct data type folder. Search results become easier to trace back to the original decision.\n\n## Considered Options\n- Store all documents in one folder.\n- Keep typed folders and preserve source metadata.\n"
+        }
+      ]
+    },
+    {
+      "id": "ADR-005:status",
+      "question": "What is the status of ADR-005?",
+      "no_answer": false,
+      "judge": {
+        "groundedness": 2,
+        "answer_quality": 1,
+        "citation_quality": 2,
+        "abstention_quality": 0,
+        "overall": 1,
+        "reason": "Evidence does not mention the status."
+      },
+      "retrieved": [
+        {
+          "chunk_id": "adrs:ADR-005:decision",
+          "doc_id": "ADR-005",
+          "data_type": "adrs",
+          "section_type": "decision",
+          "score": 6.6539,
+          "text": "EDMS will index this record inside the organization workspace and use hybrid retrieval with linked evidence."
+        },
+        {
+          "chunk_id": "adrs:ADR-005:consequences",
+          "doc_id": "ADR-005",
+          "data_type": "adrs",
+          "section_type": "consequences",
+          "score": 6.5414,
+          "text": "Admins must upload records into the correct data type folder. Search results become easier to trace back to the original decision."
+        },
+        {
+          "chunk_id": "postmortems:POSTMORTEM-005:lessons_learned",
+          "doc_id": "POSTMORTEM-005",
+          "data_type": "postmortems",
+          "section_type": "lessons_learned",
+          "score": 6.4361,
+          "text": "Job state should be read from backend ingestion records instead of only relying on initial upload response text."
+        }
+      ]
+    },
+    {
+      "id": "ADR-005:decision",
+      "question": "What decision does ADR-005 make?",
+      "no_answer": false,
+      "judge": {
+        "groundedness": 5,
+        "answer_quality": 5,
+        "citation_quality": 5,
+        "abstention_quality": 0,
+        "overall": 5,
+        "reason": "Evidence directly matches the gold answer."
+      },
+      "retrieved": [
+        {
+          "chunk_id": "adrs:ADR-005:decision",
+          "doc_id": "ADR-005",
+          "data_type": "adrs",
+          "section_type": "decision",
+          "score": 8.5563,
+          "text": "EDMS will index this record inside the organization workspace and use hybrid retrieval with linked evidence."
+        },
+        {
+          "chunk_id": "adrs:ADR-005:consequences",
+          "doc_id": "ADR-005",
+          "data_type": "adrs",
+          "section_type": "consequences",
+          "score": 8.1426,
+          "text": "Admins must upload records into the correct data type folder. Search results become easier to trace back to the original decision."
+        },
+        {
+          "chunk_id": "adrs:ADR-005:content",
+          "doc_id": "ADR-005",
+          "data_type": "adrs",
+          "section_type": "content",
+          "score": 6.5397,
+          "text": "# ADR-005: Standardize EDMS Retrieval Flow\n\nStatus: Accepted\nOwner: Platform Team\nLast Updated: 2026-05-05 10:00 UTC\n\n## Context\nTeams need consistent answers from ADRs, RFCs, meeting notes, postmortems, tickets, and diagrams without leaking data across organizations.\n\n## Decision\nEDMS will index this record inside the organization workspace and use hybrid retrieval with linked evidence.\n\n## Consequences\nAdmins must upload records into the correct data type folder. Search results become easier to trace back to the original decision.\n\n## Considered Options\n- Store all documents in one folder.\n- Keep typed folders and preserve source metadata.\n"
+        }
+      ]
+    },
+    {
+      "id": "ADR-005:consequences",
+      "question": "What consequence does ADR-005 mention?",
+      "no_answer": false,
+      "judge": {
+        "groundedness": 2,
+        "answer_quality": 1,
+        "citation_quality": 2,
+        "abstention_quality": 0,
+        "overall": 1,
+        "reason": "Evidence does not mention the consequence."
+      },
+      "retrieved": [
+        {
+          "chunk_id": "adrs:ADR-005:considered_options",
+          "doc_id": "ADR-005",
+          "data_type": "adrs",
+          "section_type": "considered_options",
+          "score": 6.2555,
+          "text": "- Store all documents in one folder.\n- Keep typed folders and preserve source metadata."
+        },
+        {
+          "chunk_id": "adrs:ADR-005:decision",
+          "doc_id": "ADR-005",
+          "data_type": "adrs",
+          "section_type": "decision",
+          "score": 6.1432,
+          "text": "EDMS will index this record inside the organization workspace and use hybrid retrieval with linked evidence."
+        },
+        {
+          "chunk_id": "adrs:ADR-005:context",
+          "doc_id": "ADR-005",
+          "data_type": "adrs",
+          "section_type": "context",
+          "score": 6.0349,
+          "text": "Teams need consistent answers from ADRs, RFCs, meeting notes, postmortems, tickets, and diagrams without leaking data across organizations."
+        }
+      ]
+    },
+    {
+      "id": "ADR-005:section_summary",
+      "question": "What does ADR-005 say in the consequences section?",
+      "no_answer": false,
+      "judge": {
+        "groundedness": 5,
+        "answer_quality": 5,
+        "citation_quality": 5,
+        "abstention_quality": 0,
+        "overall": 5,
+        "reason": "Evidence directly matches the gold answer."
+      },
+      "retrieved": [
+        {
+          "chunk_id": "adrs:ADR-005:consequences",
+          "doc_id": "ADR-005",
+          "data_type": "adrs",
+          "section_type": "consequences",
+          "score": 9.2486,
+          "text": "Admins must upload records into the correct data type folder. Search results become easier to trace back to the original decision."
+        },
+        {
+          "chunk_id": "adrs:ADR-005:considered_options",
+          "doc_id": "ADR-005",
+          "data_type": "adrs",
+          "section_type": "considered_options",
+          "score": 7.5461,
+          "text": "- Store all documents in one folder.\n- Keep typed folders and preserve source metadata."
+        },
+        {
+          "chunk_id": "adrs:ADR-005:content",
+          "doc_id": "ADR-005",
+          "data_type": "adrs",
+          "section_type": "content",
+          "score": 7.1783,
+          "text": "# ADR-005: Standardize EDMS Retrieval Flow\n\nStatus: Accepted\nOwner: Platform Team\nLast Updated: 2026-05-05 10:00 UTC\n\n## Context\nTeams need consistent answers from ADRs, RFCs, meeting notes, postmortems, tickets, and diagrams without leaking data across organizations.\n\n## Decision\nEDMS will index this record inside the organization workspace and use hybrid retrieval with linked evidence.\n\n## Consequences\nAdmins must upload records into the correct data type folder. Search results become easier to trace back to the original decision.\n\n## Considered Options\n- Store all documents in one folder.\n- Keep typed folders and preserve source metadata.\n"
+        }
+      ]
+    },
+    {
+      "id": "ADR-006:status",
+      "question": "What is the status of ADR-006?",
+      "no_answer": false,
+      "judge": {
+        "groundedness": 2,
+        "answer_quality": 1,
+        "citation_quality": 2,
+        "abstention_quality": 0,
+        "overall": 1,
+        "reason": "Evidence does not mention the status."
+      },
+      "retrieved": [
+        {
+          "chunk_id": "adrs:ADR-006:decision",
+          "doc_id": "ADR-006",
+          "data_type": "adrs",
+          "section_type": "decision",
+          "score": 6.6539,
+          "text": "EDMS will index this record inside the organization workspace and use hybrid retrieval with linked evidence."
+        },
+        {
+          "chunk_id": "adrs:ADR-006:consequences",
+          "doc_id": "ADR-006",
+          "data_type": "adrs",
+          "section_type": "consequences",
+          "score": 6.5414,
+          "text": "Admins must upload records into the correct data type folder. Search results become easier to trace back to the original decision."
+        },
+        {
+          "chunk_id": "postmortems:POSTMORTEM-006:lessons_learned",
+          "doc_id": "POSTMORTEM-006",
+          "data_type": "postmortems",
+          "section_type": "lessons_learned",
+          "score": 6.4361,
+          "text": "Job state should be read from backend ingestion records instead of only relying on initial upload response text."
+        }
+      ]
+    },
+    {
+      "id": "ADR-006:decision",
+      "question": "What decision does ADR-006 make?",
+      "no_answer": false,
+      "judge": {
+        "groundedness": 5,
+        "answer_quality": 5,
+        "citation_quality": 5,
+        "abstention_quality": 0,
+        "overall": 5,
+        "reason": "Evidence directly matches the gold answer."
+      },
+      "retrieved": [
+        {
+          "chunk_id": "adrs:ADR-006:decision",
+          "doc_id": "ADR-006",
+          "data_type": "adrs",
+          "section_type": "decision",
+          "score": 8.5563,
+          "text": "EDMS will index this record inside the organization workspace and use hybrid retrieval with linked evidence."
+        },
+        {
+          "chunk_id": "adrs:ADR-006:consequences",
+          "doc_id": "ADR-006",
+          "data_type": "adrs",
+          "section_type": "consequences",
+          "score": 8.1426,
+          "text": "Admins must upload records into the correct data type folder. Search results become easier to trace back to the original decision."
+        },
+        {
+          "chunk_id": "adrs:ADR-006:content",
+          "doc_id": "ADR-006",
+          "data_type": "adrs",
+          "section_type": "content",
+          "score": 6.5397,
+          "text": "# ADR-006: Standardize EDMS Retrieval Flow\n\nStatus: Accepted\nOwner: Platform Team\nLast Updated: 2026-05-06 10:00 UTC\n\n## Context\nTeams need consistent answers from ADRs, RFCs, meeting notes, postmortems, tickets, and diagrams without leaking data across organizations.\n\n## Decision\nEDMS will index this record inside the organization workspace and use hybrid retrieval with linked evidence.\n\n## Consequences\nAdmins must upload records into the correct data type folder. Search results become easier to trace back to the original decision.\n\n## Considered Options\n- Store all documents in one folder.\n- Keep typed folders and preserve source metadata.\n"
+        }
+      ]
+    },
+    {
+      "id": "ADR-006:consequences",
+      "question": "What consequence does ADR-006 mention?",
+      "no_answer": false,
+      "judge": {
+        "groundedness": 2,
+        "answer_quality": 1,
+        "citation_quality": 2,
+        "abstention_quality": 0,
+        "overall": 1,
+        "reason": "Evidence does not mention the consequence."
+      },
+      "retrieved": [
+        {
+          "chunk_id": "adrs:ADR-006:considered_options",
+          "doc_id": "ADR-006",
+          "data_type": "adrs",
+          "section_type": "considered_options",
+          "score": 6.2555,
+          "text": "- Store all documents in one folder.\n- Keep typed folders and preserve source metadata."
+        },
+        {
+          "chunk_id": "adrs:ADR-006:decision",
+          "doc_id": "ADR-006",
+          "data_type": "adrs",
+          "section_type": "decision",
+          "score": 6.1432,
+          "text": "EDMS will index this record inside the organization workspace and use hybrid retrieval with linked evidence."
+        },
+        {
+          "chunk_id": "adrs:ADR-006:context",
+          "doc_id": "ADR-006",
+          "data_type": "adrs",
+          "section_type": "context",
+          "score": 6.0349,
+          "text": "Teams need consistent answers from ADRs, RFCs, meeting notes, postmortems, tickets, and diagrams without leaking data across organizations."
+        }
+      ]
+    },
+    {
+      "id": "ADR-006:section_summary",
+      "question": "What does ADR-006 say in the consequences section?",
+      "no_answer": false,
+      "judge": {
+        "groundedness": 5,
+        "answer_quality": 5,
+        "citation_quality": 5,
+        "abstention_quality": 0,
+        "overall": 5,
+        "reason": "Evidence directly matches the gold answer."
+      },
+      "retrieved": [
+        {
+          "chunk_id": "adrs:ADR-006:consequences",
+          "doc_id": "ADR-006",
+          "data_type": "adrs",
+          "section_type": "consequences",
+          "score": 9.2486,
+          "text": "Admins must upload records into the correct data type folder. Search results become easier to trace back to the original decision."
+        },
+        {
+          "chunk_id": "adrs:ADR-006:considered_options",
+          "doc_id": "ADR-006",
+          "data_type": "adrs",
+          "section_type": "considered_options",
+          "score": 7.5461,
+          "text": "- Store all documents in one folder.\n- Keep typed folders and preserve source metadata."
+        },
+        {
+          "chunk_id": "adrs:ADR-006:content",
+          "doc_id": "ADR-006",
+          "data_type": "adrs",
+          "section_type": "content",
+          "score": 7.1783,
+          "text": "# ADR-006: Standardize EDMS Retrieval Flow\n\nStatus: Accepted\nOwner: Platform Team\nLast Updated: 2026-05-06 10:00 UTC\n\n## Context\nTeams need consistent answers from ADRs, RFCs, meeting notes, postmortems, tickets, and diagrams without leaking data across organizations.\n\n## Decision\nEDMS will index this record inside the organization workspace and use hybrid retrieval with linked evidence.\n\n## Consequences\nAdmins must upload records into the correct data type folder. Search results become easier to trace back to the original decision.\n\n## Considered Options\n- Store all documents in one folder.\n- Keep typed folders and preserve source metadata.\n"
+        }
+      ]
+    }
+  ]
+}

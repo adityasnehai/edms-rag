@@ -18,12 +18,12 @@ async function authRequest(path, payload) {
     throw new Error(
       data?.detail ||
         text.trim() ||
-        "Cannot complete authentication. Check that the EDMS backend is running."
+        "Cannot complete authentication. Check that the MemoStack backend is running."
     );
   }
 
   if (!data) {
-    throw new Error("Invalid authentication response from the EDMS API.");
+    throw new Error("Invalid authentication response from the MemoStack API.");
   }
 
   return data;
@@ -43,8 +43,4 @@ export function refreshSession(refresh_token) {
 
 export function logoutSession(refresh_token) {
   return authRequest("/auth/logout", { refresh_token });
-}
-
-export function logoutAllSessions(refresh_token) {
-  return authRequest("/auth/logout-all", { refresh_token });
 }

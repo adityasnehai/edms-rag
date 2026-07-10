@@ -20,7 +20,7 @@ export default function NotFound() {
       {/* Background */}
       <div className="pointer-events-none absolute inset-0" aria-hidden>
         <div className="absolute inset-0 bg-dot-grid opacity-30" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,rgba(99,102,241,0.09),transparent_55%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,rgba(255,143,24,0.14),transparent_55%)]" />
       </div>
 
       <div className="relative">
@@ -41,7 +41,7 @@ export default function NotFound() {
         <button
           type="button"
           onClick={goHome}
-          className="mt-8 inline-flex items-center gap-2 rounded-xl bg-gradient-primary px-6 py-2.5 text-sm font-semibold text-white shadow-glow transition hover:opacity-95"
+          className="mt-8 inline-flex items-center gap-2 rounded-xl border border-[#f48d16]/22 bg-[#fff4e1] px-6 py-2.5 text-sm font-semibold text-[#251f19] shadow-sm transition hover:border-[#f48d16]/35 hover:bg-[#ffeed2]"
         >
           Go home
         </button>

@@ -1,0 +1,5512 @@
+{
+  "corpus": {
+    "documents": 50,
+    "chunks": 230,
+    "dataset_examples": 210
+  },
+  "metrics": {
+    "total_examples": 210,
+    "positive_examples": 200,
+    "negative_examples": 10,
+    "retrieval_recall@1": 0.8,
+    "retrieval_recall@3": 0.8,
+    "retrieval_recall@5": 0.85,
+    "mrr": 0.9559,
+    "answer_support@1": 0.8,
+    "answer_support@3": 0.8,
+    "no_answer_accuracy": 1.0,
+    "abstain_threshold": 5.0,
+    "per_type": {
+      "adrs": {
+        "count": 40,
+        "retrieval_recall@1": 0.5,
+        "retrieval_recall@3": 0.5,
+        "retrieval_recall@5": 0.75,
+        "answer_support@3": 0.5,
+        "mrr": 0.5625
+      },
+      "meeting_notes": {
+        "count": 40,
+        "retrieval_recall@1": 0.75,
+        "retrieval_recall@3": 0.75,
+        "retrieval_recall@5": 0.75,
+        "answer_support@3": 0.75,
+        "mrr": 0.75
+      },
+      "postmortems": {
+        "count": 40,
+        "retrieval_recall@1": 1.0,
+        "retrieval_recall@3": 1.0,
+        "retrieval_recall@5": 1.0,
+        "answer_support@3": 1.0,
+        "mrr": 1.0
+      },
+      "rfcs": {
+        "count": 40,
+        "retrieval_recall@1": 0.75,
+        "retrieval_recall@3": 0.75,
+        "retrieval_recall@5": 0.75,
+        "answer_support@3": 0.75,
+        "mrr": 0.75
+      },
+      "tickets": {
+        "count": 40,
+        "retrieval_recall@1": 1.0,
+        "retrieval_recall@3": 1.0,
+        "retrieval_recall@5": 1.0,
+        "answer_support@3": 1.0,
+        "mrr": 1.0
+      },
+      "negative": {
+        "count": 10,
+        "retrieval_recall@1": 0.0,
+        "retrieval_recall@3": 0.0,
+        "retrieval_recall@5": 0.0,
+        "answer_support@3": 0.0,
+        "mrr": 0.0
+      }
+    }
+  },
+  "examples": [
+    {
+      "id": "ADR-001:status",
+      "question": "What is the status of ADR-001?",
+      "gold_doc_id": "ADR-001",
+      "gold_chunk_ids": [
+        "adrs:ADR-001:content"
+      ],
+      "retrieved_doc_ids": [
+        "ADR-001",
+        "ADR-001",
+        "POSTMORTEM-001",
+        "ADR-001",
+        "ADR-001"
+      ],
+      "retrieved_chunk_ids": [
+        "adrs:ADR-001:decision",
+        "adrs:ADR-001:consequences",
+        "postmortems:POSTMORTEM-001:lessons_learned",
+        "adrs:ADR-001:considered_options",
+        "adrs:ADR-001:context"
+      ],
+      "top_score": 6.6539,
+      "predicted_no_answer": false,
+      "matched_gold_rank": null,
+      "no_answer": false
+    },
+    {
+      "id": "ADR-001:decision",
+      "question": "What decision does ADR-001 make?",
+      "gold_doc_id": "ADR-001",
+      "gold_chunk_ids": [
+        "adrs:ADR-001:decision"
+      ],
+      "retrieved_doc_ids": [
+        "ADR-001",
+        "ADR-001",
+        "ADR-001",
+        "ADR-001",
+        "ADR-001"
+      ],
+      "retrieved_chunk_ids": [
+        "adrs:ADR-001:decision",
+        "adrs:ADR-001:consequences",
+        "adrs:ADR-001:content",
+        "adrs:ADR-001:considered_options",
+        "adrs:ADR-001:context"
+      ],
+      "top_score": 8.5563,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "ADR-001:consequences",
+      "question": "What consequence does ADR-001 mention?",
+      "gold_doc_id": "ADR-001",
+      "gold_chunk_ids": [
+        "adrs:ADR-001:consequences"
+      ],
+      "retrieved_doc_ids": [
+        "ADR-001",
+        "ADR-001",
+        "ADR-001",
+        "ADR-001",
+        "ADR-001"
+      ],
+      "retrieved_chunk_ids": [
+        "adrs:ADR-001:considered_options",
+        "adrs:ADR-001:decision",
+        "adrs:ADR-001:context",
+        "adrs:ADR-001:consequences",
+        "adrs:ADR-001:content"
+      ],
+      "top_score": 6.2555,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 4,
+      "no_answer": false
+    },
+    {
+      "id": "ADR-001:section_summary",
+      "question": "What does ADR-001 say in the consequences section?",
+      "gold_doc_id": "ADR-001",
+      "gold_chunk_ids": [
+        "adrs:ADR-001:consequences"
+      ],
+      "retrieved_doc_ids": [
+        "ADR-001",
+        "ADR-001",
+        "ADR-001",
+        "ADR-001",
+        "ADR-001"
+      ],
+      "retrieved_chunk_ids": [
+        "adrs:ADR-001:consequences",
+        "adrs:ADR-001:considered_options",
+        "adrs:ADR-001:content",
+        "adrs:ADR-001:decision",
+        "adrs:ADR-001:context"
+      ],
+      "top_score": 9.2486,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "ADR-002:status",
+      "question": "What is the status of ADR-002?",
+      "gold_doc_id": "ADR-002",
+      "gold_chunk_ids": [
+        "adrs:ADR-002:content"
+      ],
+      "retrieved_doc_ids": [
+        "ADR-002",
+        "ADR-002",
+        "POSTMORTEM-002",
+        "ADR-002",
+        "ADR-002"
+      ],
+      "retrieved_chunk_ids": [
+        "adrs:ADR-002:decision",
+        "adrs:ADR-002:consequences",
+        "postmortems:POSTMORTEM-002:lessons_learned",
+        "adrs:ADR-002:considered_options",
+        "adrs:ADR-002:context"
+      ],
+      "top_score": 6.6539,
+      "predicted_no_answer": false,
+      "matched_gold_rank": null,
+      "no_answer": false
+    },
+    {
+      "id": "ADR-002:decision",
+      "question": "What decision does ADR-002 make?",
+      "gold_doc_id": "ADR-002",
+      "gold_chunk_ids": [
+        "adrs:ADR-002:decision"
+      ],
+      "retrieved_doc_ids": [
+        "ADR-002",
+        "ADR-002",
+        "ADR-002",
+        "ADR-002",
+        "ADR-002"
+      ],
+      "retrieved_chunk_ids": [
+        "adrs:ADR-002:decision",
+        "adrs:ADR-002:consequences",
+        "adrs:ADR-002:content",
+        "adrs:ADR-002:considered_options",
+        "adrs:ADR-002:context"
+      ],
+      "top_score": 8.5563,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "ADR-002:consequences",
+      "question": "What consequence does ADR-002 mention?",
+      "gold_doc_id": "ADR-002",
+      "gold_chunk_ids": [
+        "adrs:ADR-002:consequences"
+      ],
+      "retrieved_doc_ids": [
+        "ADR-002",
+        "ADR-002",
+        "ADR-002",
+        "ADR-002",
+        "ADR-002"
+      ],
+      "retrieved_chunk_ids": [
+        "adrs:ADR-002:considered_options",
+        "adrs:ADR-002:decision",
+        "adrs:ADR-002:context",
+        "adrs:ADR-002:consequences",
+        "adrs:ADR-002:content"
+      ],
+      "top_score": 6.2555,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 4,
+      "no_answer": false
+    },
+    {
+      "id": "ADR-002:section_summary",
+      "question": "What does ADR-002 say in the consequences section?",
+      "gold_doc_id": "ADR-002",
+      "gold_chunk_ids": [
+        "adrs:ADR-002:consequences"
+      ],
+      "retrieved_doc_ids": [
+        "ADR-002",
+        "ADR-002",
+        "ADR-002",
+        "ADR-002",
+        "ADR-002"
+      ],
+      "retrieved_chunk_ids": [
+        "adrs:ADR-002:consequences",
+        "adrs:ADR-002:considered_options",
+        "adrs:ADR-002:content",
+        "adrs:ADR-002:decision",
+        "adrs:ADR-002:context"
+      ],
+      "top_score": 9.2486,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "ADR-003:status",
+      "question": "What is the status of ADR-003?",
+      "gold_doc_id": "ADR-003",
+      "gold_chunk_ids": [
+        "adrs:ADR-003:content"
+      ],
+      "retrieved_doc_ids": [
+        "ADR-003",
+        "ADR-003",
+        "POSTMORTEM-003",
+        "ADR-003",
+        "ADR-003"
+      ],
+      "retrieved_chunk_ids": [
+        "adrs:ADR-003:decision",
+        "adrs:ADR-003:consequences",
+        "postmortems:POSTMORTEM-003:lessons_learned",
+        "adrs:ADR-003:considered_options",
+        "adrs:ADR-003:context"
+      ],
+      "top_score": 6.6539,
+      "predicted_no_answer": false,
+      "matched_gold_rank": null,
+      "no_answer": false
+    },
+    {
+      "id": "ADR-003:decision",
+      "question": "What decision does ADR-003 make?",
+      "gold_doc_id": "ADR-003",
+      "gold_chunk_ids": [
+        "adrs:ADR-003:decision"
+      ],
+      "retrieved_doc_ids": [
+        "ADR-003",
+        "ADR-003",
+        "ADR-003",
+        "ADR-003",
+        "ADR-003"
+      ],
+      "retrieved_chunk_ids": [
+        "adrs:ADR-003:decision",
+        "adrs:ADR-003:consequences",
+        "adrs:ADR-003:content",
+        "adrs:ADR-003:considered_options",
+        "adrs:ADR-003:context"
+      ],
+      "top_score": 8.5563,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "ADR-003:consequences",
+      "question": "What consequence does ADR-003 mention?",
+      "gold_doc_id": "ADR-003",
+      "gold_chunk_ids": [
+        "adrs:ADR-003:consequences"
+      ],
+      "retrieved_doc_ids": [
+        "ADR-003",
+        "ADR-003",
+        "ADR-003",
+        "ADR-003",
+        "ADR-003"
+      ],
+      "retrieved_chunk_ids": [
+        "adrs:ADR-003:considered_options",
+        "adrs:ADR-003:decision",
+        "adrs:ADR-003:context",
+        "adrs:ADR-003:consequences",
+        "adrs:ADR-003:content"
+      ],
+      "top_score": 6.2555,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 4,
+      "no_answer": false
+    },
+    {
+      "id": "ADR-003:section_summary",
+      "question": "What does ADR-003 say in the consequences section?",
+      "gold_doc_id": "ADR-003",
+      "gold_chunk_ids": [
+        "adrs:ADR-003:consequences"
+      ],
+      "retrieved_doc_ids": [
+        "ADR-003",
+        "ADR-003",
+        "ADR-003",
+        "ADR-003",
+        "ADR-003"
+      ],
+      "retrieved_chunk_ids": [
+        "adrs:ADR-003:consequences",
+        "adrs:ADR-003:considered_options",
+        "adrs:ADR-003:content",
+        "adrs:ADR-003:decision",
+        "adrs:ADR-003:context"
+      ],
+      "top_score": 9.2486,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "ADR-004:status",
+      "question": "What is the status of ADR-004?",
+      "gold_doc_id": "ADR-004",
+      "gold_chunk_ids": [
+        "adrs:ADR-004:content"
+      ],
+      "retrieved_doc_ids": [
+        "ADR-004",
+        "ADR-004",
+        "POSTMORTEM-004",
+        "ADR-004",
+        "ADR-004"
+      ],
+      "retrieved_chunk_ids": [
+        "adrs:ADR-004:decision",
+        "adrs:ADR-004:consequences",
+        "postmortems:POSTMORTEM-004:lessons_learned",
+        "adrs:ADR-004:considered_options",
+        "adrs:ADR-004:context"
+      ],
+      "top_score": 6.6539,
+      "predicted_no_answer": false,
+      "matched_gold_rank": null,
+      "no_answer": false
+    },
+    {
+      "id": "ADR-004:decision",
+      "question": "What decision does ADR-004 make?",
+      "gold_doc_id": "ADR-004",
+      "gold_chunk_ids": [
+        "adrs:ADR-004:decision"
+      ],
+      "retrieved_doc_ids": [
+        "ADR-004",
+        "ADR-004",
+        "ADR-004",
+        "ADR-004",
+        "ADR-004"
+      ],
+      "retrieved_chunk_ids": [
+        "adrs:ADR-004:decision",
+        "adrs:ADR-004:consequences",
+        "adrs:ADR-004:content",
+        "adrs:ADR-004:considered_options",
+        "adrs:ADR-004:context"
+      ],
+      "top_score": 8.5563,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "ADR-004:consequences",
+      "question": "What consequence does ADR-004 mention?",
+      "gold_doc_id": "ADR-004",
+      "gold_chunk_ids": [
+        "adrs:ADR-004:consequences"
+      ],
+      "retrieved_doc_ids": [
+        "ADR-004",
+        "ADR-004",
+        "ADR-004",
+        "ADR-004",
+        "ADR-004"
+      ],
+      "retrieved_chunk_ids": [
+        "adrs:ADR-004:considered_options",
+        "adrs:ADR-004:decision",
+        "adrs:ADR-004:context",
+        "adrs:ADR-004:consequences",
+        "adrs:ADR-004:content"
+      ],
+      "top_score": 6.2555,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 4,
+      "no_answer": false
+    },
+    {
+      "id": "ADR-004:section_summary",
+      "question": "What does ADR-004 say in the consequences section?",
+      "gold_doc_id": "ADR-004",
+      "gold_chunk_ids": [
+        "adrs:ADR-004:consequences"
+      ],
+      "retrieved_doc_ids": [
+        "ADR-004",
+        "ADR-004",
+        "ADR-004",
+        "ADR-004",
+        "ADR-004"
+      ],
+      "retrieved_chunk_ids": [
+        "adrs:ADR-004:consequences",
+        "adrs:ADR-004:considered_options",
+        "adrs:ADR-004:content",
+        "adrs:ADR-004:decision",
+        "adrs:ADR-004:context"
+      ],
+      "top_score": 9.2486,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "ADR-005:status",
+      "question": "What is the status of ADR-005?",
+      "gold_doc_id": "ADR-005",
+      "gold_chunk_ids": [
+        "adrs:ADR-005:content"
+      ],
+      "retrieved_doc_ids": [
+        "ADR-005",
+        "ADR-005",
+        "POSTMORTEM-005",
+        "ADR-005",
+        "ADR-005"
+      ],
+      "retrieved_chunk_ids": [
+        "adrs:ADR-005:decision",
+        "adrs:ADR-005:consequences",
+        "postmortems:POSTMORTEM-005:lessons_learned",
+        "adrs:ADR-005:considered_options",
+        "adrs:ADR-005:context"
+      ],
+      "top_score": 6.6539,
+      "predicted_no_answer": false,
+      "matched_gold_rank": null,
+      "no_answer": false
+    },
+    {
+      "id": "ADR-005:decision",
+      "question": "What decision does ADR-005 make?",
+      "gold_doc_id": "ADR-005",
+      "gold_chunk_ids": [
+        "adrs:ADR-005:decision"
+      ],
+      "retrieved_doc_ids": [
+        "ADR-005",
+        "ADR-005",
+        "ADR-005",
+        "ADR-005",
+        "ADR-005"
+      ],
+      "retrieved_chunk_ids": [
+        "adrs:ADR-005:decision",
+        "adrs:ADR-005:consequences",
+        "adrs:ADR-005:content",
+        "adrs:ADR-005:considered_options",
+        "adrs:ADR-005:context"
+      ],
+      "top_score": 8.5563,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "ADR-005:consequences",
+      "question": "What consequence does ADR-005 mention?",
+      "gold_doc_id": "ADR-005",
+      "gold_chunk_ids": [
+        "adrs:ADR-005:consequences"
+      ],
+      "retrieved_doc_ids": [
+        "ADR-005",
+        "ADR-005",
+        "ADR-005",
+        "ADR-005",
+        "ADR-005"
+      ],
+      "retrieved_chunk_ids": [
+        "adrs:ADR-005:considered_options",
+        "adrs:ADR-005:decision",
+        "adrs:ADR-005:context",
+        "adrs:ADR-005:consequences",
+        "adrs:ADR-005:content"
+      ],
+      "top_score": 6.2555,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 4,
+      "no_answer": false
+    },
+    {
+      "id": "ADR-005:section_summary",
+      "question": "What does ADR-005 say in the consequences section?",
+      "gold_doc_id": "ADR-005",
+      "gold_chunk_ids": [
+        "adrs:ADR-005:consequences"
+      ],
+      "retrieved_doc_ids": [
+        "ADR-005",
+        "ADR-005",
+        "ADR-005",
+        "ADR-005",
+        "ADR-005"
+      ],
+      "retrieved_chunk_ids": [
+        "adrs:ADR-005:consequences",
+        "adrs:ADR-005:considered_options",
+        "adrs:ADR-005:content",
+        "adrs:ADR-005:decision",
+        "adrs:ADR-005:context"
+      ],
+      "top_score": 9.2486,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "ADR-006:status",
+      "question": "What is the status of ADR-006?",
+      "gold_doc_id": "ADR-006",
+      "gold_chunk_ids": [
+        "adrs:ADR-006:content"
+      ],
+      "retrieved_doc_ids": [
+        "ADR-006",
+        "ADR-006",
+        "POSTMORTEM-006",
+        "ADR-006",
+        "ADR-006"
+      ],
+      "retrieved_chunk_ids": [
+        "adrs:ADR-006:decision",
+        "adrs:ADR-006:consequences",
+        "postmortems:POSTMORTEM-006:lessons_learned",
+        "adrs:ADR-006:considered_options",
+        "adrs:ADR-006:context"
+      ],
+      "top_score": 6.6539,
+      "predicted_no_answer": false,
+      "matched_gold_rank": null,
+      "no_answer": false
+    },
+    {
+      "id": "ADR-006:decision",
+      "question": "What decision does ADR-006 make?",
+      "gold_doc_id": "ADR-006",
+      "gold_chunk_ids": [
+        "adrs:ADR-006:decision"
+      ],
+      "retrieved_doc_ids": [
+        "ADR-006",
+        "ADR-006",
+        "ADR-006",
+        "ADR-006",
+        "ADR-006"
+      ],
+      "retrieved_chunk_ids": [
+        "adrs:ADR-006:decision",
+        "adrs:ADR-006:consequences",
+        "adrs:ADR-006:content",
+        "adrs:ADR-006:considered_options",
+        "adrs:ADR-006:context"
+      ],
+      "top_score": 8.5563,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "ADR-006:consequences",
+      "question": "What consequence does ADR-006 mention?",
+      "gold_doc_id": "ADR-006",
+      "gold_chunk_ids": [
+        "adrs:ADR-006:consequences"
+      ],
+      "retrieved_doc_ids": [
+        "ADR-006",
+        "ADR-006",
+        "ADR-006",
+        "ADR-006",
+        "ADR-006"
+      ],
+      "retrieved_chunk_ids": [
+        "adrs:ADR-006:considered_options",
+        "adrs:ADR-006:decision",
+        "adrs:ADR-006:context",
+        "adrs:ADR-006:consequences",
+        "adrs:ADR-006:content"
+      ],
+      "top_score": 6.2555,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 4,
+      "no_answer": false
+    },
+    {
+      "id": "ADR-006:section_summary",
+      "question": "What does ADR-006 say in the consequences section?",
+      "gold_doc_id": "ADR-006",
+      "gold_chunk_ids": [
+        "adrs:ADR-006:consequences"
+      ],
+      "retrieved_doc_ids": [
+        "ADR-006",
+        "ADR-006",
+        "ADR-006",
+        "ADR-006",
+        "ADR-006"
+      ],
+      "retrieved_chunk_ids": [
+        "adrs:ADR-006:consequences",
+        "adrs:ADR-006:considered_options",
+        "adrs:ADR-006:content",
+        "adrs:ADR-006:decision",
+        "adrs:ADR-006:context"
+      ],
+      "top_score": 9.2486,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "ADR-007:status",
+      "question": "What is the status of ADR-007?",
+      "gold_doc_id": "ADR-007",
+      "gold_chunk_ids": [
+        "adrs:ADR-007:content"
+      ],
+      "retrieved_doc_ids": [
+        "ADR-007",
+        "ADR-007",
+        "POSTMORTEM-007",
+        "ADR-007",
+        "ADR-007"
+      ],
+      "retrieved_chunk_ids": [
+        "adrs:ADR-007:decision",
+        "adrs:ADR-007:consequences",
+        "postmortems:POSTMORTEM-007:lessons_learned",
+        "adrs:ADR-007:considered_options",
+        "adrs:ADR-007:context"
+      ],
+      "top_score": 6.6539,
+      "predicted_no_answer": false,
+      "matched_gold_rank": null,
+      "no_answer": false
+    },
+    {
+      "id": "ADR-007:decision",
+      "question": "What decision does ADR-007 make?",
+      "gold_doc_id": "ADR-007",
+      "gold_chunk_ids": [
+        "adrs:ADR-007:decision"
+      ],
+      "retrieved_doc_ids": [
+        "ADR-007",
+        "ADR-007",
+        "ADR-007",
+        "ADR-007",
+        "ADR-007"
+      ],
+      "retrieved_chunk_ids": [
+        "adrs:ADR-007:decision",
+        "adrs:ADR-007:consequences",
+        "adrs:ADR-007:content",
+        "adrs:ADR-007:considered_options",
+        "adrs:ADR-007:context"
+      ],
+      "top_score": 8.5563,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "ADR-007:consequences",
+      "question": "What consequence does ADR-007 mention?",
+      "gold_doc_id": "ADR-007",
+      "gold_chunk_ids": [
+        "adrs:ADR-007:consequences"
+      ],
+      "retrieved_doc_ids": [
+        "ADR-007",
+        "ADR-007",
+        "ADR-007",
+        "ADR-007",
+        "ADR-007"
+      ],
+      "retrieved_chunk_ids": [
+        "adrs:ADR-007:considered_options",
+        "adrs:ADR-007:decision",
+        "adrs:ADR-007:context",
+        "adrs:ADR-007:consequences",
+        "adrs:ADR-007:content"
+      ],
+      "top_score": 6.2555,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 4,
+      "no_answer": false
+    },
+    {
+      "id": "ADR-007:section_summary",
+      "question": "What does ADR-007 say in the consequences section?",
+      "gold_doc_id": "ADR-007",
+      "gold_chunk_ids": [
+        "adrs:ADR-007:consequences"
+      ],
+      "retrieved_doc_ids": [
+        "ADR-007",
+        "ADR-007",
+        "ADR-007",
+        "ADR-007",
+        "ADR-007"
+      ],
+      "retrieved_chunk_ids": [
+        "adrs:ADR-007:consequences",
+        "adrs:ADR-007:considered_options",
+        "adrs:ADR-007:content",
+        "adrs:ADR-007:decision",
+        "adrs:ADR-007:context"
+      ],
+      "top_score": 9.2486,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "ADR-008:status",
+      "question": "What is the status of ADR-008?",
+      "gold_doc_id": "ADR-008",
+      "gold_chunk_ids": [
+        "adrs:ADR-008:content"
+      ],
+      "retrieved_doc_ids": [
+        "ADR-008",
+        "ADR-008",
+        "POSTMORTEM-008",
+        "ADR-008",
+        "ADR-008"
+      ],
+      "retrieved_chunk_ids": [
+        "adrs:ADR-008:decision",
+        "adrs:ADR-008:consequences",
+        "postmortems:POSTMORTEM-008:lessons_learned",
+        "adrs:ADR-008:considered_options",
+        "adrs:ADR-008:context"
+      ],
+      "top_score": 6.6539,
+      "predicted_no_answer": false,
+      "matched_gold_rank": null,
+      "no_answer": false
+    },
+    {
+      "id": "ADR-008:decision",
+      "question": "What decision does ADR-008 make?",
+      "gold_doc_id": "ADR-008",
+      "gold_chunk_ids": [
+        "adrs:ADR-008:decision"
+      ],
+      "retrieved_doc_ids": [
+        "ADR-008",
+        "ADR-008",
+        "ADR-008",
+        "ADR-008",
+        "ADR-008"
+      ],
+      "retrieved_chunk_ids": [
+        "adrs:ADR-008:decision",
+        "adrs:ADR-008:consequences",
+        "adrs:ADR-008:content",
+        "adrs:ADR-008:considered_options",
+        "adrs:ADR-008:context"
+      ],
+      "top_score": 8.5563,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "ADR-008:consequences",
+      "question": "What consequence does ADR-008 mention?",
+      "gold_doc_id": "ADR-008",
+      "gold_chunk_ids": [
+        "adrs:ADR-008:consequences"
+      ],
+      "retrieved_doc_ids": [
+        "ADR-008",
+        "ADR-008",
+        "ADR-008",
+        "ADR-008",
+        "ADR-008"
+      ],
+      "retrieved_chunk_ids": [
+        "adrs:ADR-008:considered_options",
+        "adrs:ADR-008:decision",
+        "adrs:ADR-008:context",
+        "adrs:ADR-008:consequences",
+        "adrs:ADR-008:content"
+      ],
+      "top_score": 6.2555,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 4,
+      "no_answer": false
+    },
+    {
+      "id": "ADR-008:section_summary",
+      "question": "What does ADR-008 say in the consequences section?",
+      "gold_doc_id": "ADR-008",
+      "gold_chunk_ids": [
+        "adrs:ADR-008:consequences"
+      ],
+      "retrieved_doc_ids": [
+        "ADR-008",
+        "ADR-008",
+        "ADR-008",
+        "ADR-008",
+        "ADR-008"
+      ],
+      "retrieved_chunk_ids": [
+        "adrs:ADR-008:consequences",
+        "adrs:ADR-008:considered_options",
+        "adrs:ADR-008:content",
+        "adrs:ADR-008:decision",
+        "adrs:ADR-008:context"
+      ],
+      "top_score": 9.2486,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "ADR-009:status",
+      "question": "What is the status of ADR-009?",
+      "gold_doc_id": "ADR-009",
+      "gold_chunk_ids": [
+        "adrs:ADR-009:content"
+      ],
+      "retrieved_doc_ids": [
+        "ADR-009",
+        "ADR-009",
+        "POSTMORTEM-009",
+        "ADR-009",
+        "ADR-009"
+      ],
+      "retrieved_chunk_ids": [
+        "adrs:ADR-009:decision",
+        "adrs:ADR-009:consequences",
+        "postmortems:POSTMORTEM-009:lessons_learned",
+        "adrs:ADR-009:considered_options",
+        "adrs:ADR-009:context"
+      ],
+      "top_score": 6.6539,
+      "predicted_no_answer": false,
+      "matched_gold_rank": null,
+      "no_answer": false
+    },
+    {
+      "id": "ADR-009:decision",
+      "question": "What decision does ADR-009 make?",
+      "gold_doc_id": "ADR-009",
+      "gold_chunk_ids": [
+        "adrs:ADR-009:decision"
+      ],
+      "retrieved_doc_ids": [
+        "ADR-009",
+        "ADR-009",
+        "ADR-009",
+        "ADR-009",
+        "ADR-009"
+      ],
+      "retrieved_chunk_ids": [
+        "adrs:ADR-009:decision",
+        "adrs:ADR-009:consequences",
+        "adrs:ADR-009:content",
+        "adrs:ADR-009:considered_options",
+        "adrs:ADR-009:context"
+      ],
+      "top_score": 8.5563,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "ADR-009:consequences",
+      "question": "What consequence does ADR-009 mention?",
+      "gold_doc_id": "ADR-009",
+      "gold_chunk_ids": [
+        "adrs:ADR-009:consequences"
+      ],
+      "retrieved_doc_ids": [
+        "ADR-009",
+        "ADR-009",
+        "ADR-009",
+        "ADR-009",
+        "ADR-009"
+      ],
+      "retrieved_chunk_ids": [
+        "adrs:ADR-009:considered_options",
+        "adrs:ADR-009:decision",
+        "adrs:ADR-009:context",
+        "adrs:ADR-009:consequences",
+        "adrs:ADR-009:content"
+      ],
+      "top_score": 6.2555,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 4,
+      "no_answer": false
+    },
+    {
+      "id": "ADR-009:section_summary",
+      "question": "What does ADR-009 say in the consequences section?",
+      "gold_doc_id": "ADR-009",
+      "gold_chunk_ids": [
+        "adrs:ADR-009:consequences"
+      ],
+      "retrieved_doc_ids": [
+        "ADR-009",
+        "ADR-009",
+        "ADR-009",
+        "ADR-009",
+        "ADR-009"
+      ],
+      "retrieved_chunk_ids": [
+        "adrs:ADR-009:consequences",
+        "adrs:ADR-009:considered_options",
+        "adrs:ADR-009:content",
+        "adrs:ADR-009:decision",
+        "adrs:ADR-009:context"
+      ],
+      "top_score": 9.2486,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "ADR-010:status",
+      "question": "What is the status of ADR-010?",
+      "gold_doc_id": "ADR-010",
+      "gold_chunk_ids": [
+        "adrs:ADR-010:content"
+      ],
+      "retrieved_doc_ids": [
+        "ADR-010",
+        "ADR-010",
+        "POSTMORTEM-010",
+        "ADR-010",
+        "ADR-010"
+      ],
+      "retrieved_chunk_ids": [
+        "adrs:ADR-010:decision",
+        "adrs:ADR-010:consequences",
+        "postmortems:POSTMORTEM-010:lessons_learned",
+        "adrs:ADR-010:considered_options",
+        "adrs:ADR-010:context"
+      ],
+      "top_score": 6.6539,
+      "predicted_no_answer": false,
+      "matched_gold_rank": null,
+      "no_answer": false
+    },
+    {
+      "id": "ADR-010:decision",
+      "question": "What decision does ADR-010 make?",
+      "gold_doc_id": "ADR-010",
+      "gold_chunk_ids": [
+        "adrs:ADR-010:decision"
+      ],
+      "retrieved_doc_ids": [
+        "ADR-010",
+        "ADR-010",
+        "ADR-010",
+        "ADR-010",
+        "ADR-010"
+      ],
+      "retrieved_chunk_ids": [
+        "adrs:ADR-010:decision",
+        "adrs:ADR-010:consequences",
+        "adrs:ADR-010:content",
+        "adrs:ADR-010:considered_options",
+        "adrs:ADR-010:context"
+      ],
+      "top_score": 8.5563,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "ADR-010:consequences",
+      "question": "What consequence does ADR-010 mention?",
+      "gold_doc_id": "ADR-010",
+      "gold_chunk_ids": [
+        "adrs:ADR-010:consequences"
+      ],
+      "retrieved_doc_ids": [
+        "ADR-010",
+        "ADR-010",
+        "ADR-010",
+        "ADR-010",
+        "ADR-010"
+      ],
+      "retrieved_chunk_ids": [
+        "adrs:ADR-010:considered_options",
+        "adrs:ADR-010:decision",
+        "adrs:ADR-010:context",
+        "adrs:ADR-010:consequences",
+        "adrs:ADR-010:content"
+      ],
+      "top_score": 6.2555,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 4,
+      "no_answer": false
+    },
+    {
+      "id": "ADR-010:section_summary",
+      "question": "What does ADR-010 say in the consequences section?",
+      "gold_doc_id": "ADR-010",
+      "gold_chunk_ids": [
+        "adrs:ADR-010:consequences"
+      ],
+      "retrieved_doc_ids": [
+        "ADR-010",
+        "ADR-010",
+        "ADR-010",
+        "ADR-010",
+        "ADR-010"
+      ],
+      "retrieved_chunk_ids": [
+        "adrs:ADR-010:consequences",
+        "adrs:ADR-010:considered_options",
+        "adrs:ADR-010:content",
+        "adrs:ADR-010:decision",
+        "adrs:ADR-010:context"
+      ],
+      "top_score": 9.2486,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "MEETING-001:date",
+      "question": "When was MEETING-001 held?",
+      "gold_doc_id": "MEETING-001",
+      "gold_chunk_ids": [
+        "meeting_notes:MEETING-001:content"
+      ],
+      "retrieved_doc_ids": [
+        "POSTMORTEM-001",
+        "RFC-001",
+        "MEETING-001",
+        "MEETING-001",
+        "MEETING-001"
+      ],
+      "retrieved_chunk_ids": [
+        "postmortems:POSTMORTEM-001:resolution",
+        "rfcs:RFC-001:problem_statement",
+        "meeting_notes:MEETING-001:action_items",
+        "meeting_notes:MEETING-001:discussion_summary",
+        "meeting_notes:MEETING-001:decisions_made"
+      ],
+      "top_score": 6.7216,
+      "predicted_no_answer": false,
+      "matched_gold_rank": null,
+      "no_answer": false
+    },
+    {
+      "id": "MEETING-001:decisions",
+      "question": "What decisions were made in MEETING-001?",
+      "gold_doc_id": "MEETING-001",
+      "gold_chunk_ids": [
+        "meeting_notes:MEETING-001:decisions_made"
+      ],
+      "retrieved_doc_ids": [
+        "MEETING-001",
+        "MEETING-001",
+        "MEETING-002",
+        "MEETING-003",
+        "MEETING-004"
+      ],
+      "retrieved_chunk_ids": [
+        "meeting_notes:MEETING-001:decisions_made",
+        "meeting_notes:MEETING-001:content",
+        "meeting_notes:MEETING-002:decisions_made",
+        "meeting_notes:MEETING-003:decisions_made",
+        "meeting_notes:MEETING-004:decisions_made"
+      ],
+      "top_score": 11.4313,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "MEETING-001:actions",
+      "question": "What action items were assigned in MEETING-001?",
+      "gold_doc_id": "MEETING-001",
+      "gold_chunk_ids": [
+        "meeting_notes:MEETING-001:action_items"
+      ],
+      "retrieved_doc_ids": [
+        "MEETING-001",
+        "MEETING-001",
+        "MEETING-002",
+        "MEETING-003",
+        "MEETING-004"
+      ],
+      "retrieved_chunk_ids": [
+        "meeting_notes:MEETING-001:action_items",
+        "meeting_notes:MEETING-001:content",
+        "meeting_notes:MEETING-002:action_items",
+        "meeting_notes:MEETING-003:action_items",
+        "meeting_notes:MEETING-004:action_items"
+      ],
+      "top_score": 12.0421,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "MEETING-001:section_summary",
+      "question": "What does MEETING-001 say in the action items section?",
+      "gold_doc_id": "MEETING-001",
+      "gold_chunk_ids": [
+        "meeting_notes:MEETING-001:action_items"
+      ],
+      "retrieved_doc_ids": [
+        "MEETING-001",
+        "MEETING-001",
+        "MEETING-002",
+        "MEETING-003",
+        "MEETING-004"
+      ],
+      "retrieved_chunk_ids": [
+        "meeting_notes:MEETING-001:action_items",
+        "meeting_notes:MEETING-001:content",
+        "meeting_notes:MEETING-002:action_items",
+        "meeting_notes:MEETING-003:action_items",
+        "meeting_notes:MEETING-004:action_items"
+      ],
+      "top_score": 12.0421,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "MEETING-002:date",
+      "question": "When was MEETING-002 held?",
+      "gold_doc_id": "MEETING-002",
+      "gold_chunk_ids": [
+        "meeting_notes:MEETING-002:content"
+      ],
+      "retrieved_doc_ids": [
+        "POSTMORTEM-002",
+        "RFC-002",
+        "MEETING-002",
+        "MEETING-002",
+        "MEETING-002"
+      ],
+      "retrieved_chunk_ids": [
+        "postmortems:POSTMORTEM-002:resolution",
+        "rfcs:RFC-002:problem_statement",
+        "meeting_notes:MEETING-002:action_items",
+        "meeting_notes:MEETING-002:discussion_summary",
+        "meeting_notes:MEETING-002:decisions_made"
+      ],
+      "top_score": 6.7216,
+      "predicted_no_answer": false,
+      "matched_gold_rank": null,
+      "no_answer": false
+    },
+    {
+      "id": "MEETING-002:decisions",
+      "question": "What decisions were made in MEETING-002?",
+      "gold_doc_id": "MEETING-002",
+      "gold_chunk_ids": [
+        "meeting_notes:MEETING-002:decisions_made"
+      ],
+      "retrieved_doc_ids": [
+        "MEETING-002",
+        "MEETING-002",
+        "MEETING-001",
+        "MEETING-003",
+        "MEETING-004"
+      ],
+      "retrieved_chunk_ids": [
+        "meeting_notes:MEETING-002:decisions_made",
+        "meeting_notes:MEETING-002:content",
+        "meeting_notes:MEETING-001:decisions_made",
+        "meeting_notes:MEETING-003:decisions_made",
+        "meeting_notes:MEETING-004:decisions_made"
+      ],
+      "top_score": 11.4313,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "MEETING-002:actions",
+      "question": "What action items were assigned in MEETING-002?",
+      "gold_doc_id": "MEETING-002",
+      "gold_chunk_ids": [
+        "meeting_notes:MEETING-002:action_items"
+      ],
+      "retrieved_doc_ids": [
+        "MEETING-002",
+        "MEETING-002",
+        "MEETING-001",
+        "MEETING-003",
+        "MEETING-004"
+      ],
+      "retrieved_chunk_ids": [
+        "meeting_notes:MEETING-002:action_items",
+        "meeting_notes:MEETING-002:content",
+        "meeting_notes:MEETING-001:action_items",
+        "meeting_notes:MEETING-003:action_items",
+        "meeting_notes:MEETING-004:action_items"
+      ],
+      "top_score": 12.0421,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "MEETING-002:section_summary",
+      "question": "What does MEETING-002 say in the action items section?",
+      "gold_doc_id": "MEETING-002",
+      "gold_chunk_ids": [
+        "meeting_notes:MEETING-002:action_items"
+      ],
+      "retrieved_doc_ids": [
+        "MEETING-002",
+        "MEETING-002",
+        "MEETING-001",
+        "MEETING-003",
+        "MEETING-004"
+      ],
+      "retrieved_chunk_ids": [
+        "meeting_notes:MEETING-002:action_items",
+        "meeting_notes:MEETING-002:content",
+        "meeting_notes:MEETING-001:action_items",
+        "meeting_notes:MEETING-003:action_items",
+        "meeting_notes:MEETING-004:action_items"
+      ],
+      "top_score": 12.0421,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "MEETING-003:date",
+      "question": "When was MEETING-003 held?",
+      "gold_doc_id": "MEETING-003",
+      "gold_chunk_ids": [
+        "meeting_notes:MEETING-003:content"
+      ],
+      "retrieved_doc_ids": [
+        "POSTMORTEM-003",
+        "RFC-003",
+        "MEETING-003",
+        "MEETING-003",
+        "MEETING-003"
+      ],
+      "retrieved_chunk_ids": [
+        "postmortems:POSTMORTEM-003:resolution",
+        "rfcs:RFC-003:problem_statement",
+        "meeting_notes:MEETING-003:action_items",
+        "meeting_notes:MEETING-003:discussion_summary",
+        "meeting_notes:MEETING-003:decisions_made"
+      ],
+      "top_score": 6.7216,
+      "predicted_no_answer": false,
+      "matched_gold_rank": null,
+      "no_answer": false
+    },
+    {
+      "id": "MEETING-003:decisions",
+      "question": "What decisions were made in MEETING-003?",
+      "gold_doc_id": "MEETING-003",
+      "gold_chunk_ids": [
+        "meeting_notes:MEETING-003:decisions_made"
+      ],
+      "retrieved_doc_ids": [
+        "MEETING-003",
+        "MEETING-003",
+        "MEETING-001",
+        "MEETING-002",
+        "MEETING-004"
+      ],
+      "retrieved_chunk_ids": [
+        "meeting_notes:MEETING-003:decisions_made",
+        "meeting_notes:MEETING-003:content",
+        "meeting_notes:MEETING-001:decisions_made",
+        "meeting_notes:MEETING-002:decisions_made",
+        "meeting_notes:MEETING-004:decisions_made"
+      ],
+      "top_score": 11.4313,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "MEETING-003:actions",
+      "question": "What action items were assigned in MEETING-003?",
+      "gold_doc_id": "MEETING-003",
+      "gold_chunk_ids": [
+        "meeting_notes:MEETING-003:action_items"
+      ],
+      "retrieved_doc_ids": [
+        "MEETING-003",
+        "MEETING-003",
+        "MEETING-001",
+        "MEETING-002",
+        "MEETING-004"
+      ],
+      "retrieved_chunk_ids": [
+        "meeting_notes:MEETING-003:action_items",
+        "meeting_notes:MEETING-003:content",
+        "meeting_notes:MEETING-001:action_items",
+        "meeting_notes:MEETING-002:action_items",
+        "meeting_notes:MEETING-004:action_items"
+      ],
+      "top_score": 12.0421,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "MEETING-003:section_summary",
+      "question": "What does MEETING-003 say in the action items section?",
+      "gold_doc_id": "MEETING-003",
+      "gold_chunk_ids": [
+        "meeting_notes:MEETING-003:action_items"
+      ],
+      "retrieved_doc_ids": [
+        "MEETING-003",
+        "MEETING-003",
+        "MEETING-001",
+        "MEETING-002",
+        "MEETING-004"
+      ],
+      "retrieved_chunk_ids": [
+        "meeting_notes:MEETING-003:action_items",
+        "meeting_notes:MEETING-003:content",
+        "meeting_notes:MEETING-001:action_items",
+        "meeting_notes:MEETING-002:action_items",
+        "meeting_notes:MEETING-004:action_items"
+      ],
+      "top_score": 12.0421,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "MEETING-004:date",
+      "question": "When was MEETING-004 held?",
+      "gold_doc_id": "MEETING-004",
+      "gold_chunk_ids": [
+        "meeting_notes:MEETING-004:content"
+      ],
+      "retrieved_doc_ids": [
+        "POSTMORTEM-004",
+        "RFC-004",
+        "MEETING-004",
+        "MEETING-004",
+        "MEETING-004"
+      ],
+      "retrieved_chunk_ids": [
+        "postmortems:POSTMORTEM-004:resolution",
+        "rfcs:RFC-004:problem_statement",
+        "meeting_notes:MEETING-004:action_items",
+        "meeting_notes:MEETING-004:discussion_summary",
+        "meeting_notes:MEETING-004:decisions_made"
+      ],
+      "top_score": 6.7216,
+      "predicted_no_answer": false,
+      "matched_gold_rank": null,
+      "no_answer": false
+    },
+    {
+      "id": "MEETING-004:decisions",
+      "question": "What decisions were made in MEETING-004?",
+      "gold_doc_id": "MEETING-004",
+      "gold_chunk_ids": [
+        "meeting_notes:MEETING-004:decisions_made"
+      ],
+      "retrieved_doc_ids": [
+        "MEETING-004",
+        "MEETING-004",
+        "MEETING-001",
+        "MEETING-002",
+        "MEETING-003"
+      ],
+      "retrieved_chunk_ids": [
+        "meeting_notes:MEETING-004:decisions_made",
+        "meeting_notes:MEETING-004:content",
+        "meeting_notes:MEETING-001:decisions_made",
+        "meeting_notes:MEETING-002:decisions_made",
+        "meeting_notes:MEETING-003:decisions_made"
+      ],
+      "top_score": 11.4313,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "MEETING-004:actions",
+      "question": "What action items were assigned in MEETING-004?",
+      "gold_doc_id": "MEETING-004",
+      "gold_chunk_ids": [
+        "meeting_notes:MEETING-004:action_items"
+      ],
+      "retrieved_doc_ids": [
+        "MEETING-004",
+        "MEETING-004",
+        "MEETING-001",
+        "MEETING-002",
+        "MEETING-003"
+      ],
+      "retrieved_chunk_ids": [
+        "meeting_notes:MEETING-004:action_items",
+        "meeting_notes:MEETING-004:content",
+        "meeting_notes:MEETING-001:action_items",
+        "meeting_notes:MEETING-002:action_items",
+        "meeting_notes:MEETING-003:action_items"
+      ],
+      "top_score": 12.0421,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "MEETING-004:section_summary",
+      "question": "What does MEETING-004 say in the action items section?",
+      "gold_doc_id": "MEETING-004",
+      "gold_chunk_ids": [
+        "meeting_notes:MEETING-004:action_items"
+      ],
+      "retrieved_doc_ids": [
+        "MEETING-004",
+        "MEETING-004",
+        "MEETING-001",
+        "MEETING-002",
+        "MEETING-003"
+      ],
+      "retrieved_chunk_ids": [
+        "meeting_notes:MEETING-004:action_items",
+        "meeting_notes:MEETING-004:content",
+        "meeting_notes:MEETING-001:action_items",
+        "meeting_notes:MEETING-002:action_items",
+        "meeting_notes:MEETING-003:action_items"
+      ],
+      "top_score": 12.0421,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "MEETING-005:date",
+      "question": "When was MEETING-005 held?",
+      "gold_doc_id": "MEETING-005",
+      "gold_chunk_ids": [
+        "meeting_notes:MEETING-005:content"
+      ],
+      "retrieved_doc_ids": [
+        "POSTMORTEM-005",
+        "RFC-005",
+        "MEETING-005",
+        "MEETING-005",
+        "MEETING-005"
+      ],
+      "retrieved_chunk_ids": [
+        "postmortems:POSTMORTEM-005:resolution",
+        "rfcs:RFC-005:problem_statement",
+        "meeting_notes:MEETING-005:action_items",
+        "meeting_notes:MEETING-005:discussion_summary",
+        "meeting_notes:MEETING-005:decisions_made"
+      ],
+      "top_score": 6.7216,
+      "predicted_no_answer": false,
+      "matched_gold_rank": null,
+      "no_answer": false
+    },
+    {
+      "id": "MEETING-005:decisions",
+      "question": "What decisions were made in MEETING-005?",
+      "gold_doc_id": "MEETING-005",
+      "gold_chunk_ids": [
+        "meeting_notes:MEETING-005:decisions_made"
+      ],
+      "retrieved_doc_ids": [
+        "MEETING-005",
+        "MEETING-005",
+        "MEETING-001",
+        "MEETING-002",
+        "MEETING-003"
+      ],
+      "retrieved_chunk_ids": [
+        "meeting_notes:MEETING-005:decisions_made",
+        "meeting_notes:MEETING-005:content",
+        "meeting_notes:MEETING-001:decisions_made",
+        "meeting_notes:MEETING-002:decisions_made",
+        "meeting_notes:MEETING-003:decisions_made"
+      ],
+      "top_score": 11.4313,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "MEETING-005:actions",
+      "question": "What action items were assigned in MEETING-005?",
+      "gold_doc_id": "MEETING-005",
+      "gold_chunk_ids": [
+        "meeting_notes:MEETING-005:action_items"
+      ],
+      "retrieved_doc_ids": [
+        "MEETING-005",
+        "MEETING-005",
+        "MEETING-001",
+        "MEETING-002",
+        "MEETING-003"
+      ],
+      "retrieved_chunk_ids": [
+        "meeting_notes:MEETING-005:action_items",
+        "meeting_notes:MEETING-005:content",
+        "meeting_notes:MEETING-001:action_items",
+        "meeting_notes:MEETING-002:action_items",
+        "meeting_notes:MEETING-003:action_items"
+      ],
+      "top_score": 12.0421,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "MEETING-005:section_summary",
+      "question": "What does MEETING-005 say in the action items section?",
+      "gold_doc_id": "MEETING-005",
+      "gold_chunk_ids": [
+        "meeting_notes:MEETING-005:action_items"
+      ],
+      "retrieved_doc_ids": [
+        "MEETING-005",
+        "MEETING-005",
+        "MEETING-001",
+        "MEETING-002",
+        "MEETING-003"
+      ],
+      "retrieved_chunk_ids": [
+        "meeting_notes:MEETING-005:action_items",
+        "meeting_notes:MEETING-005:content",
+        "meeting_notes:MEETING-001:action_items",
+        "meeting_notes:MEETING-002:action_items",
+        "meeting_notes:MEETING-003:action_items"
+      ],
+      "top_score": 12.0421,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "MEETING-006:date",
+      "question": "When was MEETING-006 held?",
+      "gold_doc_id": "MEETING-006",
+      "gold_chunk_ids": [
+        "meeting_notes:MEETING-006:content"
+      ],
+      "retrieved_doc_ids": [
+        "POSTMORTEM-006",
+        "RFC-006",
+        "MEETING-006",
+        "MEETING-006",
+        "MEETING-006"
+      ],
+      "retrieved_chunk_ids": [
+        "postmortems:POSTMORTEM-006:resolution",
+        "rfcs:RFC-006:problem_statement",
+        "meeting_notes:MEETING-006:action_items",
+        "meeting_notes:MEETING-006:discussion_summary",
+        "meeting_notes:MEETING-006:decisions_made"
+      ],
+      "top_score": 6.7216,
+      "predicted_no_answer": false,
+      "matched_gold_rank": null,
+      "no_answer": false
+    },
+    {
+      "id": "MEETING-006:decisions",
+      "question": "What decisions were made in MEETING-006?",
+      "gold_doc_id": "MEETING-006",
+      "gold_chunk_ids": [
+        "meeting_notes:MEETING-006:decisions_made"
+      ],
+      "retrieved_doc_ids": [
+        "MEETING-006",
+        "MEETING-006",
+        "MEETING-001",
+        "MEETING-002",
+        "MEETING-003"
+      ],
+      "retrieved_chunk_ids": [
+        "meeting_notes:MEETING-006:decisions_made",
+        "meeting_notes:MEETING-006:content",
+        "meeting_notes:MEETING-001:decisions_made",
+        "meeting_notes:MEETING-002:decisions_made",
+        "meeting_notes:MEETING-003:decisions_made"
+      ],
+      "top_score": 11.4313,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "MEETING-006:actions",
+      "question": "What action items were assigned in MEETING-006?",
+      "gold_doc_id": "MEETING-006",
+      "gold_chunk_ids": [
+        "meeting_notes:MEETING-006:action_items"
+      ],
+      "retrieved_doc_ids": [
+        "MEETING-006",
+        "MEETING-006",
+        "MEETING-001",
+        "MEETING-002",
+        "MEETING-003"
+      ],
+      "retrieved_chunk_ids": [
+        "meeting_notes:MEETING-006:action_items",
+        "meeting_notes:MEETING-006:content",
+        "meeting_notes:MEETING-001:action_items",
+        "meeting_notes:MEETING-002:action_items",
+        "meeting_notes:MEETING-003:action_items"
+      ],
+      "top_score": 12.0421,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "MEETING-006:section_summary",
+      "question": "What does MEETING-006 say in the action items section?",
+      "gold_doc_id": "MEETING-006",
+      "gold_chunk_ids": [
+        "meeting_notes:MEETING-006:action_items"
+      ],
+      "retrieved_doc_ids": [
+        "MEETING-006",
+        "MEETING-006",
+        "MEETING-001",
+        "MEETING-002",
+        "MEETING-003"
+      ],
+      "retrieved_chunk_ids": [
+        "meeting_notes:MEETING-006:action_items",
+        "meeting_notes:MEETING-006:content",
+        "meeting_notes:MEETING-001:action_items",
+        "meeting_notes:MEETING-002:action_items",
+        "meeting_notes:MEETING-003:action_items"
+      ],
+      "top_score": 12.0421,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "MEETING-007:date",
+      "question": "When was MEETING-007 held?",
+      "gold_doc_id": "MEETING-007",
+      "gold_chunk_ids": [
+        "meeting_notes:MEETING-007:content"
+      ],
+      "retrieved_doc_ids": [
+        "POSTMORTEM-007",
+        "RFC-007",
+        "MEETING-007",
+        "MEETING-007",
+        "MEETING-007"
+      ],
+      "retrieved_chunk_ids": [
+        "postmortems:POSTMORTEM-007:resolution",
+        "rfcs:RFC-007:problem_statement",
+        "meeting_notes:MEETING-007:action_items",
+        "meeting_notes:MEETING-007:discussion_summary",
+        "meeting_notes:MEETING-007:decisions_made"
+      ],
+      "top_score": 6.7216,
+      "predicted_no_answer": false,
+      "matched_gold_rank": null,
+      "no_answer": false
+    },
+    {
+      "id": "MEETING-007:decisions",
+      "question": "What decisions were made in MEETING-007?",
+      "gold_doc_id": "MEETING-007",
+      "gold_chunk_ids": [
+        "meeting_notes:MEETING-007:decisions_made"
+      ],
+      "retrieved_doc_ids": [
+        "MEETING-007",
+        "MEETING-007",
+        "MEETING-001",
+        "MEETING-002",
+        "MEETING-003"
+      ],
+      "retrieved_chunk_ids": [
+        "meeting_notes:MEETING-007:decisions_made",
+        "meeting_notes:MEETING-007:content",
+        "meeting_notes:MEETING-001:decisions_made",
+        "meeting_notes:MEETING-002:decisions_made",
+        "meeting_notes:MEETING-003:decisions_made"
+      ],
+      "top_score": 11.4313,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "MEETING-007:actions",
+      "question": "What action items were assigned in MEETING-007?",
+      "gold_doc_id": "MEETING-007",
+      "gold_chunk_ids": [
+        "meeting_notes:MEETING-007:action_items"
+      ],
+      "retrieved_doc_ids": [
+        "MEETING-007",
+        "MEETING-007",
+        "MEETING-001",
+        "MEETING-002",
+        "MEETING-003"
+      ],
+      "retrieved_chunk_ids": [
+        "meeting_notes:MEETING-007:action_items",
+        "meeting_notes:MEETING-007:content",
+        "meeting_notes:MEETING-001:action_items",
+        "meeting_notes:MEETING-002:action_items",
+        "meeting_notes:MEETING-003:action_items"
+      ],
+      "top_score": 12.0421,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "MEETING-007:section_summary",
+      "question": "What does MEETING-007 say in the action items section?",
+      "gold_doc_id": "MEETING-007",
+      "gold_chunk_ids": [
+        "meeting_notes:MEETING-007:action_items"
+      ],
+      "retrieved_doc_ids": [
+        "MEETING-007",
+        "MEETING-007",
+        "MEETING-001",
+        "MEETING-002",
+        "MEETING-003"
+      ],
+      "retrieved_chunk_ids": [
+        "meeting_notes:MEETING-007:action_items",
+        "meeting_notes:MEETING-007:content",
+        "meeting_notes:MEETING-001:action_items",
+        "meeting_notes:MEETING-002:action_items",
+        "meeting_notes:MEETING-003:action_items"
+      ],
+      "top_score": 12.0421,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "MEETING-008:date",
+      "question": "When was MEETING-008 held?",
+      "gold_doc_id": "MEETING-008",
+      "gold_chunk_ids": [
+        "meeting_notes:MEETING-008:content"
+      ],
+      "retrieved_doc_ids": [
+        "POSTMORTEM-008",
+        "RFC-008",
+        "MEETING-008",
+        "MEETING-008",
+        "MEETING-008"
+      ],
+      "retrieved_chunk_ids": [
+        "postmortems:POSTMORTEM-008:resolution",
+        "rfcs:RFC-008:problem_statement",
+        "meeting_notes:MEETING-008:action_items",
+        "meeting_notes:MEETING-008:discussion_summary",
+        "meeting_notes:MEETING-008:decisions_made"
+      ],
+      "top_score": 6.7216,
+      "predicted_no_answer": false,
+      "matched_gold_rank": null,
+      "no_answer": false
+    },
+    {
+      "id": "MEETING-008:decisions",
+      "question": "What decisions were made in MEETING-008?",
+      "gold_doc_id": "MEETING-008",
+      "gold_chunk_ids": [
+        "meeting_notes:MEETING-008:decisions_made"
+      ],
+      "retrieved_doc_ids": [
+        "MEETING-008",
+        "MEETING-008",
+        "MEETING-001",
+        "MEETING-002",
+        "MEETING-003"
+      ],
+      "retrieved_chunk_ids": [
+        "meeting_notes:MEETING-008:decisions_made",
+        "meeting_notes:MEETING-008:content",
+        "meeting_notes:MEETING-001:decisions_made",
+        "meeting_notes:MEETING-002:decisions_made",
+        "meeting_notes:MEETING-003:decisions_made"
+      ],
+      "top_score": 11.4313,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "MEETING-008:actions",
+      "question": "What action items were assigned in MEETING-008?",
+      "gold_doc_id": "MEETING-008",
+      "gold_chunk_ids": [
+        "meeting_notes:MEETING-008:action_items"
+      ],
+      "retrieved_doc_ids": [
+        "MEETING-008",
+        "MEETING-008",
+        "MEETING-001",
+        "MEETING-002",
+        "MEETING-003"
+      ],
+      "retrieved_chunk_ids": [
+        "meeting_notes:MEETING-008:action_items",
+        "meeting_notes:MEETING-008:content",
+        "meeting_notes:MEETING-001:action_items",
+        "meeting_notes:MEETING-002:action_items",
+        "meeting_notes:MEETING-003:action_items"
+      ],
+      "top_score": 12.0421,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "MEETING-008:section_summary",
+      "question": "What does MEETING-008 say in the action items section?",
+      "gold_doc_id": "MEETING-008",
+      "gold_chunk_ids": [
+        "meeting_notes:MEETING-008:action_items"
+      ],
+      "retrieved_doc_ids": [
+        "MEETING-008",
+        "MEETING-008",
+        "MEETING-001",
+        "MEETING-002",
+        "MEETING-003"
+      ],
+      "retrieved_chunk_ids": [
+        "meeting_notes:MEETING-008:action_items",
+        "meeting_notes:MEETING-008:content",
+        "meeting_notes:MEETING-001:action_items",
+        "meeting_notes:MEETING-002:action_items",
+        "meeting_notes:MEETING-003:action_items"
+      ],
+      "top_score": 12.0421,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "MEETING-009:date",
+      "question": "When was MEETING-009 held?",
+      "gold_doc_id": "MEETING-009",
+      "gold_chunk_ids": [
+        "meeting_notes:MEETING-009:content"
+      ],
+      "retrieved_doc_ids": [
+        "POSTMORTEM-009",
+        "RFC-009",
+        "MEETING-009",
+        "MEETING-009",
+        "MEETING-009"
+      ],
+      "retrieved_chunk_ids": [
+        "postmortems:POSTMORTEM-009:resolution",
+        "rfcs:RFC-009:problem_statement",
+        "meeting_notes:MEETING-009:action_items",
+        "meeting_notes:MEETING-009:discussion_summary",
+        "meeting_notes:MEETING-009:decisions_made"
+      ],
+      "top_score": 6.7216,
+      "predicted_no_answer": false,
+      "matched_gold_rank": null,
+      "no_answer": false
+    },
+    {
+      "id": "MEETING-009:decisions",
+      "question": "What decisions were made in MEETING-009?",
+      "gold_doc_id": "MEETING-009",
+      "gold_chunk_ids": [
+        "meeting_notes:MEETING-009:decisions_made"
+      ],
+      "retrieved_doc_ids": [
+        "MEETING-009",
+        "MEETING-009",
+        "MEETING-001",
+        "MEETING-002",
+        "MEETING-003"
+      ],
+      "retrieved_chunk_ids": [
+        "meeting_notes:MEETING-009:decisions_made",
+        "meeting_notes:MEETING-009:content",
+        "meeting_notes:MEETING-001:decisions_made",
+        "meeting_notes:MEETING-002:decisions_made",
+        "meeting_notes:MEETING-003:decisions_made"
+      ],
+      "top_score": 11.4313,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "MEETING-009:actions",
+      "question": "What action items were assigned in MEETING-009?",
+      "gold_doc_id": "MEETING-009",
+      "gold_chunk_ids": [
+        "meeting_notes:MEETING-009:action_items"
+      ],
+      "retrieved_doc_ids": [
+        "MEETING-009",
+        "MEETING-009",
+        "MEETING-001",
+        "MEETING-002",
+        "MEETING-003"
+      ],
+      "retrieved_chunk_ids": [
+        "meeting_notes:MEETING-009:action_items",
+        "meeting_notes:MEETING-009:content",
+        "meeting_notes:MEETING-001:action_items",
+        "meeting_notes:MEETING-002:action_items",
+        "meeting_notes:MEETING-003:action_items"
+      ],
+      "top_score": 12.0421,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "MEETING-009:section_summary",
+      "question": "What does MEETING-009 say in the action items section?",
+      "gold_doc_id": "MEETING-009",
+      "gold_chunk_ids": [
+        "meeting_notes:MEETING-009:action_items"
+      ],
+      "retrieved_doc_ids": [
+        "MEETING-009",
+        "MEETING-009",
+        "MEETING-001",
+        "MEETING-002",
+        "MEETING-003"
+      ],
+      "retrieved_chunk_ids": [
+        "meeting_notes:MEETING-009:action_items",
+        "meeting_notes:MEETING-009:content",
+        "meeting_notes:MEETING-001:action_items",
+        "meeting_notes:MEETING-002:action_items",
+        "meeting_notes:MEETING-003:action_items"
+      ],
+      "top_score": 12.0421,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "MEETING-010:date",
+      "question": "When was MEETING-010 held?",
+      "gold_doc_id": "MEETING-010",
+      "gold_chunk_ids": [
+        "meeting_notes:MEETING-010:content"
+      ],
+      "retrieved_doc_ids": [
+        "POSTMORTEM-010",
+        "RFC-010",
+        "MEETING-010",
+        "MEETING-010",
+        "MEETING-010"
+      ],
+      "retrieved_chunk_ids": [
+        "postmortems:POSTMORTEM-010:resolution",
+        "rfcs:RFC-010:problem_statement",
+        "meeting_notes:MEETING-010:action_items",
+        "meeting_notes:MEETING-010:discussion_summary",
+        "meeting_notes:MEETING-010:decisions_made"
+      ],
+      "top_score": 6.7216,
+      "predicted_no_answer": false,
+      "matched_gold_rank": null,
+      "no_answer": false
+    },
+    {
+      "id": "MEETING-010:decisions",
+      "question": "What decisions were made in MEETING-010?",
+      "gold_doc_id": "MEETING-010",
+      "gold_chunk_ids": [
+        "meeting_notes:MEETING-010:decisions_made"
+      ],
+      "retrieved_doc_ids": [
+        "MEETING-010",
+        "MEETING-010",
+        "MEETING-001",
+        "MEETING-002",
+        "MEETING-003"
+      ],
+      "retrieved_chunk_ids": [
+        "meeting_notes:MEETING-010:decisions_made",
+        "meeting_notes:MEETING-010:content",
+        "meeting_notes:MEETING-001:decisions_made",
+        "meeting_notes:MEETING-002:decisions_made",
+        "meeting_notes:MEETING-003:decisions_made"
+      ],
+      "top_score": 11.4313,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "MEETING-010:actions",
+      "question": "What action items were assigned in MEETING-010?",
+      "gold_doc_id": "MEETING-010",
+      "gold_chunk_ids": [
+        "meeting_notes:MEETING-010:action_items"
+      ],
+      "retrieved_doc_ids": [
+        "MEETING-010",
+        "MEETING-010",
+        "MEETING-001",
+        "MEETING-002",
+        "MEETING-003"
+      ],
+      "retrieved_chunk_ids": [
+        "meeting_notes:MEETING-010:action_items",
+        "meeting_notes:MEETING-010:content",
+        "meeting_notes:MEETING-001:action_items",
+        "meeting_notes:MEETING-002:action_items",
+        "meeting_notes:MEETING-003:action_items"
+      ],
+      "top_score": 12.0421,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "MEETING-010:section_summary",
+      "question": "What does MEETING-010 say in the action items section?",
+      "gold_doc_id": "MEETING-010",
+      "gold_chunk_ids": [
+        "meeting_notes:MEETING-010:action_items"
+      ],
+      "retrieved_doc_ids": [
+        "MEETING-010",
+        "MEETING-010",
+        "MEETING-001",
+        "MEETING-002",
+        "MEETING-003"
+      ],
+      "retrieved_chunk_ids": [
+        "meeting_notes:MEETING-010:action_items",
+        "meeting_notes:MEETING-010:content",
+        "meeting_notes:MEETING-001:action_items",
+        "meeting_notes:MEETING-002:action_items",
+        "meeting_notes:MEETING-003:action_items"
+      ],
+      "top_score": 12.0421,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "POSTMORTEM-001:severity",
+      "question": "What severity is listed for POSTMORTEM-001?",
+      "gold_doc_id": "POSTMORTEM-001",
+      "gold_chunk_ids": [
+        "postmortems:POSTMORTEM-001:content"
+      ],
+      "retrieved_doc_ids": [
+        "POSTMORTEM-001",
+        "POSTMORTEM-001",
+        "POSTMORTEM-001",
+        "POSTMORTEM-001",
+        "TICKET-001"
+      ],
+      "retrieved_chunk_ids": [
+        "postmortems:POSTMORTEM-001:content",
+        "postmortems:POSTMORTEM-001:root_cause",
+        "postmortems:POSTMORTEM-001:resolution",
+        "postmortems:POSTMORTEM-001:incident_summary",
+        "tickets:TICKET-001:description"
+      ],
+      "top_score": 6.6347,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "POSTMORTEM-001:root_cause",
+      "question": "What was the root cause in POSTMORTEM-001?",
+      "gold_doc_id": "POSTMORTEM-001",
+      "gold_chunk_ids": [
+        "postmortems:POSTMORTEM-001:root_cause"
+      ],
+      "retrieved_doc_ids": [
+        "POSTMORTEM-001",
+        "POSTMORTEM-001",
+        "POSTMORTEM-002",
+        "POSTMORTEM-003",
+        "POSTMORTEM-004"
+      ],
+      "retrieved_chunk_ids": [
+        "postmortems:POSTMORTEM-001:root_cause",
+        "postmortems:POSTMORTEM-001:content",
+        "postmortems:POSTMORTEM-002:root_cause",
+        "postmortems:POSTMORTEM-003:root_cause",
+        "postmortems:POSTMORTEM-004:root_cause"
+      ],
+      "top_score": 14.1655,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "POSTMORTEM-001:resolution",
+      "question": "What was the resolution in POSTMORTEM-001?",
+      "gold_doc_id": "POSTMORTEM-001",
+      "gold_chunk_ids": [
+        "postmortems:POSTMORTEM-001:resolution"
+      ],
+      "retrieved_doc_ids": [
+        "POSTMORTEM-001",
+        "POSTMORTEM-001",
+        "POSTMORTEM-001",
+        "POSTMORTEM-002",
+        "POSTMORTEM-003"
+      ],
+      "retrieved_chunk_ids": [
+        "postmortems:POSTMORTEM-001:resolution",
+        "postmortems:POSTMORTEM-001:content",
+        "postmortems:POSTMORTEM-001:root_cause",
+        "postmortems:POSTMORTEM-002:resolution",
+        "postmortems:POSTMORTEM-003:resolution"
+      ],
+      "top_score": 11.8768,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "POSTMORTEM-001:section_summary",
+      "question": "What does POSTMORTEM-001 say in the incident summary section?",
+      "gold_doc_id": "POSTMORTEM-001",
+      "gold_chunk_ids": [
+        "postmortems:POSTMORTEM-001:incident_summary"
+      ],
+      "retrieved_doc_ids": [
+        "POSTMORTEM-001",
+        "POSTMORTEM-001",
+        "POSTMORTEM-001",
+        "POSTMORTEM-002",
+        "POSTMORTEM-003"
+      ],
+      "retrieved_chunk_ids": [
+        "postmortems:POSTMORTEM-001:incident_summary",
+        "postmortems:POSTMORTEM-001:content",
+        "postmortems:POSTMORTEM-001:root_cause",
+        "postmortems:POSTMORTEM-002:incident_summary",
+        "postmortems:POSTMORTEM-003:incident_summary"
+      ],
+      "top_score": 11.6156,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "POSTMORTEM-002:severity",
+      "question": "What severity is listed for POSTMORTEM-002?",
+      "gold_doc_id": "POSTMORTEM-002",
+      "gold_chunk_ids": [
+        "postmortems:POSTMORTEM-002:content"
+      ],
+      "retrieved_doc_ids": [
+        "POSTMORTEM-002",
+        "POSTMORTEM-002",
+        "POSTMORTEM-002",
+        "POSTMORTEM-002",
+        "TICKET-002"
+      ],
+      "retrieved_chunk_ids": [
+        "postmortems:POSTMORTEM-002:content",
+        "postmortems:POSTMORTEM-002:root_cause",
+        "postmortems:POSTMORTEM-002:resolution",
+        "postmortems:POSTMORTEM-002:incident_summary",
+        "tickets:TICKET-002:description"
+      ],
+      "top_score": 6.6347,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "POSTMORTEM-002:root_cause",
+      "question": "What was the root cause in POSTMORTEM-002?",
+      "gold_doc_id": "POSTMORTEM-002",
+      "gold_chunk_ids": [
+        "postmortems:POSTMORTEM-002:root_cause"
+      ],
+      "retrieved_doc_ids": [
+        "POSTMORTEM-002",
+        "POSTMORTEM-002",
+        "POSTMORTEM-001",
+        "POSTMORTEM-003",
+        "POSTMORTEM-004"
+      ],
+      "retrieved_chunk_ids": [
+        "postmortems:POSTMORTEM-002:root_cause",
+        "postmortems:POSTMORTEM-002:content",
+        "postmortems:POSTMORTEM-001:root_cause",
+        "postmortems:POSTMORTEM-003:root_cause",
+        "postmortems:POSTMORTEM-004:root_cause"
+      ],
+      "top_score": 14.1655,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "POSTMORTEM-002:resolution",
+      "question": "What was the resolution in POSTMORTEM-002?",
+      "gold_doc_id": "POSTMORTEM-002",
+      "gold_chunk_ids": [
+        "postmortems:POSTMORTEM-002:resolution"
+      ],
+      "retrieved_doc_ids": [
+        "POSTMORTEM-002",
+        "POSTMORTEM-002",
+        "POSTMORTEM-002",
+        "POSTMORTEM-001",
+        "POSTMORTEM-003"
+      ],
+      "retrieved_chunk_ids": [
+        "postmortems:POSTMORTEM-002:resolution",
+        "postmortems:POSTMORTEM-002:content",
+        "postmortems:POSTMORTEM-002:root_cause",
+        "postmortems:POSTMORTEM-001:resolution",
+        "postmortems:POSTMORTEM-003:resolution"
+      ],
+      "top_score": 11.8768,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "POSTMORTEM-002:section_summary",
+      "question": "What does POSTMORTEM-002 say in the incident summary section?",
+      "gold_doc_id": "POSTMORTEM-002",
+      "gold_chunk_ids": [
+        "postmortems:POSTMORTEM-002:incident_summary"
+      ],
+      "retrieved_doc_ids": [
+        "POSTMORTEM-002",
+        "POSTMORTEM-002",
+        "POSTMORTEM-002",
+        "POSTMORTEM-001",
+        "POSTMORTEM-003"
+      ],
+      "retrieved_chunk_ids": [
+        "postmortems:POSTMORTEM-002:incident_summary",
+        "postmortems:POSTMORTEM-002:content",
+        "postmortems:POSTMORTEM-002:root_cause",
+        "postmortems:POSTMORTEM-001:incident_summary",
+        "postmortems:POSTMORTEM-003:incident_summary"
+      ],
+      "top_score": 11.6156,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "POSTMORTEM-003:severity",
+      "question": "What severity is listed for POSTMORTEM-003?",
+      "gold_doc_id": "POSTMORTEM-003",
+      "gold_chunk_ids": [
+        "postmortems:POSTMORTEM-003:content"
+      ],
+      "retrieved_doc_ids": [
+        "POSTMORTEM-003",
+        "POSTMORTEM-003",
+        "POSTMORTEM-003",
+        "POSTMORTEM-003",
+        "TICKET-003"
+      ],
+      "retrieved_chunk_ids": [
+        "postmortems:POSTMORTEM-003:content",
+        "postmortems:POSTMORTEM-003:root_cause",
+        "postmortems:POSTMORTEM-003:resolution",
+        "postmortems:POSTMORTEM-003:incident_summary",
+        "tickets:TICKET-003:description"
+      ],
+      "top_score": 6.6347,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "POSTMORTEM-003:root_cause",
+      "question": "What was the root cause in POSTMORTEM-003?",
+      "gold_doc_id": "POSTMORTEM-003",
+      "gold_chunk_ids": [
+        "postmortems:POSTMORTEM-003:root_cause"
+      ],
+      "retrieved_doc_ids": [
+        "POSTMORTEM-003",
+        "POSTMORTEM-003",
+        "POSTMORTEM-001",
+        "POSTMORTEM-002",
+        "POSTMORTEM-004"
+      ],
+      "retrieved_chunk_ids": [
+        "postmortems:POSTMORTEM-003:root_cause",
+        "postmortems:POSTMORTEM-003:content",
+        "postmortems:POSTMORTEM-001:root_cause",
+        "postmortems:POSTMORTEM-002:root_cause",
+        "postmortems:POSTMORTEM-004:root_cause"
+      ],
+      "top_score": 14.1655,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "POSTMORTEM-003:resolution",
+      "question": "What was the resolution in POSTMORTEM-003?",
+      "gold_doc_id": "POSTMORTEM-003",
+      "gold_chunk_ids": [
+        "postmortems:POSTMORTEM-003:resolution"
+      ],
+      "retrieved_doc_ids": [
+        "POSTMORTEM-003",
+        "POSTMORTEM-003",
+        "POSTMORTEM-003",
+        "POSTMORTEM-001",
+        "POSTMORTEM-002"
+      ],
+      "retrieved_chunk_ids": [
+        "postmortems:POSTMORTEM-003:resolution",
+        "postmortems:POSTMORTEM-003:content",
+        "postmortems:POSTMORTEM-003:root_cause",
+        "postmortems:POSTMORTEM-001:resolution",
+        "postmortems:POSTMORTEM-002:resolution"
+      ],
+      "top_score": 11.8768,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "POSTMORTEM-003:section_summary",
+      "question": "What does POSTMORTEM-003 say in the incident summary section?",
+      "gold_doc_id": "POSTMORTEM-003",
+      "gold_chunk_ids": [
+        "postmortems:POSTMORTEM-003:incident_summary"
+      ],
+      "retrieved_doc_ids": [
+        "POSTMORTEM-003",
+        "POSTMORTEM-003",
+        "POSTMORTEM-003",
+        "POSTMORTEM-001",
+        "POSTMORTEM-002"
+      ],
+      "retrieved_chunk_ids": [
+        "postmortems:POSTMORTEM-003:incident_summary",
+        "postmortems:POSTMORTEM-003:content",
+        "postmortems:POSTMORTEM-003:root_cause",
+        "postmortems:POSTMORTEM-001:incident_summary",
+        "postmortems:POSTMORTEM-002:incident_summary"
+      ],
+      "top_score": 11.6156,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "POSTMORTEM-004:severity",
+      "question": "What severity is listed for POSTMORTEM-004?",
+      "gold_doc_id": "POSTMORTEM-004",
+      "gold_chunk_ids": [
+        "postmortems:POSTMORTEM-004:content"
+      ],
+      "retrieved_doc_ids": [
+        "POSTMORTEM-004",
+        "POSTMORTEM-004",
+        "POSTMORTEM-004",
+        "POSTMORTEM-004",
+        "TICKET-004"
+      ],
+      "retrieved_chunk_ids": [
+        "postmortems:POSTMORTEM-004:content",
+        "postmortems:POSTMORTEM-004:root_cause",
+        "postmortems:POSTMORTEM-004:resolution",
+        "postmortems:POSTMORTEM-004:incident_summary",
+        "tickets:TICKET-004:description"
+      ],
+      "top_score": 6.6347,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "POSTMORTEM-004:root_cause",
+      "question": "What was the root cause in POSTMORTEM-004?",
+      "gold_doc_id": "POSTMORTEM-004",
+      "gold_chunk_ids": [
+        "postmortems:POSTMORTEM-004:root_cause"
+      ],
+      "retrieved_doc_ids": [
+        "POSTMORTEM-004",
+        "POSTMORTEM-004",
+        "POSTMORTEM-001",
+        "POSTMORTEM-002",
+        "POSTMORTEM-003"
+      ],
+      "retrieved_chunk_ids": [
+        "postmortems:POSTMORTEM-004:root_cause",
+        "postmortems:POSTMORTEM-004:content",
+        "postmortems:POSTMORTEM-001:root_cause",
+        "postmortems:POSTMORTEM-002:root_cause",
+        "postmortems:POSTMORTEM-003:root_cause"
+      ],
+      "top_score": 14.1655,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "POSTMORTEM-004:resolution",
+      "question": "What was the resolution in POSTMORTEM-004?",
+      "gold_doc_id": "POSTMORTEM-004",
+      "gold_chunk_ids": [
+        "postmortems:POSTMORTEM-004:resolution"
+      ],
+      "retrieved_doc_ids": [
+        "POSTMORTEM-004",
+        "POSTMORTEM-004",
+        "POSTMORTEM-004",
+        "POSTMORTEM-001",
+        "POSTMORTEM-002"
+      ],
+      "retrieved_chunk_ids": [
+        "postmortems:POSTMORTEM-004:resolution",
+        "postmortems:POSTMORTEM-004:content",
+        "postmortems:POSTMORTEM-004:root_cause",
+        "postmortems:POSTMORTEM-001:resolution",
+        "postmortems:POSTMORTEM-002:resolution"
+      ],
+      "top_score": 11.8768,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "POSTMORTEM-004:section_summary",
+      "question": "What does POSTMORTEM-004 say in the incident summary section?",
+      "gold_doc_id": "POSTMORTEM-004",
+      "gold_chunk_ids": [
+        "postmortems:POSTMORTEM-004:incident_summary"
+      ],
+      "retrieved_doc_ids": [
+        "POSTMORTEM-004",
+        "POSTMORTEM-004",
+        "POSTMORTEM-004",
+        "POSTMORTEM-001",
+        "POSTMORTEM-002"
+      ],
+      "retrieved_chunk_ids": [
+        "postmortems:POSTMORTEM-004:incident_summary",
+        "postmortems:POSTMORTEM-004:content",
+        "postmortems:POSTMORTEM-004:root_cause",
+        "postmortems:POSTMORTEM-001:incident_summary",
+        "postmortems:POSTMORTEM-002:incident_summary"
+      ],
+      "top_score": 11.6156,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "POSTMORTEM-005:severity",
+      "question": "What severity is listed for POSTMORTEM-005?",
+      "gold_doc_id": "POSTMORTEM-005",
+      "gold_chunk_ids": [
+        "postmortems:POSTMORTEM-005:content"
+      ],
+      "retrieved_doc_ids": [
+        "POSTMORTEM-005",
+        "POSTMORTEM-005",
+        "POSTMORTEM-005",
+        "POSTMORTEM-005",
+        "TICKET-005"
+      ],
+      "retrieved_chunk_ids": [
+        "postmortems:POSTMORTEM-005:content",
+        "postmortems:POSTMORTEM-005:root_cause",
+        "postmortems:POSTMORTEM-005:resolution",
+        "postmortems:POSTMORTEM-005:incident_summary",
+        "tickets:TICKET-005:description"
+      ],
+      "top_score": 6.6347,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "POSTMORTEM-005:root_cause",
+      "question": "What was the root cause in POSTMORTEM-005?",
+      "gold_doc_id": "POSTMORTEM-005",
+      "gold_chunk_ids": [
+        "postmortems:POSTMORTEM-005:root_cause"
+      ],
+      "retrieved_doc_ids": [
+        "POSTMORTEM-005",
+        "POSTMORTEM-005",
+        "POSTMORTEM-001",
+        "POSTMORTEM-002",
+        "POSTMORTEM-003"
+      ],
+      "retrieved_chunk_ids": [
+        "postmortems:POSTMORTEM-005:root_cause",
+        "postmortems:POSTMORTEM-005:content",
+        "postmortems:POSTMORTEM-001:root_cause",
+        "postmortems:POSTMORTEM-002:root_cause",
+        "postmortems:POSTMORTEM-003:root_cause"
+      ],
+      "top_score": 14.1655,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "POSTMORTEM-005:resolution",
+      "question": "What was the resolution in POSTMORTEM-005?",
+      "gold_doc_id": "POSTMORTEM-005",
+      "gold_chunk_ids": [
+        "postmortems:POSTMORTEM-005:resolution"
+      ],
+      "retrieved_doc_ids": [
+        "POSTMORTEM-005",
+        "POSTMORTEM-005",
+        "POSTMORTEM-005",
+        "POSTMORTEM-001",
+        "POSTMORTEM-002"
+      ],
+      "retrieved_chunk_ids": [
+        "postmortems:POSTMORTEM-005:resolution",
+        "postmortems:POSTMORTEM-005:content",
+        "postmortems:POSTMORTEM-005:root_cause",
+        "postmortems:POSTMORTEM-001:resolution",
+        "postmortems:POSTMORTEM-002:resolution"
+      ],
+      "top_score": 11.8768,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "POSTMORTEM-005:section_summary",
+      "question": "What does POSTMORTEM-005 say in the incident summary section?",
+      "gold_doc_id": "POSTMORTEM-005",
+      "gold_chunk_ids": [
+        "postmortems:POSTMORTEM-005:incident_summary"
+      ],
+      "retrieved_doc_ids": [
+        "POSTMORTEM-005",
+        "POSTMORTEM-005",
+        "POSTMORTEM-005",
+        "POSTMORTEM-001",
+        "POSTMORTEM-002"
+      ],
+      "retrieved_chunk_ids": [
+        "postmortems:POSTMORTEM-005:incident_summary",
+        "postmortems:POSTMORTEM-005:content",
+        "postmortems:POSTMORTEM-005:root_cause",
+        "postmortems:POSTMORTEM-001:incident_summary",
+        "postmortems:POSTMORTEM-002:incident_summary"
+      ],
+      "top_score": 11.6156,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "POSTMORTEM-006:severity",
+      "question": "What severity is listed for POSTMORTEM-006?",
+      "gold_doc_id": "POSTMORTEM-006",
+      "gold_chunk_ids": [
+        "postmortems:POSTMORTEM-006:content"
+      ],
+      "retrieved_doc_ids": [
+        "POSTMORTEM-006",
+        "POSTMORTEM-006",
+        "POSTMORTEM-006",
+        "POSTMORTEM-006",
+        "TICKET-006"
+      ],
+      "retrieved_chunk_ids": [
+        "postmortems:POSTMORTEM-006:content",
+        "postmortems:POSTMORTEM-006:root_cause",
+        "postmortems:POSTMORTEM-006:resolution",
+        "postmortems:POSTMORTEM-006:incident_summary",
+        "tickets:TICKET-006:description"
+      ],
+      "top_score": 6.6347,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "POSTMORTEM-006:root_cause",
+      "question": "What was the root cause in POSTMORTEM-006?",
+      "gold_doc_id": "POSTMORTEM-006",
+      "gold_chunk_ids": [
+        "postmortems:POSTMORTEM-006:root_cause"
+      ],
+      "retrieved_doc_ids": [
+        "POSTMORTEM-006",
+        "POSTMORTEM-006",
+        "POSTMORTEM-001",
+        "POSTMORTEM-002",
+        "POSTMORTEM-003"
+      ],
+      "retrieved_chunk_ids": [
+        "postmortems:POSTMORTEM-006:root_cause",
+        "postmortems:POSTMORTEM-006:content",
+        "postmortems:POSTMORTEM-001:root_cause",
+        "postmortems:POSTMORTEM-002:root_cause",
+        "postmortems:POSTMORTEM-003:root_cause"
+      ],
+      "top_score": 14.1655,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "POSTMORTEM-006:resolution",
+      "question": "What was the resolution in POSTMORTEM-006?",
+      "gold_doc_id": "POSTMORTEM-006",
+      "gold_chunk_ids": [
+        "postmortems:POSTMORTEM-006:resolution"
+      ],
+      "retrieved_doc_ids": [
+        "POSTMORTEM-006",
+        "POSTMORTEM-006",
+        "POSTMORTEM-006",
+        "POSTMORTEM-001",
+        "POSTMORTEM-002"
+      ],
+      "retrieved_chunk_ids": [
+        "postmortems:POSTMORTEM-006:resolution",
+        "postmortems:POSTMORTEM-006:content",
+        "postmortems:POSTMORTEM-006:root_cause",
+        "postmortems:POSTMORTEM-001:resolution",
+        "postmortems:POSTMORTEM-002:resolution"
+      ],
+      "top_score": 11.8768,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "POSTMORTEM-006:section_summary",
+      "question": "What does POSTMORTEM-006 say in the incident summary section?",
+      "gold_doc_id": "POSTMORTEM-006",
+      "gold_chunk_ids": [
+        "postmortems:POSTMORTEM-006:incident_summary"
+      ],
+      "retrieved_doc_ids": [
+        "POSTMORTEM-006",
+        "POSTMORTEM-006",
+        "POSTMORTEM-006",
+        "POSTMORTEM-001",
+        "POSTMORTEM-002"
+      ],
+      "retrieved_chunk_ids": [
+        "postmortems:POSTMORTEM-006:incident_summary",
+        "postmortems:POSTMORTEM-006:content",
+        "postmortems:POSTMORTEM-006:root_cause",
+        "postmortems:POSTMORTEM-001:incident_summary",
+        "postmortems:POSTMORTEM-002:incident_summary"
+      ],
+      "top_score": 11.6156,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "POSTMORTEM-007:severity",
+      "question": "What severity is listed for POSTMORTEM-007?",
+      "gold_doc_id": "POSTMORTEM-007",
+      "gold_chunk_ids": [
+        "postmortems:POSTMORTEM-007:content"
+      ],
+      "retrieved_doc_ids": [
+        "POSTMORTEM-007",
+        "POSTMORTEM-007",
+        "POSTMORTEM-007",
+        "POSTMORTEM-007",
+        "TICKET-007"
+      ],
+      "retrieved_chunk_ids": [
+        "postmortems:POSTMORTEM-007:content",
+        "postmortems:POSTMORTEM-007:root_cause",
+        "postmortems:POSTMORTEM-007:resolution",
+        "postmortems:POSTMORTEM-007:incident_summary",
+        "tickets:TICKET-007:description"
+      ],
+      "top_score": 6.6347,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "POSTMORTEM-007:root_cause",
+      "question": "What was the root cause in POSTMORTEM-007?",
+      "gold_doc_id": "POSTMORTEM-007",
+      "gold_chunk_ids": [
+        "postmortems:POSTMORTEM-007:root_cause"
+      ],
+      "retrieved_doc_ids": [
+        "POSTMORTEM-007",
+        "POSTMORTEM-007",
+        "POSTMORTEM-001",
+        "POSTMORTEM-002",
+        "POSTMORTEM-003"
+      ],
+      "retrieved_chunk_ids": [
+        "postmortems:POSTMORTEM-007:root_cause",
+        "postmortems:POSTMORTEM-007:content",
+        "postmortems:POSTMORTEM-001:root_cause",
+        "postmortems:POSTMORTEM-002:root_cause",
+        "postmortems:POSTMORTEM-003:root_cause"
+      ],
+      "top_score": 14.1655,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "POSTMORTEM-007:resolution",
+      "question": "What was the resolution in POSTMORTEM-007?",
+      "gold_doc_id": "POSTMORTEM-007",
+      "gold_chunk_ids": [
+        "postmortems:POSTMORTEM-007:resolution"
+      ],
+      "retrieved_doc_ids": [
+        "POSTMORTEM-007",
+        "POSTMORTEM-007",
+        "POSTMORTEM-007",
+        "POSTMORTEM-001",
+        "POSTMORTEM-002"
+      ],
+      "retrieved_chunk_ids": [
+        "postmortems:POSTMORTEM-007:resolution",
+        "postmortems:POSTMORTEM-007:content",
+        "postmortems:POSTMORTEM-007:root_cause",
+        "postmortems:POSTMORTEM-001:resolution",
+        "postmortems:POSTMORTEM-002:resolution"
+      ],
+      "top_score": 11.8768,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "POSTMORTEM-007:section_summary",
+      "question": "What does POSTMORTEM-007 say in the incident summary section?",
+      "gold_doc_id": "POSTMORTEM-007",
+      "gold_chunk_ids": [
+        "postmortems:POSTMORTEM-007:incident_summary"
+      ],
+      "retrieved_doc_ids": [
+        "POSTMORTEM-007",
+        "POSTMORTEM-007",
+        "POSTMORTEM-007",
+        "POSTMORTEM-001",
+        "POSTMORTEM-002"
+      ],
+      "retrieved_chunk_ids": [
+        "postmortems:POSTMORTEM-007:incident_summary",
+        "postmortems:POSTMORTEM-007:content",
+        "postmortems:POSTMORTEM-007:root_cause",
+        "postmortems:POSTMORTEM-001:incident_summary",
+        "postmortems:POSTMORTEM-002:incident_summary"
+      ],
+      "top_score": 11.6156,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "POSTMORTEM-008:severity",
+      "question": "What severity is listed for POSTMORTEM-008?",
+      "gold_doc_id": "POSTMORTEM-008",
+      "gold_chunk_ids": [
+        "postmortems:POSTMORTEM-008:content"
+      ],
+      "retrieved_doc_ids": [
+        "POSTMORTEM-008",
+        "POSTMORTEM-008",
+        "POSTMORTEM-008",
+        "POSTMORTEM-008",
+        "TICKET-008"
+      ],
+      "retrieved_chunk_ids": [
+        "postmortems:POSTMORTEM-008:content",
+        "postmortems:POSTMORTEM-008:root_cause",
+        "postmortems:POSTMORTEM-008:resolution",
+        "postmortems:POSTMORTEM-008:incident_summary",
+        "tickets:TICKET-008:description"
+      ],
+      "top_score": 6.6347,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "POSTMORTEM-008:root_cause",
+      "question": "What was the root cause in POSTMORTEM-008?",
+      "gold_doc_id": "POSTMORTEM-008",
+      "gold_chunk_ids": [
+        "postmortems:POSTMORTEM-008:root_cause"
+      ],
+      "retrieved_doc_ids": [
+        "POSTMORTEM-008",
+        "POSTMORTEM-008",
+        "POSTMORTEM-001",
+        "POSTMORTEM-002",
+        "POSTMORTEM-003"
+      ],
+      "retrieved_chunk_ids": [
+        "postmortems:POSTMORTEM-008:root_cause",
+        "postmortems:POSTMORTEM-008:content",
+        "postmortems:POSTMORTEM-001:root_cause",
+        "postmortems:POSTMORTEM-002:root_cause",
+        "postmortems:POSTMORTEM-003:root_cause"
+      ],
+      "top_score": 14.1655,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "POSTMORTEM-008:resolution",
+      "question": "What was the resolution in POSTMORTEM-008?",
+      "gold_doc_id": "POSTMORTEM-008",
+      "gold_chunk_ids": [
+        "postmortems:POSTMORTEM-008:resolution"
+      ],
+      "retrieved_doc_ids": [
+        "POSTMORTEM-008",
+        "POSTMORTEM-008",
+        "POSTMORTEM-008",
+        "POSTMORTEM-001",
+        "POSTMORTEM-002"
+      ],
+      "retrieved_chunk_ids": [
+        "postmortems:POSTMORTEM-008:resolution",
+        "postmortems:POSTMORTEM-008:content",
+        "postmortems:POSTMORTEM-008:root_cause",
+        "postmortems:POSTMORTEM-001:resolution",
+        "postmortems:POSTMORTEM-002:resolution"
+      ],
+      "top_score": 11.8768,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "POSTMORTEM-008:section_summary",
+      "question": "What does POSTMORTEM-008 say in the incident summary section?",
+      "gold_doc_id": "POSTMORTEM-008",
+      "gold_chunk_ids": [
+        "postmortems:POSTMORTEM-008:incident_summary"
+      ],
+      "retrieved_doc_ids": [
+        "POSTMORTEM-008",
+        "POSTMORTEM-008",
+        "POSTMORTEM-008",
+        "POSTMORTEM-001",
+        "POSTMORTEM-002"
+      ],
+      "retrieved_chunk_ids": [
+        "postmortems:POSTMORTEM-008:incident_summary",
+        "postmortems:POSTMORTEM-008:content",
+        "postmortems:POSTMORTEM-008:root_cause",
+        "postmortems:POSTMORTEM-001:incident_summary",
+        "postmortems:POSTMORTEM-002:incident_summary"
+      ],
+      "top_score": 11.6156,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "POSTMORTEM-009:severity",
+      "question": "What severity is listed for POSTMORTEM-009?",
+      "gold_doc_id": "POSTMORTEM-009",
+      "gold_chunk_ids": [
+        "postmortems:POSTMORTEM-009:content"
+      ],
+      "retrieved_doc_ids": [
+        "POSTMORTEM-009",
+        "POSTMORTEM-009",
+        "POSTMORTEM-009",
+        "POSTMORTEM-009",
+        "TICKET-009"
+      ],
+      "retrieved_chunk_ids": [
+        "postmortems:POSTMORTEM-009:content",
+        "postmortems:POSTMORTEM-009:root_cause",
+        "postmortems:POSTMORTEM-009:resolution",
+        "postmortems:POSTMORTEM-009:incident_summary",
+        "tickets:TICKET-009:description"
+      ],
+      "top_score": 6.6347,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "POSTMORTEM-009:root_cause",
+      "question": "What was the root cause in POSTMORTEM-009?",
+      "gold_doc_id": "POSTMORTEM-009",
+      "gold_chunk_ids": [
+        "postmortems:POSTMORTEM-009:root_cause"
+      ],
+      "retrieved_doc_ids": [
+        "POSTMORTEM-009",
+        "POSTMORTEM-009",
+        "POSTMORTEM-001",
+        "POSTMORTEM-002",
+        "POSTMORTEM-003"
+      ],
+      "retrieved_chunk_ids": [
+        "postmortems:POSTMORTEM-009:root_cause",
+        "postmortems:POSTMORTEM-009:content",
+        "postmortems:POSTMORTEM-001:root_cause",
+        "postmortems:POSTMORTEM-002:root_cause",
+        "postmortems:POSTMORTEM-003:root_cause"
+      ],
+      "top_score": 14.1655,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "POSTMORTEM-009:resolution",
+      "question": "What was the resolution in POSTMORTEM-009?",
+      "gold_doc_id": "POSTMORTEM-009",
+      "gold_chunk_ids": [
+        "postmortems:POSTMORTEM-009:resolution"
+      ],
+      "retrieved_doc_ids": [
+        "POSTMORTEM-009",
+        "POSTMORTEM-009",
+        "POSTMORTEM-009",
+        "POSTMORTEM-001",
+        "POSTMORTEM-002"
+      ],
+      "retrieved_chunk_ids": [
+        "postmortems:POSTMORTEM-009:resolution",
+        "postmortems:POSTMORTEM-009:content",
+        "postmortems:POSTMORTEM-009:root_cause",
+        "postmortems:POSTMORTEM-001:resolution",
+        "postmortems:POSTMORTEM-002:resolution"
+      ],
+      "top_score": 11.8768,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "POSTMORTEM-009:section_summary",
+      "question": "What does POSTMORTEM-009 say in the incident summary section?",
+      "gold_doc_id": "POSTMORTEM-009",
+      "gold_chunk_ids": [
+        "postmortems:POSTMORTEM-009:incident_summary"
+      ],
+      "retrieved_doc_ids": [
+        "POSTMORTEM-009",
+        "POSTMORTEM-009",
+        "POSTMORTEM-009",
+        "POSTMORTEM-001",
+        "POSTMORTEM-002"
+      ],
+      "retrieved_chunk_ids": [
+        "postmortems:POSTMORTEM-009:incident_summary",
+        "postmortems:POSTMORTEM-009:content",
+        "postmortems:POSTMORTEM-009:root_cause",
+        "postmortems:POSTMORTEM-001:incident_summary",
+        "postmortems:POSTMORTEM-002:incident_summary"
+      ],
+      "top_score": 11.6156,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "POSTMORTEM-010:severity",
+      "question": "What severity is listed for POSTMORTEM-010?",
+      "gold_doc_id": "POSTMORTEM-010",
+      "gold_chunk_ids": [
+        "postmortems:POSTMORTEM-010:content"
+      ],
+      "retrieved_doc_ids": [
+        "POSTMORTEM-010",
+        "POSTMORTEM-010",
+        "POSTMORTEM-010",
+        "POSTMORTEM-010",
+        "TICKET-010"
+      ],
+      "retrieved_chunk_ids": [
+        "postmortems:POSTMORTEM-010:content",
+        "postmortems:POSTMORTEM-010:root_cause",
+        "postmortems:POSTMORTEM-010:resolution",
+        "postmortems:POSTMORTEM-010:incident_summary",
+        "tickets:TICKET-010:description"
+      ],
+      "top_score": 6.6347,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "POSTMORTEM-010:root_cause",
+      "question": "What was the root cause in POSTMORTEM-010?",
+      "gold_doc_id": "POSTMORTEM-010",
+      "gold_chunk_ids": [
+        "postmortems:POSTMORTEM-010:root_cause"
+      ],
+      "retrieved_doc_ids": [
+        "POSTMORTEM-010",
+        "POSTMORTEM-010",
+        "POSTMORTEM-001",
+        "POSTMORTEM-002",
+        "POSTMORTEM-003"
+      ],
+      "retrieved_chunk_ids": [
+        "postmortems:POSTMORTEM-010:root_cause",
+        "postmortems:POSTMORTEM-010:content",
+        "postmortems:POSTMORTEM-001:root_cause",
+        "postmortems:POSTMORTEM-002:root_cause",
+        "postmortems:POSTMORTEM-003:root_cause"
+      ],
+      "top_score": 14.1655,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "POSTMORTEM-010:resolution",
+      "question": "What was the resolution in POSTMORTEM-010?",
+      "gold_doc_id": "POSTMORTEM-010",
+      "gold_chunk_ids": [
+        "postmortems:POSTMORTEM-010:resolution"
+      ],
+      "retrieved_doc_ids": [
+        "POSTMORTEM-010",
+        "POSTMORTEM-010",
+        "POSTMORTEM-010",
+        "POSTMORTEM-001",
+        "POSTMORTEM-002"
+      ],
+      "retrieved_chunk_ids": [
+        "postmortems:POSTMORTEM-010:resolution",
+        "postmortems:POSTMORTEM-010:content",
+        "postmortems:POSTMORTEM-010:root_cause",
+        "postmortems:POSTMORTEM-001:resolution",
+        "postmortems:POSTMORTEM-002:resolution"
+      ],
+      "top_score": 11.8768,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "POSTMORTEM-010:section_summary",
+      "question": "What does POSTMORTEM-010 say in the incident summary section?",
+      "gold_doc_id": "POSTMORTEM-010",
+      "gold_chunk_ids": [
+        "postmortems:POSTMORTEM-010:incident_summary"
+      ],
+      "retrieved_doc_ids": [
+        "POSTMORTEM-010",
+        "POSTMORTEM-010",
+        "POSTMORTEM-010",
+        "POSTMORTEM-001",
+        "POSTMORTEM-002"
+      ],
+      "retrieved_chunk_ids": [
+        "postmortems:POSTMORTEM-010:incident_summary",
+        "postmortems:POSTMORTEM-010:content",
+        "postmortems:POSTMORTEM-010:root_cause",
+        "postmortems:POSTMORTEM-001:incident_summary",
+        "postmortems:POSTMORTEM-002:incident_summary"
+      ],
+      "top_score": 11.6156,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "RFC-001:status",
+      "question": "What is the status of RFC-001?",
+      "gold_doc_id": "RFC-001",
+      "gold_chunk_ids": [
+        "rfcs:RFC-001:content"
+      ],
+      "retrieved_doc_ids": [
+        "RFC-001",
+        "RFC-001",
+        "POSTMORTEM-001",
+        "RFC-001",
+        "RFC-001"
+      ],
+      "retrieved_chunk_ids": [
+        "rfcs:RFC-001:proposed_solution",
+        "rfcs:RFC-001:problem_statement",
+        "postmortems:POSTMORTEM-001:lessons_learned",
+        "rfcs:RFC-001:trade_offs",
+        "rfcs:RFC-001:alternatives_considered"
+      ],
+      "top_score": 6.6539,
+      "predicted_no_answer": false,
+      "matched_gold_rank": null,
+      "no_answer": false
+    },
+    {
+      "id": "RFC-001:problem",
+      "question": "What problem does RFC-001 describe?",
+      "gold_doc_id": "RFC-001",
+      "gold_chunk_ids": [
+        "rfcs:RFC-001:problem_statement"
+      ],
+      "retrieved_doc_ids": [
+        "RFC-001",
+        "RFC-001",
+        "RFC-001",
+        "RFC-001",
+        "RFC-001"
+      ],
+      "retrieved_chunk_ids": [
+        "rfcs:RFC-001:problem_statement",
+        "rfcs:RFC-001:trade_offs",
+        "rfcs:RFC-001:content",
+        "rfcs:RFC-001:alternatives_considered",
+        "rfcs:RFC-001:proposed_solution"
+      ],
+      "top_score": 8.9375,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "RFC-001:tradeoffs",
+      "question": "What trade-offs does RFC-001 note?",
+      "gold_doc_id": "RFC-001",
+      "gold_chunk_ids": [
+        "rfcs:RFC-001:trade_offs"
+      ],
+      "retrieved_doc_ids": [
+        "RFC-001",
+        "RFC-002",
+        "RFC-003",
+        "RFC-004",
+        "RFC-005"
+      ],
+      "retrieved_chunk_ids": [
+        "rfcs:RFC-001:trade_offs",
+        "rfcs:RFC-002:trade_offs",
+        "rfcs:RFC-003:trade_offs",
+        "rfcs:RFC-004:trade_offs",
+        "rfcs:RFC-005:trade_offs"
+      ],
+      "top_score": 12.6146,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "RFC-001:section_summary",
+      "question": "What does RFC-001 say in the alternatives considered section?",
+      "gold_doc_id": "RFC-001",
+      "gold_chunk_ids": [
+        "rfcs:RFC-001:alternatives_considered"
+      ],
+      "retrieved_doc_ids": [
+        "RFC-001",
+        "RFC-001",
+        "RFC-002",
+        "RFC-003",
+        "RFC-004"
+      ],
+      "retrieved_chunk_ids": [
+        "rfcs:RFC-001:alternatives_considered",
+        "rfcs:RFC-001:content",
+        "rfcs:RFC-002:alternatives_considered",
+        "rfcs:RFC-003:alternatives_considered",
+        "rfcs:RFC-004:alternatives_considered"
+      ],
+      "top_score": 11.4803,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "RFC-002:status",
+      "question": "What is the status of RFC-002?",
+      "gold_doc_id": "RFC-002",
+      "gold_chunk_ids": [
+        "rfcs:RFC-002:content"
+      ],
+      "retrieved_doc_ids": [
+        "RFC-002",
+        "RFC-002",
+        "POSTMORTEM-002",
+        "RFC-002",
+        "RFC-002"
+      ],
+      "retrieved_chunk_ids": [
+        "rfcs:RFC-002:proposed_solution",
+        "rfcs:RFC-002:problem_statement",
+        "postmortems:POSTMORTEM-002:lessons_learned",
+        "rfcs:RFC-002:trade_offs",
+        "rfcs:RFC-002:alternatives_considered"
+      ],
+      "top_score": 6.6539,
+      "predicted_no_answer": false,
+      "matched_gold_rank": null,
+      "no_answer": false
+    },
+    {
+      "id": "RFC-002:problem",
+      "question": "What problem does RFC-002 describe?",
+      "gold_doc_id": "RFC-002",
+      "gold_chunk_ids": [
+        "rfcs:RFC-002:problem_statement"
+      ],
+      "retrieved_doc_ids": [
+        "RFC-002",
+        "RFC-002",
+        "RFC-002",
+        "RFC-002",
+        "RFC-002"
+      ],
+      "retrieved_chunk_ids": [
+        "rfcs:RFC-002:problem_statement",
+        "rfcs:RFC-002:trade_offs",
+        "rfcs:RFC-002:content",
+        "rfcs:RFC-002:alternatives_considered",
+        "rfcs:RFC-002:proposed_solution"
+      ],
+      "top_score": 8.9375,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "RFC-002:tradeoffs",
+      "question": "What trade-offs does RFC-002 note?",
+      "gold_doc_id": "RFC-002",
+      "gold_chunk_ids": [
+        "rfcs:RFC-002:trade_offs"
+      ],
+      "retrieved_doc_ids": [
+        "RFC-002",
+        "RFC-001",
+        "RFC-003",
+        "RFC-004",
+        "RFC-005"
+      ],
+      "retrieved_chunk_ids": [
+        "rfcs:RFC-002:trade_offs",
+        "rfcs:RFC-001:trade_offs",
+        "rfcs:RFC-003:trade_offs",
+        "rfcs:RFC-004:trade_offs",
+        "rfcs:RFC-005:trade_offs"
+      ],
+      "top_score": 12.6146,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "RFC-002:section_summary",
+      "question": "What does RFC-002 say in the alternatives considered section?",
+      "gold_doc_id": "RFC-002",
+      "gold_chunk_ids": [
+        "rfcs:RFC-002:alternatives_considered"
+      ],
+      "retrieved_doc_ids": [
+        "RFC-002",
+        "RFC-002",
+        "RFC-001",
+        "RFC-003",
+        "RFC-004"
+      ],
+      "retrieved_chunk_ids": [
+        "rfcs:RFC-002:alternatives_considered",
+        "rfcs:RFC-002:content",
+        "rfcs:RFC-001:alternatives_considered",
+        "rfcs:RFC-003:alternatives_considered",
+        "rfcs:RFC-004:alternatives_considered"
+      ],
+      "top_score": 11.4803,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "RFC-003:status",
+      "question": "What is the status of RFC-003?",
+      "gold_doc_id": "RFC-003",
+      "gold_chunk_ids": [
+        "rfcs:RFC-003:content"
+      ],
+      "retrieved_doc_ids": [
+        "RFC-003",
+        "RFC-003",
+        "POSTMORTEM-003",
+        "RFC-003",
+        "RFC-003"
+      ],
+      "retrieved_chunk_ids": [
+        "rfcs:RFC-003:proposed_solution",
+        "rfcs:RFC-003:problem_statement",
+        "postmortems:POSTMORTEM-003:lessons_learned",
+        "rfcs:RFC-003:trade_offs",
+        "rfcs:RFC-003:alternatives_considered"
+      ],
+      "top_score": 6.6539,
+      "predicted_no_answer": false,
+      "matched_gold_rank": null,
+      "no_answer": false
+    },
+    {
+      "id": "RFC-003:problem",
+      "question": "What problem does RFC-003 describe?",
+      "gold_doc_id": "RFC-003",
+      "gold_chunk_ids": [
+        "rfcs:RFC-003:problem_statement"
+      ],
+      "retrieved_doc_ids": [
+        "RFC-003",
+        "RFC-003",
+        "RFC-003",
+        "RFC-003",
+        "RFC-003"
+      ],
+      "retrieved_chunk_ids": [
+        "rfcs:RFC-003:problem_statement",
+        "rfcs:RFC-003:trade_offs",
+        "rfcs:RFC-003:content",
+        "rfcs:RFC-003:alternatives_considered",
+        "rfcs:RFC-003:proposed_solution"
+      ],
+      "top_score": 8.9375,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "RFC-003:tradeoffs",
+      "question": "What trade-offs does RFC-003 note?",
+      "gold_doc_id": "RFC-003",
+      "gold_chunk_ids": [
+        "rfcs:RFC-003:trade_offs"
+      ],
+      "retrieved_doc_ids": [
+        "RFC-003",
+        "RFC-001",
+        "RFC-002",
+        "RFC-004",
+        "RFC-005"
+      ],
+      "retrieved_chunk_ids": [
+        "rfcs:RFC-003:trade_offs",
+        "rfcs:RFC-001:trade_offs",
+        "rfcs:RFC-002:trade_offs",
+        "rfcs:RFC-004:trade_offs",
+        "rfcs:RFC-005:trade_offs"
+      ],
+      "top_score": 12.6146,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "RFC-003:section_summary",
+      "question": "What does RFC-003 say in the alternatives considered section?",
+      "gold_doc_id": "RFC-003",
+      "gold_chunk_ids": [
+        "rfcs:RFC-003:alternatives_considered"
+      ],
+      "retrieved_doc_ids": [
+        "RFC-003",
+        "RFC-003",
+        "RFC-001",
+        "RFC-002",
+        "RFC-004"
+      ],
+      "retrieved_chunk_ids": [
+        "rfcs:RFC-003:alternatives_considered",
+        "rfcs:RFC-003:content",
+        "rfcs:RFC-001:alternatives_considered",
+        "rfcs:RFC-002:alternatives_considered",
+        "rfcs:RFC-004:alternatives_considered"
+      ],
+      "top_score": 11.4803,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "RFC-004:status",
+      "question": "What is the status of RFC-004?",
+      "gold_doc_id": "RFC-004",
+      "gold_chunk_ids": [
+        "rfcs:RFC-004:content"
+      ],
+      "retrieved_doc_ids": [
+        "RFC-004",
+        "RFC-004",
+        "POSTMORTEM-004",
+        "RFC-004",
+        "RFC-004"
+      ],
+      "retrieved_chunk_ids": [
+        "rfcs:RFC-004:proposed_solution",
+        "rfcs:RFC-004:problem_statement",
+        "postmortems:POSTMORTEM-004:lessons_learned",
+        "rfcs:RFC-004:trade_offs",
+        "rfcs:RFC-004:alternatives_considered"
+      ],
+      "top_score": 6.6539,
+      "predicted_no_answer": false,
+      "matched_gold_rank": null,
+      "no_answer": false
+    },
+    {
+      "id": "RFC-004:problem",
+      "question": "What problem does RFC-004 describe?",
+      "gold_doc_id": "RFC-004",
+      "gold_chunk_ids": [
+        "rfcs:RFC-004:problem_statement"
+      ],
+      "retrieved_doc_ids": [
+        "RFC-004",
+        "RFC-004",
+        "RFC-004",
+        "RFC-004",
+        "RFC-004"
+      ],
+      "retrieved_chunk_ids": [
+        "rfcs:RFC-004:problem_statement",
+        "rfcs:RFC-004:trade_offs",
+        "rfcs:RFC-004:content",
+        "rfcs:RFC-004:alternatives_considered",
+        "rfcs:RFC-004:proposed_solution"
+      ],
+      "top_score": 8.9375,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "RFC-004:tradeoffs",
+      "question": "What trade-offs does RFC-004 note?",
+      "gold_doc_id": "RFC-004",
+      "gold_chunk_ids": [
+        "rfcs:RFC-004:trade_offs"
+      ],
+      "retrieved_doc_ids": [
+        "RFC-004",
+        "RFC-001",
+        "RFC-002",
+        "RFC-003",
+        "RFC-005"
+      ],
+      "retrieved_chunk_ids": [
+        "rfcs:RFC-004:trade_offs",
+        "rfcs:RFC-001:trade_offs",
+        "rfcs:RFC-002:trade_offs",
+        "rfcs:RFC-003:trade_offs",
+        "rfcs:RFC-005:trade_offs"
+      ],
+      "top_score": 12.6146,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "RFC-004:section_summary",
+      "question": "What does RFC-004 say in the alternatives considered section?",
+      "gold_doc_id": "RFC-004",
+      "gold_chunk_ids": [
+        "rfcs:RFC-004:alternatives_considered"
+      ],
+      "retrieved_doc_ids": [
+        "RFC-004",
+        "RFC-004",
+        "RFC-001",
+        "RFC-002",
+        "RFC-003"
+      ],
+      "retrieved_chunk_ids": [
+        "rfcs:RFC-004:alternatives_considered",
+        "rfcs:RFC-004:content",
+        "rfcs:RFC-001:alternatives_considered",
+        "rfcs:RFC-002:alternatives_considered",
+        "rfcs:RFC-003:alternatives_considered"
+      ],
+      "top_score": 11.4803,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "RFC-005:status",
+      "question": "What is the status of RFC-005?",
+      "gold_doc_id": "RFC-005",
+      "gold_chunk_ids": [
+        "rfcs:RFC-005:content"
+      ],
+      "retrieved_doc_ids": [
+        "RFC-005",
+        "RFC-005",
+        "POSTMORTEM-005",
+        "RFC-005",
+        "RFC-005"
+      ],
+      "retrieved_chunk_ids": [
+        "rfcs:RFC-005:proposed_solution",
+        "rfcs:RFC-005:problem_statement",
+        "postmortems:POSTMORTEM-005:lessons_learned",
+        "rfcs:RFC-005:trade_offs",
+        "rfcs:RFC-005:alternatives_considered"
+      ],
+      "top_score": 6.6539,
+      "predicted_no_answer": false,
+      "matched_gold_rank": null,
+      "no_answer": false
+    },
+    {
+      "id": "RFC-005:problem",
+      "question": "What problem does RFC-005 describe?",
+      "gold_doc_id": "RFC-005",
+      "gold_chunk_ids": [
+        "rfcs:RFC-005:problem_statement"
+      ],
+      "retrieved_doc_ids": [
+        "RFC-005",
+        "RFC-005",
+        "RFC-005",
+        "RFC-005",
+        "RFC-005"
+      ],
+      "retrieved_chunk_ids": [
+        "rfcs:RFC-005:problem_statement",
+        "rfcs:RFC-005:trade_offs",
+        "rfcs:RFC-005:content",
+        "rfcs:RFC-005:alternatives_considered",
+        "rfcs:RFC-005:proposed_solution"
+      ],
+      "top_score": 8.9375,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "RFC-005:tradeoffs",
+      "question": "What trade-offs does RFC-005 note?",
+      "gold_doc_id": "RFC-005",
+      "gold_chunk_ids": [
+        "rfcs:RFC-005:trade_offs"
+      ],
+      "retrieved_doc_ids": [
+        "RFC-005",
+        "RFC-001",
+        "RFC-002",
+        "RFC-003",
+        "RFC-004"
+      ],
+      "retrieved_chunk_ids": [
+        "rfcs:RFC-005:trade_offs",
+        "rfcs:RFC-001:trade_offs",
+        "rfcs:RFC-002:trade_offs",
+        "rfcs:RFC-003:trade_offs",
+        "rfcs:RFC-004:trade_offs"
+      ],
+      "top_score": 12.6146,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "RFC-005:section_summary",
+      "question": "What does RFC-005 say in the alternatives considered section?",
+      "gold_doc_id": "RFC-005",
+      "gold_chunk_ids": [
+        "rfcs:RFC-005:alternatives_considered"
+      ],
+      "retrieved_doc_ids": [
+        "RFC-005",
+        "RFC-005",
+        "RFC-001",
+        "RFC-002",
+        "RFC-003"
+      ],
+      "retrieved_chunk_ids": [
+        "rfcs:RFC-005:alternatives_considered",
+        "rfcs:RFC-005:content",
+        "rfcs:RFC-001:alternatives_considered",
+        "rfcs:RFC-002:alternatives_considered",
+        "rfcs:RFC-003:alternatives_considered"
+      ],
+      "top_score": 11.4803,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "RFC-006:status",
+      "question": "What is the status of RFC-006?",
+      "gold_doc_id": "RFC-006",
+      "gold_chunk_ids": [
+        "rfcs:RFC-006:content"
+      ],
+      "retrieved_doc_ids": [
+        "RFC-006",
+        "RFC-006",
+        "POSTMORTEM-006",
+        "RFC-006",
+        "RFC-006"
+      ],
+      "retrieved_chunk_ids": [
+        "rfcs:RFC-006:proposed_solution",
+        "rfcs:RFC-006:problem_statement",
+        "postmortems:POSTMORTEM-006:lessons_learned",
+        "rfcs:RFC-006:trade_offs",
+        "rfcs:RFC-006:alternatives_considered"
+      ],
+      "top_score": 6.6539,
+      "predicted_no_answer": false,
+      "matched_gold_rank": null,
+      "no_answer": false
+    },
+    {
+      "id": "RFC-006:problem",
+      "question": "What problem does RFC-006 describe?",
+      "gold_doc_id": "RFC-006",
+      "gold_chunk_ids": [
+        "rfcs:RFC-006:problem_statement"
+      ],
+      "retrieved_doc_ids": [
+        "RFC-006",
+        "RFC-006",
+        "RFC-006",
+        "RFC-006",
+        "RFC-006"
+      ],
+      "retrieved_chunk_ids": [
+        "rfcs:RFC-006:problem_statement",
+        "rfcs:RFC-006:trade_offs",
+        "rfcs:RFC-006:content",
+        "rfcs:RFC-006:alternatives_considered",
+        "rfcs:RFC-006:proposed_solution"
+      ],
+      "top_score": 8.9375,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "RFC-006:tradeoffs",
+      "question": "What trade-offs does RFC-006 note?",
+      "gold_doc_id": "RFC-006",
+      "gold_chunk_ids": [
+        "rfcs:RFC-006:trade_offs"
+      ],
+      "retrieved_doc_ids": [
+        "RFC-006",
+        "RFC-001",
+        "RFC-002",
+        "RFC-003",
+        "RFC-004"
+      ],
+      "retrieved_chunk_ids": [
+        "rfcs:RFC-006:trade_offs",
+        "rfcs:RFC-001:trade_offs",
+        "rfcs:RFC-002:trade_offs",
+        "rfcs:RFC-003:trade_offs",
+        "rfcs:RFC-004:trade_offs"
+      ],
+      "top_score": 12.6146,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "RFC-006:section_summary",
+      "question": "What does RFC-006 say in the alternatives considered section?",
+      "gold_doc_id": "RFC-006",
+      "gold_chunk_ids": [
+        "rfcs:RFC-006:alternatives_considered"
+      ],
+      "retrieved_doc_ids": [
+        "RFC-006",
+        "RFC-006",
+        "RFC-001",
+        "RFC-002",
+        "RFC-003"
+      ],
+      "retrieved_chunk_ids": [
+        "rfcs:RFC-006:alternatives_considered",
+        "rfcs:RFC-006:content",
+        "rfcs:RFC-001:alternatives_considered",
+        "rfcs:RFC-002:alternatives_considered",
+        "rfcs:RFC-003:alternatives_considered"
+      ],
+      "top_score": 11.4803,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "RFC-007:status",
+      "question": "What is the status of RFC-007?",
+      "gold_doc_id": "RFC-007",
+      "gold_chunk_ids": [
+        "rfcs:RFC-007:content"
+      ],
+      "retrieved_doc_ids": [
+        "RFC-007",
+        "RFC-007",
+        "POSTMORTEM-007",
+        "RFC-007",
+        "RFC-007"
+      ],
+      "retrieved_chunk_ids": [
+        "rfcs:RFC-007:proposed_solution",
+        "rfcs:RFC-007:problem_statement",
+        "postmortems:POSTMORTEM-007:lessons_learned",
+        "rfcs:RFC-007:trade_offs",
+        "rfcs:RFC-007:alternatives_considered"
+      ],
+      "top_score": 6.6539,
+      "predicted_no_answer": false,
+      "matched_gold_rank": null,
+      "no_answer": false
+    },
+    {
+      "id": "RFC-007:problem",
+      "question": "What problem does RFC-007 describe?",
+      "gold_doc_id": "RFC-007",
+      "gold_chunk_ids": [
+        "rfcs:RFC-007:problem_statement"
+      ],
+      "retrieved_doc_ids": [
+        "RFC-007",
+        "RFC-007",
+        "RFC-007",
+        "RFC-007",
+        "RFC-007"
+      ],
+      "retrieved_chunk_ids": [
+        "rfcs:RFC-007:problem_statement",
+        "rfcs:RFC-007:trade_offs",
+        "rfcs:RFC-007:content",
+        "rfcs:RFC-007:alternatives_considered",
+        "rfcs:RFC-007:proposed_solution"
+      ],
+      "top_score": 8.9375,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "RFC-007:tradeoffs",
+      "question": "What trade-offs does RFC-007 note?",
+      "gold_doc_id": "RFC-007",
+      "gold_chunk_ids": [
+        "rfcs:RFC-007:trade_offs"
+      ],
+      "retrieved_doc_ids": [
+        "RFC-007",
+        "RFC-001",
+        "RFC-002",
+        "RFC-003",
+        "RFC-004"
+      ],
+      "retrieved_chunk_ids": [
+        "rfcs:RFC-007:trade_offs",
+        "rfcs:RFC-001:trade_offs",
+        "rfcs:RFC-002:trade_offs",
+        "rfcs:RFC-003:trade_offs",
+        "rfcs:RFC-004:trade_offs"
+      ],
+      "top_score": 12.6146,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "RFC-007:section_summary",
+      "question": "What does RFC-007 say in the alternatives considered section?",
+      "gold_doc_id": "RFC-007",
+      "gold_chunk_ids": [
+        "rfcs:RFC-007:alternatives_considered"
+      ],
+      "retrieved_doc_ids": [
+        "RFC-007",
+        "RFC-007",
+        "RFC-001",
+        "RFC-002",
+        "RFC-003"
+      ],
+      "retrieved_chunk_ids": [
+        "rfcs:RFC-007:alternatives_considered",
+        "rfcs:RFC-007:content",
+        "rfcs:RFC-001:alternatives_considered",
+        "rfcs:RFC-002:alternatives_considered",
+        "rfcs:RFC-003:alternatives_considered"
+      ],
+      "top_score": 11.4803,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "RFC-008:status",
+      "question": "What is the status of RFC-008?",
+      "gold_doc_id": "RFC-008",
+      "gold_chunk_ids": [
+        "rfcs:RFC-008:content"
+      ],
+      "retrieved_doc_ids": [
+        "RFC-008",
+        "RFC-008",
+        "POSTMORTEM-008",
+        "RFC-008",
+        "RFC-008"
+      ],
+      "retrieved_chunk_ids": [
+        "rfcs:RFC-008:proposed_solution",
+        "rfcs:RFC-008:problem_statement",
+        "postmortems:POSTMORTEM-008:lessons_learned",
+        "rfcs:RFC-008:trade_offs",
+        "rfcs:RFC-008:alternatives_considered"
+      ],
+      "top_score": 6.6539,
+      "predicted_no_answer": false,
+      "matched_gold_rank": null,
+      "no_answer": false
+    },
+    {
+      "id": "RFC-008:problem",
+      "question": "What problem does RFC-008 describe?",
+      "gold_doc_id": "RFC-008",
+      "gold_chunk_ids": [
+        "rfcs:RFC-008:problem_statement"
+      ],
+      "retrieved_doc_ids": [
+        "RFC-008",
+        "RFC-008",
+        "RFC-008",
+        "RFC-008",
+        "RFC-008"
+      ],
+      "retrieved_chunk_ids": [
+        "rfcs:RFC-008:problem_statement",
+        "rfcs:RFC-008:trade_offs",
+        "rfcs:RFC-008:content",
+        "rfcs:RFC-008:alternatives_considered",
+        "rfcs:RFC-008:proposed_solution"
+      ],
+      "top_score": 8.9375,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "RFC-008:tradeoffs",
+      "question": "What trade-offs does RFC-008 note?",
+      "gold_doc_id": "RFC-008",
+      "gold_chunk_ids": [
+        "rfcs:RFC-008:trade_offs"
+      ],
+      "retrieved_doc_ids": [
+        "RFC-008",
+        "RFC-001",
+        "RFC-002",
+        "RFC-003",
+        "RFC-004"
+      ],
+      "retrieved_chunk_ids": [
+        "rfcs:RFC-008:trade_offs",
+        "rfcs:RFC-001:trade_offs",
+        "rfcs:RFC-002:trade_offs",
+        "rfcs:RFC-003:trade_offs",
+        "rfcs:RFC-004:trade_offs"
+      ],
+      "top_score": 12.6146,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "RFC-008:section_summary",
+      "question": "What does RFC-008 say in the alternatives considered section?",
+      "gold_doc_id": "RFC-008",
+      "gold_chunk_ids": [
+        "rfcs:RFC-008:alternatives_considered"
+      ],
+      "retrieved_doc_ids": [
+        "RFC-008",
+        "RFC-008",
+        "RFC-001",
+        "RFC-002",
+        "RFC-003"
+      ],
+      "retrieved_chunk_ids": [
+        "rfcs:RFC-008:alternatives_considered",
+        "rfcs:RFC-008:content",
+        "rfcs:RFC-001:alternatives_considered",
+        "rfcs:RFC-002:alternatives_considered",
+        "rfcs:RFC-003:alternatives_considered"
+      ],
+      "top_score": 11.4803,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "RFC-009:status",
+      "question": "What is the status of RFC-009?",
+      "gold_doc_id": "RFC-009",
+      "gold_chunk_ids": [
+        "rfcs:RFC-009:content"
+      ],
+      "retrieved_doc_ids": [
+        "RFC-009",
+        "RFC-009",
+        "POSTMORTEM-009",
+        "RFC-009",
+        "RFC-009"
+      ],
+      "retrieved_chunk_ids": [
+        "rfcs:RFC-009:proposed_solution",
+        "rfcs:RFC-009:problem_statement",
+        "postmortems:POSTMORTEM-009:lessons_learned",
+        "rfcs:RFC-009:trade_offs",
+        "rfcs:RFC-009:alternatives_considered"
+      ],
+      "top_score": 6.6539,
+      "predicted_no_answer": false,
+      "matched_gold_rank": null,
+      "no_answer": false
+    },
+    {
+      "id": "RFC-009:problem",
+      "question": "What problem does RFC-009 describe?",
+      "gold_doc_id": "RFC-009",
+      "gold_chunk_ids": [
+        "rfcs:RFC-009:problem_statement"
+      ],
+      "retrieved_doc_ids": [
+        "RFC-009",
+        "RFC-009",
+        "RFC-009",
+        "RFC-009",
+        "RFC-009"
+      ],
+      "retrieved_chunk_ids": [
+        "rfcs:RFC-009:problem_statement",
+        "rfcs:RFC-009:trade_offs",
+        "rfcs:RFC-009:content",
+        "rfcs:RFC-009:alternatives_considered",
+        "rfcs:RFC-009:proposed_solution"
+      ],
+      "top_score": 8.9375,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "RFC-009:tradeoffs",
+      "question": "What trade-offs does RFC-009 note?",
+      "gold_doc_id": "RFC-009",
+      "gold_chunk_ids": [
+        "rfcs:RFC-009:trade_offs"
+      ],
+      "retrieved_doc_ids": [
+        "RFC-009",
+        "RFC-001",
+        "RFC-002",
+        "RFC-003",
+        "RFC-004"
+      ],
+      "retrieved_chunk_ids": [
+        "rfcs:RFC-009:trade_offs",
+        "rfcs:RFC-001:trade_offs",
+        "rfcs:RFC-002:trade_offs",
+        "rfcs:RFC-003:trade_offs",
+        "rfcs:RFC-004:trade_offs"
+      ],
+      "top_score": 12.6146,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "RFC-009:section_summary",
+      "question": "What does RFC-009 say in the alternatives considered section?",
+      "gold_doc_id": "RFC-009",
+      "gold_chunk_ids": [
+        "rfcs:RFC-009:alternatives_considered"
+      ],
+      "retrieved_doc_ids": [
+        "RFC-009",
+        "RFC-009",
+        "RFC-001",
+        "RFC-002",
+        "RFC-003"
+      ],
+      "retrieved_chunk_ids": [
+        "rfcs:RFC-009:alternatives_considered",
+        "rfcs:RFC-009:content",
+        "rfcs:RFC-001:alternatives_considered",
+        "rfcs:RFC-002:alternatives_considered",
+        "rfcs:RFC-003:alternatives_considered"
+      ],
+      "top_score": 11.4803,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "RFC-010:status",
+      "question": "What is the status of RFC-010?",
+      "gold_doc_id": "RFC-010",
+      "gold_chunk_ids": [
+        "rfcs:RFC-010:content"
+      ],
+      "retrieved_doc_ids": [
+        "RFC-010",
+        "RFC-010",
+        "POSTMORTEM-010",
+        "RFC-010",
+        "RFC-010"
+      ],
+      "retrieved_chunk_ids": [
+        "rfcs:RFC-010:proposed_solution",
+        "rfcs:RFC-010:problem_statement",
+        "postmortems:POSTMORTEM-010:lessons_learned",
+        "rfcs:RFC-010:trade_offs",
+        "rfcs:RFC-010:alternatives_considered"
+      ],
+      "top_score": 6.6539,
+      "predicted_no_answer": false,
+      "matched_gold_rank": null,
+      "no_answer": false
+    },
+    {
+      "id": "RFC-010:problem",
+      "question": "What problem does RFC-010 describe?",
+      "gold_doc_id": "RFC-010",
+      "gold_chunk_ids": [
+        "rfcs:RFC-010:problem_statement"
+      ],
+      "retrieved_doc_ids": [
+        "RFC-010",
+        "RFC-010",
+        "RFC-010",
+        "RFC-010",
+        "RFC-010"
+      ],
+      "retrieved_chunk_ids": [
+        "rfcs:RFC-010:problem_statement",
+        "rfcs:RFC-010:trade_offs",
+        "rfcs:RFC-010:content",
+        "rfcs:RFC-010:alternatives_considered",
+        "rfcs:RFC-010:proposed_solution"
+      ],
+      "top_score": 8.9375,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "RFC-010:tradeoffs",
+      "question": "What trade-offs does RFC-010 note?",
+      "gold_doc_id": "RFC-010",
+      "gold_chunk_ids": [
+        "rfcs:RFC-010:trade_offs"
+      ],
+      "retrieved_doc_ids": [
+        "RFC-010",
+        "RFC-001",
+        "RFC-002",
+        "RFC-003",
+        "RFC-004"
+      ],
+      "retrieved_chunk_ids": [
+        "rfcs:RFC-010:trade_offs",
+        "rfcs:RFC-001:trade_offs",
+        "rfcs:RFC-002:trade_offs",
+        "rfcs:RFC-003:trade_offs",
+        "rfcs:RFC-004:trade_offs"
+      ],
+      "top_score": 12.6146,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "RFC-010:section_summary",
+      "question": "What does RFC-010 say in the alternatives considered section?",
+      "gold_doc_id": "RFC-010",
+      "gold_chunk_ids": [
+        "rfcs:RFC-010:alternatives_considered"
+      ],
+      "retrieved_doc_ids": [
+        "RFC-010",
+        "RFC-010",
+        "RFC-001",
+        "RFC-002",
+        "RFC-003"
+      ],
+      "retrieved_chunk_ids": [
+        "rfcs:RFC-010:alternatives_considered",
+        "rfcs:RFC-010:content",
+        "rfcs:RFC-001:alternatives_considered",
+        "rfcs:RFC-002:alternatives_considered",
+        "rfcs:RFC-003:alternatives_considered"
+      ],
+      "top_score": 11.4803,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "TICKET-001:priority",
+      "question": "What priority is listed for TICKET-001?",
+      "gold_doc_id": "TICKET-001",
+      "gold_chunk_ids": [
+        "tickets:TICKET-001:content"
+      ],
+      "retrieved_doc_ids": [
+        "TICKET-001",
+        "TICKET-001",
+        "TICKET-001",
+        "TICKET-002",
+        "TICKET-003"
+      ],
+      "retrieved_chunk_ids": [
+        "tickets:TICKET-001:content",
+        "tickets:TICKET-001:description",
+        "tickets:TICKET-001:resolution",
+        "tickets:TICKET-002:content",
+        "tickets:TICKET-003:content"
+      ],
+      "top_score": 9.5762,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "TICKET-001:description",
+      "question": "What does TICKET-001 ask for?",
+      "gold_doc_id": "TICKET-001",
+      "gold_chunk_ids": [
+        "tickets:TICKET-001:description"
+      ],
+      "retrieved_doc_ids": [
+        "TICKET-001",
+        "TICKET-001",
+        "TICKET-001",
+        "TICKET-001",
+        "TICKET-002"
+      ],
+      "retrieved_chunk_ids": [
+        "tickets:TICKET-001:description",
+        "tickets:TICKET-001:resolution",
+        "tickets:TICKET-001:content",
+        "tickets:TICKET-001:discussion",
+        "tickets:TICKET-002:description"
+      ],
+      "top_score": 8.8232,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "TICKET-001:resolution",
+      "question": "What was the resolution for TICKET-001?",
+      "gold_doc_id": "TICKET-001",
+      "gold_chunk_ids": [
+        "tickets:TICKET-001:resolution"
+      ],
+      "retrieved_doc_ids": [
+        "TICKET-001",
+        "POSTMORTEM-001",
+        "TICKET-001",
+        "TICKET-001",
+        "TICKET-002"
+      ],
+      "retrieved_chunk_ids": [
+        "tickets:TICKET-001:resolution",
+        "postmortems:POSTMORTEM-001:resolution",
+        "tickets:TICKET-001:description",
+        "tickets:TICKET-001:content",
+        "tickets:TICKET-002:resolution"
+      ],
+      "top_score": 10.8711,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "TICKET-001:section_summary",
+      "question": "What does TICKET-001 say in the description section?",
+      "gold_doc_id": "TICKET-001",
+      "gold_chunk_ids": [
+        "tickets:TICKET-001:description"
+      ],
+      "retrieved_doc_ids": [
+        "TICKET-001",
+        "TICKET-001",
+        "TICKET-001",
+        "TICKET-001",
+        "TICKET-002"
+      ],
+      "retrieved_chunk_ids": [
+        "tickets:TICKET-001:description",
+        "tickets:TICKET-001:content",
+        "tickets:TICKET-001:resolution",
+        "tickets:TICKET-001:discussion",
+        "tickets:TICKET-002:description"
+      ],
+      "top_score": 9.7945,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "TICKET-002:priority",
+      "question": "What priority is listed for TICKET-002?",
+      "gold_doc_id": "TICKET-002",
+      "gold_chunk_ids": [
+        "tickets:TICKET-002:content"
+      ],
+      "retrieved_doc_ids": [
+        "TICKET-002",
+        "TICKET-002",
+        "TICKET-002",
+        "TICKET-001",
+        "TICKET-003"
+      ],
+      "retrieved_chunk_ids": [
+        "tickets:TICKET-002:content",
+        "tickets:TICKET-002:description",
+        "tickets:TICKET-002:resolution",
+        "tickets:TICKET-001:content",
+        "tickets:TICKET-003:content"
+      ],
+      "top_score": 9.5762,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "TICKET-002:description",
+      "question": "What does TICKET-002 ask for?",
+      "gold_doc_id": "TICKET-002",
+      "gold_chunk_ids": [
+        "tickets:TICKET-002:description"
+      ],
+      "retrieved_doc_ids": [
+        "TICKET-002",
+        "TICKET-002",
+        "TICKET-002",
+        "TICKET-002",
+        "TICKET-001"
+      ],
+      "retrieved_chunk_ids": [
+        "tickets:TICKET-002:description",
+        "tickets:TICKET-002:resolution",
+        "tickets:TICKET-002:content",
+        "tickets:TICKET-002:discussion",
+        "tickets:TICKET-001:description"
+      ],
+      "top_score": 8.8232,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "TICKET-002:resolution",
+      "question": "What was the resolution for TICKET-002?",
+      "gold_doc_id": "TICKET-002",
+      "gold_chunk_ids": [
+        "tickets:TICKET-002:resolution"
+      ],
+      "retrieved_doc_ids": [
+        "TICKET-002",
+        "POSTMORTEM-002",
+        "TICKET-002",
+        "TICKET-002",
+        "TICKET-001"
+      ],
+      "retrieved_chunk_ids": [
+        "tickets:TICKET-002:resolution",
+        "postmortems:POSTMORTEM-002:resolution",
+        "tickets:TICKET-002:description",
+        "tickets:TICKET-002:content",
+        "tickets:TICKET-001:resolution"
+      ],
+      "top_score": 10.8711,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "TICKET-002:section_summary",
+      "question": "What does TICKET-002 say in the description section?",
+      "gold_doc_id": "TICKET-002",
+      "gold_chunk_ids": [
+        "tickets:TICKET-002:description"
+      ],
+      "retrieved_doc_ids": [
+        "TICKET-002",
+        "TICKET-002",
+        "TICKET-002",
+        "TICKET-002",
+        "TICKET-001"
+      ],
+      "retrieved_chunk_ids": [
+        "tickets:TICKET-002:description",
+        "tickets:TICKET-002:content",
+        "tickets:TICKET-002:resolution",
+        "tickets:TICKET-002:discussion",
+        "tickets:TICKET-001:description"
+      ],
+      "top_score": 9.7945,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "TICKET-003:priority",
+      "question": "What priority is listed for TICKET-003?",
+      "gold_doc_id": "TICKET-003",
+      "gold_chunk_ids": [
+        "tickets:TICKET-003:content"
+      ],
+      "retrieved_doc_ids": [
+        "TICKET-003",
+        "TICKET-003",
+        "TICKET-003",
+        "TICKET-001",
+        "TICKET-002"
+      ],
+      "retrieved_chunk_ids": [
+        "tickets:TICKET-003:content",
+        "tickets:TICKET-003:description",
+        "tickets:TICKET-003:resolution",
+        "tickets:TICKET-001:content",
+        "tickets:TICKET-002:content"
+      ],
+      "top_score": 9.5762,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "TICKET-003:description",
+      "question": "What does TICKET-003 ask for?",
+      "gold_doc_id": "TICKET-003",
+      "gold_chunk_ids": [
+        "tickets:TICKET-003:description"
+      ],
+      "retrieved_doc_ids": [
+        "TICKET-003",
+        "TICKET-003",
+        "TICKET-003",
+        "TICKET-003",
+        "TICKET-001"
+      ],
+      "retrieved_chunk_ids": [
+        "tickets:TICKET-003:description",
+        "tickets:TICKET-003:resolution",
+        "tickets:TICKET-003:content",
+        "tickets:TICKET-003:discussion",
+        "tickets:TICKET-001:description"
+      ],
+      "top_score": 8.8232,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "TICKET-003:resolution",
+      "question": "What was the resolution for TICKET-003?",
+      "gold_doc_id": "TICKET-003",
+      "gold_chunk_ids": [
+        "tickets:TICKET-003:resolution"
+      ],
+      "retrieved_doc_ids": [
+        "TICKET-003",
+        "POSTMORTEM-003",
+        "TICKET-003",
+        "TICKET-003",
+        "TICKET-001"
+      ],
+      "retrieved_chunk_ids": [
+        "tickets:TICKET-003:resolution",
+        "postmortems:POSTMORTEM-003:resolution",
+        "tickets:TICKET-003:description",
+        "tickets:TICKET-003:content",
+        "tickets:TICKET-001:resolution"
+      ],
+      "top_score": 10.8711,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "TICKET-003:section_summary",
+      "question": "What does TICKET-003 say in the description section?",
+      "gold_doc_id": "TICKET-003",
+      "gold_chunk_ids": [
+        "tickets:TICKET-003:description"
+      ],
+      "retrieved_doc_ids": [
+        "TICKET-003",
+        "TICKET-003",
+        "TICKET-003",
+        "TICKET-003",
+        "TICKET-001"
+      ],
+      "retrieved_chunk_ids": [
+        "tickets:TICKET-003:description",
+        "tickets:TICKET-003:content",
+        "tickets:TICKET-003:resolution",
+        "tickets:TICKET-003:discussion",
+        "tickets:TICKET-001:description"
+      ],
+      "top_score": 9.7945,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "TICKET-004:priority",
+      "question": "What priority is listed for TICKET-004?",
+      "gold_doc_id": "TICKET-004",
+      "gold_chunk_ids": [
+        "tickets:TICKET-004:content"
+      ],
+      "retrieved_doc_ids": [
+        "TICKET-004",
+        "TICKET-004",
+        "TICKET-004",
+        "TICKET-001",
+        "TICKET-002"
+      ],
+      "retrieved_chunk_ids": [
+        "tickets:TICKET-004:content",
+        "tickets:TICKET-004:description",
+        "tickets:TICKET-004:resolution",
+        "tickets:TICKET-001:content",
+        "tickets:TICKET-002:content"
+      ],
+      "top_score": 9.5762,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "TICKET-004:description",
+      "question": "What does TICKET-004 ask for?",
+      "gold_doc_id": "TICKET-004",
+      "gold_chunk_ids": [
+        "tickets:TICKET-004:description"
+      ],
+      "retrieved_doc_ids": [
+        "TICKET-004",
+        "TICKET-004",
+        "TICKET-004",
+        "TICKET-004",
+        "TICKET-001"
+      ],
+      "retrieved_chunk_ids": [
+        "tickets:TICKET-004:description",
+        "tickets:TICKET-004:resolution",
+        "tickets:TICKET-004:content",
+        "tickets:TICKET-004:discussion",
+        "tickets:TICKET-001:description"
+      ],
+      "top_score": 8.8232,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "TICKET-004:resolution",
+      "question": "What was the resolution for TICKET-004?",
+      "gold_doc_id": "TICKET-004",
+      "gold_chunk_ids": [
+        "tickets:TICKET-004:resolution"
+      ],
+      "retrieved_doc_ids": [
+        "TICKET-004",
+        "POSTMORTEM-004",
+        "TICKET-004",
+        "TICKET-004",
+        "TICKET-001"
+      ],
+      "retrieved_chunk_ids": [
+        "tickets:TICKET-004:resolution",
+        "postmortems:POSTMORTEM-004:resolution",
+        "tickets:TICKET-004:description",
+        "tickets:TICKET-004:content",
+        "tickets:TICKET-001:resolution"
+      ],
+      "top_score": 10.8711,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "TICKET-004:section_summary",
+      "question": "What does TICKET-004 say in the description section?",
+      "gold_doc_id": "TICKET-004",
+      "gold_chunk_ids": [
+        "tickets:TICKET-004:description"
+      ],
+      "retrieved_doc_ids": [
+        "TICKET-004",
+        "TICKET-004",
+        "TICKET-004",
+        "TICKET-004",
+        "TICKET-001"
+      ],
+      "retrieved_chunk_ids": [
+        "tickets:TICKET-004:description",
+        "tickets:TICKET-004:content",
+        "tickets:TICKET-004:resolution",
+        "tickets:TICKET-004:discussion",
+        "tickets:TICKET-001:description"
+      ],
+      "top_score": 9.7945,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "TICKET-005:priority",
+      "question": "What priority is listed for TICKET-005?",
+      "gold_doc_id": "TICKET-005",
+      "gold_chunk_ids": [
+        "tickets:TICKET-005:content"
+      ],
+      "retrieved_doc_ids": [
+        "TICKET-005",
+        "TICKET-005",
+        "TICKET-005",
+        "TICKET-001",
+        "TICKET-002"
+      ],
+      "retrieved_chunk_ids": [
+        "tickets:TICKET-005:content",
+        "tickets:TICKET-005:description",
+        "tickets:TICKET-005:resolution",
+        "tickets:TICKET-001:content",
+        "tickets:TICKET-002:content"
+      ],
+      "top_score": 9.5762,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "TICKET-005:description",
+      "question": "What does TICKET-005 ask for?",
+      "gold_doc_id": "TICKET-005",
+      "gold_chunk_ids": [
+        "tickets:TICKET-005:description"
+      ],
+      "retrieved_doc_ids": [
+        "TICKET-005",
+        "TICKET-005",
+        "TICKET-005",
+        "TICKET-005",
+        "TICKET-001"
+      ],
+      "retrieved_chunk_ids": [
+        "tickets:TICKET-005:description",
+        "tickets:TICKET-005:resolution",
+        "tickets:TICKET-005:content",
+        "tickets:TICKET-005:discussion",
+        "tickets:TICKET-001:description"
+      ],
+      "top_score": 8.8232,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "TICKET-005:resolution",
+      "question": "What was the resolution for TICKET-005?",
+      "gold_doc_id": "TICKET-005",
+      "gold_chunk_ids": [
+        "tickets:TICKET-005:resolution"
+      ],
+      "retrieved_doc_ids": [
+        "TICKET-005",
+        "POSTMORTEM-005",
+        "TICKET-005",
+        "TICKET-005",
+        "TICKET-001"
+      ],
+      "retrieved_chunk_ids": [
+        "tickets:TICKET-005:resolution",
+        "postmortems:POSTMORTEM-005:resolution",
+        "tickets:TICKET-005:description",
+        "tickets:TICKET-005:content",
+        "tickets:TICKET-001:resolution"
+      ],
+      "top_score": 10.8711,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "TICKET-005:section_summary",
+      "question": "What does TICKET-005 say in the description section?",
+      "gold_doc_id": "TICKET-005",
+      "gold_chunk_ids": [
+        "tickets:TICKET-005:description"
+      ],
+      "retrieved_doc_ids": [
+        "TICKET-005",
+        "TICKET-005",
+        "TICKET-005",
+        "TICKET-005",
+        "TICKET-001"
+      ],
+      "retrieved_chunk_ids": [
+        "tickets:TICKET-005:description",
+        "tickets:TICKET-005:content",
+        "tickets:TICKET-005:resolution",
+        "tickets:TICKET-005:discussion",
+        "tickets:TICKET-001:description"
+      ],
+      "top_score": 9.7945,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "TICKET-006:priority",
+      "question": "What priority is listed for TICKET-006?",
+      "gold_doc_id": "TICKET-006",
+      "gold_chunk_ids": [
+        "tickets:TICKET-006:content"
+      ],
+      "retrieved_doc_ids": [
+        "TICKET-006",
+        "TICKET-006",
+        "TICKET-006",
+        "TICKET-001",
+        "TICKET-002"
+      ],
+      "retrieved_chunk_ids": [
+        "tickets:TICKET-006:content",
+        "tickets:TICKET-006:description",
+        "tickets:TICKET-006:resolution",
+        "tickets:TICKET-001:content",
+        "tickets:TICKET-002:content"
+      ],
+      "top_score": 9.5762,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "TICKET-006:description",
+      "question": "What does TICKET-006 ask for?",
+      "gold_doc_id": "TICKET-006",
+      "gold_chunk_ids": [
+        "tickets:TICKET-006:description"
+      ],
+      "retrieved_doc_ids": [
+        "TICKET-006",
+        "TICKET-006",
+        "TICKET-006",
+        "TICKET-006",
+        "TICKET-001"
+      ],
+      "retrieved_chunk_ids": [
+        "tickets:TICKET-006:description",
+        "tickets:TICKET-006:resolution",
+        "tickets:TICKET-006:content",
+        "tickets:TICKET-006:discussion",
+        "tickets:TICKET-001:description"
+      ],
+      "top_score": 8.8232,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "TICKET-006:resolution",
+      "question": "What was the resolution for TICKET-006?",
+      "gold_doc_id": "TICKET-006",
+      "gold_chunk_ids": [
+        "tickets:TICKET-006:resolution"
+      ],
+      "retrieved_doc_ids": [
+        "TICKET-006",
+        "POSTMORTEM-006",
+        "TICKET-006",
+        "TICKET-006",
+        "TICKET-001"
+      ],
+      "retrieved_chunk_ids": [
+        "tickets:TICKET-006:resolution",
+        "postmortems:POSTMORTEM-006:resolution",
+        "tickets:TICKET-006:description",
+        "tickets:TICKET-006:content",
+        "tickets:TICKET-001:resolution"
+      ],
+      "top_score": 10.8711,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "TICKET-006:section_summary",
+      "question": "What does TICKET-006 say in the description section?",
+      "gold_doc_id": "TICKET-006",
+      "gold_chunk_ids": [
+        "tickets:TICKET-006:description"
+      ],
+      "retrieved_doc_ids": [
+        "TICKET-006",
+        "TICKET-006",
+        "TICKET-006",
+        "TICKET-006",
+        "TICKET-001"
+      ],
+      "retrieved_chunk_ids": [
+        "tickets:TICKET-006:description",
+        "tickets:TICKET-006:content",
+        "tickets:TICKET-006:resolution",
+        "tickets:TICKET-006:discussion",
+        "tickets:TICKET-001:description"
+      ],
+      "top_score": 9.7945,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "TICKET-007:priority",
+      "question": "What priority is listed for TICKET-007?",
+      "gold_doc_id": "TICKET-007",
+      "gold_chunk_ids": [
+        "tickets:TICKET-007:content"
+      ],
+      "retrieved_doc_ids": [
+        "TICKET-007",
+        "TICKET-007",
+        "TICKET-007",
+        "TICKET-001",
+        "TICKET-002"
+      ],
+      "retrieved_chunk_ids": [
+        "tickets:TICKET-007:content",
+        "tickets:TICKET-007:description",
+        "tickets:TICKET-007:resolution",
+        "tickets:TICKET-001:content",
+        "tickets:TICKET-002:content"
+      ],
+      "top_score": 9.5762,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "TICKET-007:description",
+      "question": "What does TICKET-007 ask for?",
+      "gold_doc_id": "TICKET-007",
+      "gold_chunk_ids": [
+        "tickets:TICKET-007:description"
+      ],
+      "retrieved_doc_ids": [
+        "TICKET-007",
+        "TICKET-007",
+        "TICKET-007",
+        "TICKET-007",
+        "TICKET-001"
+      ],
+      "retrieved_chunk_ids": [
+        "tickets:TICKET-007:description",
+        "tickets:TICKET-007:resolution",
+        "tickets:TICKET-007:content",
+        "tickets:TICKET-007:discussion",
+        "tickets:TICKET-001:description"
+      ],
+      "top_score": 8.8232,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "TICKET-007:resolution",
+      "question": "What was the resolution for TICKET-007?",
+      "gold_doc_id": "TICKET-007",
+      "gold_chunk_ids": [
+        "tickets:TICKET-007:resolution"
+      ],
+      "retrieved_doc_ids": [
+        "TICKET-007",
+        "POSTMORTEM-007",
+        "TICKET-007",
+        "TICKET-007",
+        "TICKET-001"
+      ],
+      "retrieved_chunk_ids": [
+        "tickets:TICKET-007:resolution",
+        "postmortems:POSTMORTEM-007:resolution",
+        "tickets:TICKET-007:description",
+        "tickets:TICKET-007:content",
+        "tickets:TICKET-001:resolution"
+      ],
+      "top_score": 10.8711,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "TICKET-007:section_summary",
+      "question": "What does TICKET-007 say in the description section?",
+      "gold_doc_id": "TICKET-007",
+      "gold_chunk_ids": [
+        "tickets:TICKET-007:description"
+      ],
+      "retrieved_doc_ids": [
+        "TICKET-007",
+        "TICKET-007",
+        "TICKET-007",
+        "TICKET-007",
+        "TICKET-001"
+      ],
+      "retrieved_chunk_ids": [
+        "tickets:TICKET-007:description",
+        "tickets:TICKET-007:content",
+        "tickets:TICKET-007:resolution",
+        "tickets:TICKET-007:discussion",
+        "tickets:TICKET-001:description"
+      ],
+      "top_score": 9.7945,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "TICKET-008:priority",
+      "question": "What priority is listed for TICKET-008?",
+      "gold_doc_id": "TICKET-008",
+      "gold_chunk_ids": [
+        "tickets:TICKET-008:content"
+      ],
+      "retrieved_doc_ids": [
+        "TICKET-008",
+        "TICKET-008",
+        "TICKET-008",
+        "TICKET-001",
+        "TICKET-002"
+      ],
+      "retrieved_chunk_ids": [
+        "tickets:TICKET-008:content",
+        "tickets:TICKET-008:description",
+        "tickets:TICKET-008:resolution",
+        "tickets:TICKET-001:content",
+        "tickets:TICKET-002:content"
+      ],
+      "top_score": 9.5762,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "TICKET-008:description",
+      "question": "What does TICKET-008 ask for?",
+      "gold_doc_id": "TICKET-008",
+      "gold_chunk_ids": [
+        "tickets:TICKET-008:description"
+      ],
+      "retrieved_doc_ids": [
+        "TICKET-008",
+        "TICKET-008",
+        "TICKET-008",
+        "TICKET-008",
+        "TICKET-001"
+      ],
+      "retrieved_chunk_ids": [
+        "tickets:TICKET-008:description",
+        "tickets:TICKET-008:resolution",
+        "tickets:TICKET-008:content",
+        "tickets:TICKET-008:discussion",
+        "tickets:TICKET-001:description"
+      ],
+      "top_score": 8.8232,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "TICKET-008:resolution",
+      "question": "What was the resolution for TICKET-008?",
+      "gold_doc_id": "TICKET-008",
+      "gold_chunk_ids": [
+        "tickets:TICKET-008:resolution"
+      ],
+      "retrieved_doc_ids": [
+        "TICKET-008",
+        "POSTMORTEM-008",
+        "TICKET-008",
+        "TICKET-008",
+        "TICKET-001"
+      ],
+      "retrieved_chunk_ids": [
+        "tickets:TICKET-008:resolution",
+        "postmortems:POSTMORTEM-008:resolution",
+        "tickets:TICKET-008:description",
+        "tickets:TICKET-008:content",
+        "tickets:TICKET-001:resolution"
+      ],
+      "top_score": 10.8711,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "TICKET-008:section_summary",
+      "question": "What does TICKET-008 say in the description section?",
+      "gold_doc_id": "TICKET-008",
+      "gold_chunk_ids": [
+        "tickets:TICKET-008:description"
+      ],
+      "retrieved_doc_ids": [
+        "TICKET-008",
+        "TICKET-008",
+        "TICKET-008",
+        "TICKET-008",
+        "TICKET-001"
+      ],
+      "retrieved_chunk_ids": [
+        "tickets:TICKET-008:description",
+        "tickets:TICKET-008:content",
+        "tickets:TICKET-008:resolution",
+        "tickets:TICKET-008:discussion",
+        "tickets:TICKET-001:description"
+      ],
+      "top_score": 9.7945,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "TICKET-009:priority",
+      "question": "What priority is listed for TICKET-009?",
+      "gold_doc_id": "TICKET-009",
+      "gold_chunk_ids": [
+        "tickets:TICKET-009:content"
+      ],
+      "retrieved_doc_ids": [
+        "TICKET-009",
+        "TICKET-009",
+        "TICKET-009",
+        "TICKET-001",
+        "TICKET-002"
+      ],
+      "retrieved_chunk_ids": [
+        "tickets:TICKET-009:content",
+        "tickets:TICKET-009:description",
+        "tickets:TICKET-009:resolution",
+        "tickets:TICKET-001:content",
+        "tickets:TICKET-002:content"
+      ],
+      "top_score": 9.5762,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "TICKET-009:description",
+      "question": "What does TICKET-009 ask for?",
+      "gold_doc_id": "TICKET-009",
+      "gold_chunk_ids": [
+        "tickets:TICKET-009:description"
+      ],
+      "retrieved_doc_ids": [
+        "TICKET-009",
+        "TICKET-009",
+        "TICKET-009",
+        "TICKET-009",
+        "TICKET-001"
+      ],
+      "retrieved_chunk_ids": [
+        "tickets:TICKET-009:description",
+        "tickets:TICKET-009:resolution",
+        "tickets:TICKET-009:content",
+        "tickets:TICKET-009:discussion",
+        "tickets:TICKET-001:description"
+      ],
+      "top_score": 8.8232,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "TICKET-009:resolution",
+      "question": "What was the resolution for TICKET-009?",
+      "gold_doc_id": "TICKET-009",
+      "gold_chunk_ids": [
+        "tickets:TICKET-009:resolution"
+      ],
+      "retrieved_doc_ids": [
+        "TICKET-009",
+        "POSTMORTEM-009",
+        "TICKET-009",
+        "TICKET-009",
+        "TICKET-001"
+      ],
+      "retrieved_chunk_ids": [
+        "tickets:TICKET-009:resolution",
+        "postmortems:POSTMORTEM-009:resolution",
+        "tickets:TICKET-009:description",
+        "tickets:TICKET-009:content",
+        "tickets:TICKET-001:resolution"
+      ],
+      "top_score": 10.8711,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "TICKET-009:section_summary",
+      "question": "What does TICKET-009 say in the description section?",
+      "gold_doc_id": "TICKET-009",
+      "gold_chunk_ids": [
+        "tickets:TICKET-009:description"
+      ],
+      "retrieved_doc_ids": [
+        "TICKET-009",
+        "TICKET-009",
+        "TICKET-009",
+        "TICKET-009",
+        "TICKET-001"
+      ],
+      "retrieved_chunk_ids": [
+        "tickets:TICKET-009:description",
+        "tickets:TICKET-009:content",
+        "tickets:TICKET-009:resolution",
+        "tickets:TICKET-009:discussion",
+        "tickets:TICKET-001:description"
+      ],
+      "top_score": 9.7945,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "TICKET-010:priority",
+      "question": "What priority is listed for TICKET-010?",
+      "gold_doc_id": "TICKET-010",
+      "gold_chunk_ids": [
+        "tickets:TICKET-010:content"
+      ],
+      "retrieved_doc_ids": [
+        "TICKET-010",
+        "TICKET-010",
+        "TICKET-010",
+        "TICKET-001",
+        "TICKET-002"
+      ],
+      "retrieved_chunk_ids": [
+        "tickets:TICKET-010:content",
+        "tickets:TICKET-010:description",
+        "tickets:TICKET-010:resolution",
+        "tickets:TICKET-001:content",
+        "tickets:TICKET-002:content"
+      ],
+      "top_score": 9.5762,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "TICKET-010:description",
+      "question": "What does TICKET-010 ask for?",
+      "gold_doc_id": "TICKET-010",
+      "gold_chunk_ids": [
+        "tickets:TICKET-010:description"
+      ],
+      "retrieved_doc_ids": [
+        "TICKET-010",
+        "TICKET-010",
+        "TICKET-010",
+        "TICKET-010",
+        "TICKET-001"
+      ],
+      "retrieved_chunk_ids": [
+        "tickets:TICKET-010:description",
+        "tickets:TICKET-010:resolution",
+        "tickets:TICKET-010:content",
+        "tickets:TICKET-010:discussion",
+        "tickets:TICKET-001:description"
+      ],
+      "top_score": 8.8232,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "TICKET-010:resolution",
+      "question": "What was the resolution for TICKET-010?",
+      "gold_doc_id": "TICKET-010",
+      "gold_chunk_ids": [
+        "tickets:TICKET-010:resolution"
+      ],
+      "retrieved_doc_ids": [
+        "TICKET-010",
+        "POSTMORTEM-010",
+        "TICKET-010",
+        "TICKET-010",
+        "TICKET-001"
+      ],
+      "retrieved_chunk_ids": [
+        "tickets:TICKET-010:resolution",
+        "postmortems:POSTMORTEM-010:resolution",
+        "tickets:TICKET-010:description",
+        "tickets:TICKET-010:content",
+        "tickets:TICKET-001:resolution"
+      ],
+      "top_score": 10.8711,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "TICKET-010:section_summary",
+      "question": "What does TICKET-010 say in the description section?",
+      "gold_doc_id": "TICKET-010",
+      "gold_chunk_ids": [
+        "tickets:TICKET-010:description"
+      ],
+      "retrieved_doc_ids": [
+        "TICKET-010",
+        "TICKET-010",
+        "TICKET-010",
+        "TICKET-010",
+        "TICKET-001"
+      ],
+      "retrieved_chunk_ids": [
+        "tickets:TICKET-010:description",
+        "tickets:TICKET-010:content",
+        "tickets:TICKET-010:resolution",
+        "tickets:TICKET-010:discussion",
+        "tickets:TICKET-001:description"
+      ],
+      "top_score": 9.7945,
+      "predicted_no_answer": false,
+      "matched_gold_rank": 1,
+      "no_answer": false
+    },
+    {
+      "id": "negative:1",
+      "question": "What does the workspace say about florbax protocol 19?",
+      "gold_doc_id": null,
+      "gold_chunk_ids": [],
+      "retrieved_doc_ids": [
+        "ADR-001",
+        "ADR-002",
+        "ADR-003",
+        "ADR-004",
+        "ADR-005"
+      ],
+      "retrieved_chunk_ids": [
+        "adrs:ADR-001:decision",
+        "adrs:ADR-002:decision",
+        "adrs:ADR-003:decision",
+        "adrs:ADR-004:decision",
+        "adrs:ADR-005:decision"
+      ],
+      "top_score": 1.767,
+      "predicted_no_answer": true,
+      "matched_gold_rank": null,
+      "no_answer": true
+    },
+    {
+      "id": "negative:2",
+      "question": "Which record approves zentora authentication for quorim 7?",
+      "gold_doc_id": null,
+      "gold_chunk_ids": [],
+      "retrieved_doc_ids": [
+        "ADR-001",
+        "ADR-002",
+        "ADR-003",
+        "ADR-004",
+        "ADR-005"
+      ],
+      "retrieved_chunk_ids": [
+        "adrs:ADR-001:decision",
+        "adrs:ADR-002:decision",
+        "adrs:ADR-003:decision",
+        "adrs:ADR-004:decision",
+        "adrs:ADR-005:decision"
+      ],
+      "top_score": 2.8866,
+      "predicted_no_answer": true,
+      "matched_gold_rank": null,
+      "no_answer": true
+    },
+    {
+      "id": "negative:3",
+      "question": "Where is the narvex deployment plan documented?",
+      "gold_doc_id": null,
+      "gold_chunk_ids": [],
+      "retrieved_doc_ids": [
+        "TICKET-001",
+        "TICKET-002",
+        "TICKET-003",
+        "TICKET-004",
+        "TICKET-005"
+      ],
+      "retrieved_chunk_ids": [
+        "tickets:TICKET-001:discussion",
+        "tickets:TICKET-002:discussion",
+        "tickets:TICKET-003:discussion",
+        "tickets:TICKET-004:discussion",
+        "tickets:TICKET-005:discussion"
+      ],
+      "top_score": 0.6854,
+      "predicted_no_answer": true,
+      "matched_gold_rank": null,
+      "no_answer": true
+    },
+    {
+      "id": "negative:4",
+      "question": "What is the official guidance for plinzo billing reconciliation?",
+      "gold_doc_id": null,
+      "gold_chunk_ids": [],
+      "retrieved_doc_ids": [
+        "MEETING-001",
+        "MEETING-002",
+        "MEETING-003",
+        "MEETING-004",
+        "MEETING-005"
+      ],
+      "retrieved_chunk_ids": [
+        "meeting_notes:MEETING-001:action_items",
+        "meeting_notes:MEETING-002:action_items",
+        "meeting_notes:MEETING-003:action_items",
+        "meeting_notes:MEETING-004:action_items",
+        "meeting_notes:MEETING-005:action_items"
+      ],
+      "top_score": 2.9254,
+      "predicted_no_answer": true,
+      "matched_gold_rank": null,
+      "no_answer": true
+    },
+    {
+      "id": "negative:5",
+      "question": "Which note explains solar flare reimbursement for vextro?",
+      "gold_doc_id": null,
+      "gold_chunk_ids": [],
+      "retrieved_doc_ids": [
+        "TICKET-001",
+        "TICKET-001",
+        "TICKET-002",
+        "TICKET-002",
+        "TICKET-003"
+      ],
+      "retrieved_chunk_ids": [
+        "tickets:TICKET-001:description",
+        "tickets:TICKET-001:resolution",
+        "tickets:TICKET-002:description",
+        "tickets:TICKET-002:resolution",
+        "tickets:TICKET-003:description"
+      ],
+      "top_score": 2.3815,
+      "predicted_no_answer": true,
+      "matched_gold_rank": null,
+      "no_answer": true
+    },
+    {
+      "id": "negative:6",
+      "question": "What does MemoStack say about tarvix payroll for region 9?",
+      "gold_doc_id": null,
+      "gold_chunk_ids": [],
+      "retrieved_doc_ids": [
+        "TICKET-001",
+        "TICKET-001",
+        "TICKET-002",
+        "TICKET-002",
+        "TICKET-003"
+      ],
+      "retrieved_chunk_ids": [
+        "tickets:TICKET-001:description",
+        "tickets:TICKET-001:resolution",
+        "tickets:TICKET-002:description",
+        "tickets:TICKET-002:resolution",
+        "tickets:TICKET-003:description"
+      ],
+      "top_score": 2.3815,
+      "predicted_no_answer": true,
+      "matched_gold_rank": null,
+      "no_answer": true
+    },
+    {
+      "id": "negative:7",
+      "question": "Which document covers potato encryption standards in yulma?",
+      "gold_doc_id": null,
+      "gold_chunk_ids": [],
+      "retrieved_doc_ids": [
+        "POSTMORTEM-001",
+        "POSTMORTEM-002",
+        "POSTMORTEM-003",
+        "POSTMORTEM-004",
+        "POSTMORTEM-005"
+      ],
+      "retrieved_chunk_ids": [
+        "postmortems:POSTMORTEM-001:root_cause",
+        "postmortems:POSTMORTEM-002:root_cause",
+        "postmortems:POSTMORTEM-003:root_cause",
+        "postmortems:POSTMORTEM-004:root_cause",
+        "postmortems:POSTMORTEM-005:root_cause"
+      ],
+      "top_score": 1.3084,
+      "predicted_no_answer": true,
+      "matched_gold_rank": null,
+      "no_answer": true
+    },
+    {
+      "id": "negative:8",
+      "question": "What is the process for unicorn incident response in qelto?",
+      "gold_doc_id": null,
+      "gold_chunk_ids": [],
+      "retrieved_doc_ids": [
+        "POSTMORTEM-001",
+        "POSTMORTEM-002",
+        "POSTMORTEM-003",
+        "POSTMORTEM-004",
+        "POSTMORTEM-005"
+      ],
+      "retrieved_chunk_ids": [
+        "postmortems:POSTMORTEM-001:content",
+        "postmortems:POSTMORTEM-002:content",
+        "postmortems:POSTMORTEM-003:content",
+        "postmortems:POSTMORTEM-004:content",
+        "postmortems:POSTMORTEM-005:content"
+      ],
+      "top_score": 4.1788,
+      "predicted_no_answer": true,
+      "matched_gold_rank": null,
+      "no_answer": true
+    },
+    {
+      "id": "negative:9",
+      "question": "Which record explains helium customer onboarding for zyxra?",
+      "gold_doc_id": null,
+      "gold_chunk_ids": [],
+      "retrieved_doc_ids": [
+        "ADR-001",
+        "ADR-002",
+        "ADR-003",
+        "ADR-004",
+        "ADR-005"
+      ],
+      "retrieved_chunk_ids": [
+        "adrs:ADR-001:decision",
+        "adrs:ADR-002:decision",
+        "adrs:ADR-003:decision",
+        "adrs:ADR-004:decision",
+        "adrs:ADR-005:decision"
+      ],
+      "top_score": 2.8866,
+      "predicted_no_answer": true,
+      "matched_gold_rank": null,
+      "no_answer": true
+    },
+    {
+      "id": "negative:10",
+      "question": "What is the policy for orbital coffee refills in brondo?",
+      "gold_doc_id": null,
+      "gold_chunk_ids": [],
+      "retrieved_doc_ids": [
+        "TICKET-001",
+        "TICKET-002",
+        "TICKET-003",
+        "TICKET-004",
+        "TICKET-005"
+      ],
+      "retrieved_chunk_ids": [
+        "tickets:TICKET-001:resolution",
+        "tickets:TICKET-002:resolution",
+        "tickets:TICKET-003:resolution",
+        "tickets:TICKET-004:resolution",
+        "tickets:TICKET-005:resolution"
+      ],
+      "top_score": 3.6215,
+      "predicted_no_answer": true,
+      "matched_gold_rank": null,
+      "no_answer": true
+    }
+  ]
+}

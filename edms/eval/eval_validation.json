@@ -1,0 +1,15 @@
+{
+  "examples": 210,
+  "chunks": 230,
+  "issues": [],
+  "issue_count": 0,
+  "counts_by_type": {
+    "adrs": 40,
+    "meeting_notes": 40,
+    "postmortems": 40,
+    "rfcs": 40,
+    "tickets": 40,
+    "mixed": 10
+  },
+  "status": "pass"
+}

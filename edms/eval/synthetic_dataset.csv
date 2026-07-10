@@ -1,0 +1,211 @@
+id,query_type,data_type,doc_id,question,gold_answer,gold_section,gold_chunk_ids,no_answer
+ADR-001:status,metadata,adrs,ADR-001,What is the status of ADR-001?,Accepted,,adrs:ADR-001:content,False
+ADR-001:decision,section,adrs,ADR-001,What decision does ADR-001 make?,EDMS will index this record inside the organization workspace and use hybrid retrieval with linked evidence.,decision,adrs:ADR-001:decision,False
+ADR-001:consequences,section,adrs,ADR-001,What consequence does ADR-001 mention?,Admins must upload records into the correct data type folder.,consequences,adrs:ADR-001:consequences,False
+ADR-001:section_summary,section,adrs,ADR-001,What does ADR-001 say in the consequences section?,Admins must upload records into the correct data type folder.,consequences,adrs:ADR-001:consequences,False
+ADR-002:status,metadata,adrs,ADR-002,What is the status of ADR-002?,Accepted,,adrs:ADR-002:content,False
+ADR-002:decision,section,adrs,ADR-002,What decision does ADR-002 make?,EDMS will index this record inside the organization workspace and use hybrid retrieval with linked evidence.,decision,adrs:ADR-002:decision,False
+ADR-002:consequences,section,adrs,ADR-002,What consequence does ADR-002 mention?,Admins must upload records into the correct data type folder.,consequences,adrs:ADR-002:consequences,False
+ADR-002:section_summary,section,adrs,ADR-002,What does ADR-002 say in the consequences section?,Admins must upload records into the correct data type folder.,consequences,adrs:ADR-002:consequences,False
+ADR-003:status,metadata,adrs,ADR-003,What is the status of ADR-003?,Accepted,,adrs:ADR-003:content,False
+ADR-003:decision,section,adrs,ADR-003,What decision does ADR-003 make?,EDMS will index this record inside the organization workspace and use hybrid retrieval with linked evidence.,decision,adrs:ADR-003:decision,False
+ADR-003:consequences,section,adrs,ADR-003,What consequence does ADR-003 mention?,Admins must upload records into the correct data type folder.,consequences,adrs:ADR-003:consequences,False
+ADR-003:section_summary,section,adrs,ADR-003,What does ADR-003 say in the consequences section?,Admins must upload records into the correct data type folder.,consequences,adrs:ADR-003:consequences,False
+ADR-004:status,metadata,adrs,ADR-004,What is the status of ADR-004?,Accepted,,adrs:ADR-004:content,False
+ADR-004:decision,section,adrs,ADR-004,What decision does ADR-004 make?,EDMS will index this record inside the organization workspace and use hybrid retrieval with linked evidence.,decision,adrs:ADR-004:decision,False
+ADR-004:consequences,section,adrs,ADR-004,What consequence does ADR-004 mention?,Admins must upload records into the correct data type folder.,consequences,adrs:ADR-004:consequences,False
+ADR-004:section_summary,section,adrs,ADR-004,What does ADR-004 say in the consequences section?,Admins must upload records into the correct data type folder.,consequences,adrs:ADR-004:consequences,False
+ADR-005:status,metadata,adrs,ADR-005,What is the status of ADR-005?,Accepted,,adrs:ADR-005:content,False
+ADR-005:decision,section,adrs,ADR-005,What decision does ADR-005 make?,EDMS will index this record inside the organization workspace and use hybrid retrieval with linked evidence.,decision,adrs:ADR-005:decision,False
+ADR-005:consequences,section,adrs,ADR-005,What consequence does ADR-005 mention?,Admins must upload records into the correct data type folder.,consequences,adrs:ADR-005:consequences,False
+ADR-005:section_summary,section,adrs,ADR-005,What does ADR-005 say in the consequences section?,Admins must upload records into the correct data type folder.,consequences,adrs:ADR-005:consequences,False
+ADR-006:status,metadata,adrs,ADR-006,What is the status of ADR-006?,Accepted,,adrs:ADR-006:content,False
+ADR-006:decision,section,adrs,ADR-006,What decision does ADR-006 make?,EDMS will index this record inside the organization workspace and use hybrid retrieval with linked evidence.,decision,adrs:ADR-006:decision,False
+ADR-006:consequences,section,adrs,ADR-006,What consequence does ADR-006 mention?,Admins must upload records into the correct data type folder.,consequences,adrs:ADR-006:consequences,False
+ADR-006:section_summary,section,adrs,ADR-006,What does ADR-006 say in the consequences section?,Admins must upload records into the correct data type folder.,consequences,adrs:ADR-006:consequences,False
+ADR-007:status,metadata,adrs,ADR-007,What is the status of ADR-007?,Accepted,,adrs:ADR-007:content,False
+ADR-007:decision,section,adrs,ADR-007,What decision does ADR-007 make?,EDMS will index this record inside the organization workspace and use hybrid retrieval with linked evidence.,decision,adrs:ADR-007:decision,False
+ADR-007:consequences,section,adrs,ADR-007,What consequence does ADR-007 mention?,Admins must upload records into the correct data type folder.,consequences,adrs:ADR-007:consequences,False
+ADR-007:section_summary,section,adrs,ADR-007,What does ADR-007 say in the consequences section?,Admins must upload records into the correct data type folder.,consequences,adrs:ADR-007:consequences,False
+ADR-008:status,metadata,adrs,ADR-008,What is the status of ADR-008?,Accepted,,adrs:ADR-008:content,False
+ADR-008:decision,section,adrs,ADR-008,What decision does ADR-008 make?,EDMS will index this record inside the organization workspace and use hybrid retrieval with linked evidence.,decision,adrs:ADR-008:decision,False
+ADR-008:consequences,section,adrs,ADR-008,What consequence does ADR-008 mention?,Admins must upload records into the correct data type folder.,consequences,adrs:ADR-008:consequences,False
+ADR-008:section_summary,section,adrs,ADR-008,What does ADR-008 say in the consequences section?,Admins must upload records into the correct data type folder.,consequences,adrs:ADR-008:consequences,False
+ADR-009:status,metadata,adrs,ADR-009,What is the status of ADR-009?,Accepted,,adrs:ADR-009:content,False
+ADR-009:decision,section,adrs,ADR-009,What decision does ADR-009 make?,EDMS will index this record inside the organization workspace and use hybrid retrieval with linked evidence.,decision,adrs:ADR-009:decision,False
+ADR-009:consequences,section,adrs,ADR-009,What consequence does ADR-009 mention?,Admins must upload records into the correct data type folder.,consequences,adrs:ADR-009:consequences,False
+ADR-009:section_summary,section,adrs,ADR-009,What does ADR-009 say in the consequences section?,Admins must upload records into the correct data type folder.,consequences,adrs:ADR-009:consequences,False
+ADR-010:status,metadata,adrs,ADR-010,What is the status of ADR-010?,Accepted,,adrs:ADR-010:content,False
+ADR-010:decision,section,adrs,ADR-010,What decision does ADR-010 make?,EDMS will index this record inside the organization workspace and use hybrid retrieval with linked evidence.,decision,adrs:ADR-010:decision,False
+ADR-010:consequences,section,adrs,ADR-010,What consequence does ADR-010 mention?,Admins must upload records into the correct data type folder.,consequences,adrs:ADR-010:consequences,False
+ADR-010:section_summary,section,adrs,ADR-010,What does ADR-010 say in the consequences section?,Admins must upload records into the correct data type folder.,consequences,adrs:ADR-010:consequences,False
+MEETING-001:date,metadata,meeting_notes,MEETING-001,When was MEETING-001 held?,2026-05-01,,meeting_notes:MEETING-001:content,False
+MEETING-001:decisions,section,meeting_notes,MEETING-001,What decisions were made in MEETING-001?,- Show latest upload time per data type.,decisions_made,meeting_notes:MEETING-001:decisions_made,False
+MEETING-001:actions,section,meeting_notes,MEETING-001,What action items were assigned in MEETING-001?,- Platform validates ingestion jobs.,action_items,meeting_notes:MEETING-001:action_items,False
+MEETING-001:section_summary,section,meeting_notes,MEETING-001,What does MEETING-001 say in the action items section?,- Platform validates ingestion jobs.,action_items,meeting_notes:MEETING-001:action_items,False
+MEETING-002:date,metadata,meeting_notes,MEETING-002,When was MEETING-002 held?,2026-05-02,,meeting_notes:MEETING-002:content,False
+MEETING-002:decisions,section,meeting_notes,MEETING-002,What decisions were made in MEETING-002?,- Show latest upload time per data type.,decisions_made,meeting_notes:MEETING-002:decisions_made,False
+MEETING-002:actions,section,meeting_notes,MEETING-002,What action items were assigned in MEETING-002?,- Platform validates ingestion jobs.,action_items,meeting_notes:MEETING-002:action_items,False
+MEETING-002:section_summary,section,meeting_notes,MEETING-002,What does MEETING-002 say in the action items section?,- Platform validates ingestion jobs.,action_items,meeting_notes:MEETING-002:action_items,False
+MEETING-003:date,metadata,meeting_notes,MEETING-003,When was MEETING-003 held?,2026-05-03,,meeting_notes:MEETING-003:content,False
+MEETING-003:decisions,section,meeting_notes,MEETING-003,What decisions were made in MEETING-003?,- Show latest upload time per data type.,decisions_made,meeting_notes:MEETING-003:decisions_made,False
+MEETING-003:actions,section,meeting_notes,MEETING-003,What action items were assigned in MEETING-003?,- Platform validates ingestion jobs.,action_items,meeting_notes:MEETING-003:action_items,False
+MEETING-003:section_summary,section,meeting_notes,MEETING-003,What does MEETING-003 say in the action items section?,- Platform validates ingestion jobs.,action_items,meeting_notes:MEETING-003:action_items,False
+MEETING-004:date,metadata,meeting_notes,MEETING-004,When was MEETING-004 held?,2026-05-04,,meeting_notes:MEETING-004:content,False
+MEETING-004:decisions,section,meeting_notes,MEETING-004,What decisions were made in MEETING-004?,- Show latest upload time per data type.,decisions_made,meeting_notes:MEETING-004:decisions_made,False
+MEETING-004:actions,section,meeting_notes,MEETING-004,What action items were assigned in MEETING-004?,- Platform validates ingestion jobs.,action_items,meeting_notes:MEETING-004:action_items,False
+MEETING-004:section_summary,section,meeting_notes,MEETING-004,What does MEETING-004 say in the action items section?,- Platform validates ingestion jobs.,action_items,meeting_notes:MEETING-004:action_items,False
+MEETING-005:date,metadata,meeting_notes,MEETING-005,When was MEETING-005 held?,2026-05-05,,meeting_notes:MEETING-005:content,False
+MEETING-005:decisions,section,meeting_notes,MEETING-005,What decisions were made in MEETING-005?,- Show latest upload time per data type.,decisions_made,meeting_notes:MEETING-005:decisions_made,False
+MEETING-005:actions,section,meeting_notes,MEETING-005,What action items were assigned in MEETING-005?,- Platform validates ingestion jobs.,action_items,meeting_notes:MEETING-005:action_items,False
+MEETING-005:section_summary,section,meeting_notes,MEETING-005,What does MEETING-005 say in the action items section?,- Platform validates ingestion jobs.,action_items,meeting_notes:MEETING-005:action_items,False
+MEETING-006:date,metadata,meeting_notes,MEETING-006,When was MEETING-006 held?,2026-05-06,,meeting_notes:MEETING-006:content,False
+MEETING-006:decisions,section,meeting_notes,MEETING-006,What decisions were made in MEETING-006?,- Show latest upload time per data type.,decisions_made,meeting_notes:MEETING-006:decisions_made,False
+MEETING-006:actions,section,meeting_notes,MEETING-006,What action items were assigned in MEETING-006?,- Platform validates ingestion jobs.,action_items,meeting_notes:MEETING-006:action_items,False
+MEETING-006:section_summary,section,meeting_notes,MEETING-006,What does MEETING-006 say in the action items section?,- Platform validates ingestion jobs.,action_items,meeting_notes:MEETING-006:action_items,False
+MEETING-007:date,metadata,meeting_notes,MEETING-007,When was MEETING-007 held?,2026-05-07,,meeting_notes:MEETING-007:content,False
+MEETING-007:decisions,section,meeting_notes,MEETING-007,What decisions were made in MEETING-007?,- Show latest upload time per data type.,decisions_made,meeting_notes:MEETING-007:decisions_made,False
+MEETING-007:actions,section,meeting_notes,MEETING-007,What action items were assigned in MEETING-007?,- Platform validates ingestion jobs.,action_items,meeting_notes:MEETING-007:action_items,False
+MEETING-007:section_summary,section,meeting_notes,MEETING-007,What does MEETING-007 say in the action items section?,- Platform validates ingestion jobs.,action_items,meeting_notes:MEETING-007:action_items,False
+MEETING-008:date,metadata,meeting_notes,MEETING-008,When was MEETING-008 held?,2026-05-08,,meeting_notes:MEETING-008:content,False
+MEETING-008:decisions,section,meeting_notes,MEETING-008,What decisions were made in MEETING-008?,- Show latest upload time per data type.,decisions_made,meeting_notes:MEETING-008:decisions_made,False
+MEETING-008:actions,section,meeting_notes,MEETING-008,What action items were assigned in MEETING-008?,- Platform validates ingestion jobs.,action_items,meeting_notes:MEETING-008:action_items,False
+MEETING-008:section_summary,section,meeting_notes,MEETING-008,What does MEETING-008 say in the action items section?,- Platform validates ingestion jobs.,action_items,meeting_notes:MEETING-008:action_items,False
+MEETING-009:date,metadata,meeting_notes,MEETING-009,When was MEETING-009 held?,2026-05-09,,meeting_notes:MEETING-009:content,False
+MEETING-009:decisions,section,meeting_notes,MEETING-009,What decisions were made in MEETING-009?,- Show latest upload time per data type.,decisions_made,meeting_notes:MEETING-009:decisions_made,False
+MEETING-009:actions,section,meeting_notes,MEETING-009,What action items were assigned in MEETING-009?,- Platform validates ingestion jobs.,action_items,meeting_notes:MEETING-009:action_items,False
+MEETING-009:section_summary,section,meeting_notes,MEETING-009,What does MEETING-009 say in the action items section?,- Platform validates ingestion jobs.,action_items,meeting_notes:MEETING-009:action_items,False
+MEETING-010:date,metadata,meeting_notes,MEETING-010,When was MEETING-010 held?,2026-05-10,,meeting_notes:MEETING-010:content,False
+MEETING-010:decisions,section,meeting_notes,MEETING-010,What decisions were made in MEETING-010?,- Show latest upload time per data type.,decisions_made,meeting_notes:MEETING-010:decisions_made,False
+MEETING-010:actions,section,meeting_notes,MEETING-010,What action items were assigned in MEETING-010?,- Platform validates ingestion jobs.,action_items,meeting_notes:MEETING-010:action_items,False
+MEETING-010:section_summary,section,meeting_notes,MEETING-010,What does MEETING-010 say in the action items section?,- Platform validates ingestion jobs.,action_items,meeting_notes:MEETING-010:action_items,False
+POSTMORTEM-001:severity,metadata,postmortems,POSTMORTEM-001,What severity is listed for POSTMORTEM-001?,Medium,,postmortems:POSTMORTEM-001:content,False
+POSTMORTEM-001:root_cause,section,postmortems,POSTMORTEM-001,What was the root cause in POSTMORTEM-001?,The frontend did not continue polling job status in all development render paths.,root_cause,postmortems:POSTMORTEM-001:root_cause,False
+POSTMORTEM-001:resolution,section,postmortems,POSTMORTEM-001,What was the resolution in POSTMORTEM-001?,Polling state was corrected and the UI now updates from queued to running or completed.,resolution,postmortems:POSTMORTEM-001:resolution,False
+POSTMORTEM-001:section_summary,section,postmortems,POSTMORTEM-001,What does POSTMORTEM-001 say in the incident summary section?,An admin uploaded records and saw the UI remain on queued even after backend indexing completed.,incident_summary,postmortems:POSTMORTEM-001:incident_summary,False
+POSTMORTEM-002:severity,metadata,postmortems,POSTMORTEM-002,What severity is listed for POSTMORTEM-002?,Medium,,postmortems:POSTMORTEM-002:content,False
+POSTMORTEM-002:root_cause,section,postmortems,POSTMORTEM-002,What was the root cause in POSTMORTEM-002?,The frontend did not continue polling job status in all development render paths.,root_cause,postmortems:POSTMORTEM-002:root_cause,False
+POSTMORTEM-002:resolution,section,postmortems,POSTMORTEM-002,What was the resolution in POSTMORTEM-002?,Polling state was corrected and the UI now updates from queued to running or completed.,resolution,postmortems:POSTMORTEM-002:resolution,False
+POSTMORTEM-002:section_summary,section,postmortems,POSTMORTEM-002,What does POSTMORTEM-002 say in the incident summary section?,An admin uploaded records and saw the UI remain on queued even after backend indexing completed.,incident_summary,postmortems:POSTMORTEM-002:incident_summary,False
+POSTMORTEM-003:severity,metadata,postmortems,POSTMORTEM-003,What severity is listed for POSTMORTEM-003?,Medium,,postmortems:POSTMORTEM-003:content,False
+POSTMORTEM-003:root_cause,section,postmortems,POSTMORTEM-003,What was the root cause in POSTMORTEM-003?,The frontend did not continue polling job status in all development render paths.,root_cause,postmortems:POSTMORTEM-003:root_cause,False
+POSTMORTEM-003:resolution,section,postmortems,POSTMORTEM-003,What was the resolution in POSTMORTEM-003?,Polling state was corrected and the UI now updates from queued to running or completed.,resolution,postmortems:POSTMORTEM-003:resolution,False
+POSTMORTEM-003:section_summary,section,postmortems,POSTMORTEM-003,What does POSTMORTEM-003 say in the incident summary section?,An admin uploaded records and saw the UI remain on queued even after backend indexing completed.,incident_summary,postmortems:POSTMORTEM-003:incident_summary,False
+POSTMORTEM-004:severity,metadata,postmortems,POSTMORTEM-004,What severity is listed for POSTMORTEM-004?,Medium,,postmortems:POSTMORTEM-004:content,False
+POSTMORTEM-004:root_cause,section,postmortems,POSTMORTEM-004,What was the root cause in POSTMORTEM-004?,The frontend did not continue polling job status in all development render paths.,root_cause,postmortems:POSTMORTEM-004:root_cause,False
+POSTMORTEM-004:resolution,section,postmortems,POSTMORTEM-004,What was the resolution in POSTMORTEM-004?,Polling state was corrected and the UI now updates from queued to running or completed.,resolution,postmortems:POSTMORTEM-004:resolution,False
+POSTMORTEM-004:section_summary,section,postmortems,POSTMORTEM-004,What does POSTMORTEM-004 say in the incident summary section?,An admin uploaded records and saw the UI remain on queued even after backend indexing completed.,incident_summary,postmortems:POSTMORTEM-004:incident_summary,False
+POSTMORTEM-005:severity,metadata,postmortems,POSTMORTEM-005,What severity is listed for POSTMORTEM-005?,Medium,,postmortems:POSTMORTEM-005:content,False
+POSTMORTEM-005:root_cause,section,postmortems,POSTMORTEM-005,What was the root cause in POSTMORTEM-005?,The frontend did not continue polling job status in all development render paths.,root_cause,postmortems:POSTMORTEM-005:root_cause,False
+POSTMORTEM-005:resolution,section,postmortems,POSTMORTEM-005,What was the resolution in POSTMORTEM-005?,Polling state was corrected and the UI now updates from queued to running or completed.,resolution,postmortems:POSTMORTEM-005:resolution,False
+POSTMORTEM-005:section_summary,section,postmortems,POSTMORTEM-005,What does POSTMORTEM-005 say in the incident summary section?,An admin uploaded records and saw the UI remain on queued even after backend indexing completed.,incident_summary,postmortems:POSTMORTEM-005:incident_summary,False
+POSTMORTEM-006:severity,metadata,postmortems,POSTMORTEM-006,What severity is listed for POSTMORTEM-006?,Medium,,postmortems:POSTMORTEM-006:content,False
+POSTMORTEM-006:root_cause,section,postmortems,POSTMORTEM-006,What was the root cause in POSTMORTEM-006?,The frontend did not continue polling job status in all development render paths.,root_cause,postmortems:POSTMORTEM-006:root_cause,False
+POSTMORTEM-006:resolution,section,postmortems,POSTMORTEM-006,What was the resolution in POSTMORTEM-006?,Polling state was corrected and the UI now updates from queued to running or completed.,resolution,postmortems:POSTMORTEM-006:resolution,False
+POSTMORTEM-006:section_summary,section,postmortems,POSTMORTEM-006,What does POSTMORTEM-006 say in the incident summary section?,An admin uploaded records and saw the UI remain on queued even after backend indexing completed.,incident_summary,postmortems:POSTMORTEM-006:incident_summary,False
+POSTMORTEM-007:severity,metadata,postmortems,POSTMORTEM-007,What severity is listed for POSTMORTEM-007?,Medium,,postmortems:POSTMORTEM-007:content,False
+POSTMORTEM-007:root_cause,section,postmortems,POSTMORTEM-007,What was the root cause in POSTMORTEM-007?,The frontend did not continue polling job status in all development render paths.,root_cause,postmortems:POSTMORTEM-007:root_cause,False
+POSTMORTEM-007:resolution,section,postmortems,POSTMORTEM-007,What was the resolution in POSTMORTEM-007?,Polling state was corrected and the UI now updates from queued to running or completed.,resolution,postmortems:POSTMORTEM-007:resolution,False
+POSTMORTEM-007:section_summary,section,postmortems,POSTMORTEM-007,What does POSTMORTEM-007 say in the incident summary section?,An admin uploaded records and saw the UI remain on queued even after backend indexing completed.,incident_summary,postmortems:POSTMORTEM-007:incident_summary,False
+POSTMORTEM-008:severity,metadata,postmortems,POSTMORTEM-008,What severity is listed for POSTMORTEM-008?,Medium,,postmortems:POSTMORTEM-008:content,False
+POSTMORTEM-008:root_cause,section,postmortems,POSTMORTEM-008,What was the root cause in POSTMORTEM-008?,The frontend did not continue polling job status in all development render paths.,root_cause,postmortems:POSTMORTEM-008:root_cause,False
+POSTMORTEM-008:resolution,section,postmortems,POSTMORTEM-008,What was the resolution in POSTMORTEM-008?,Polling state was corrected and the UI now updates from queued to running or completed.,resolution,postmortems:POSTMORTEM-008:resolution,False
+POSTMORTEM-008:section_summary,section,postmortems,POSTMORTEM-008,What does POSTMORTEM-008 say in the incident summary section?,An admin uploaded records and saw the UI remain on queued even after backend indexing completed.,incident_summary,postmortems:POSTMORTEM-008:incident_summary,False
+POSTMORTEM-009:severity,metadata,postmortems,POSTMORTEM-009,What severity is listed for POSTMORTEM-009?,Medium,,postmortems:POSTMORTEM-009:content,False
+POSTMORTEM-009:root_cause,section,postmortems,POSTMORTEM-009,What was the root cause in POSTMORTEM-009?,The frontend did not continue polling job status in all development render paths.,root_cause,postmortems:POSTMORTEM-009:root_cause,False
+POSTMORTEM-009:resolution,section,postmortems,POSTMORTEM-009,What was the resolution in POSTMORTEM-009?,Polling state was corrected and the UI now updates from queued to running or completed.,resolution,postmortems:POSTMORTEM-009:resolution,False
+POSTMORTEM-009:section_summary,section,postmortems,POSTMORTEM-009,What does POSTMORTEM-009 say in the incident summary section?,An admin uploaded records and saw the UI remain on queued even after backend indexing completed.,incident_summary,postmortems:POSTMORTEM-009:incident_summary,False
+POSTMORTEM-010:severity,metadata,postmortems,POSTMORTEM-010,What severity is listed for POSTMORTEM-010?,Medium,,postmortems:POSTMORTEM-010:content,False
+POSTMORTEM-010:root_cause,section,postmortems,POSTMORTEM-010,What was the root cause in POSTMORTEM-010?,The frontend did not continue polling job status in all development render paths.,root_cause,postmortems:POSTMORTEM-010:root_cause,False
+POSTMORTEM-010:resolution,section,postmortems,POSTMORTEM-010,What was the resolution in POSTMORTEM-010?,Polling state was corrected and the UI now updates from queued to running or completed.,resolution,postmortems:POSTMORTEM-010:resolution,False
+POSTMORTEM-010:section_summary,section,postmortems,POSTMORTEM-010,What does POSTMORTEM-010 say in the incident summary section?,An admin uploaded records and saw the UI remain on queued even after backend indexing completed.,incident_summary,postmortems:POSTMORTEM-010:incident_summary,False
+RFC-001:status,metadata,rfcs,RFC-001,What is the status of RFC-001?,Draft,,rfcs:RFC-001:content,False
+RFC-001:problem,section,rfcs,RFC-001,What problem does RFC-001 describe?,Search quality drops when uploads are not structured and evidence cannot be mapped to the correct source.,problem_statement,rfcs:RFC-001:problem_statement,False
+RFC-001:tradeoffs,section,rfcs,RFC-001,What trade-offs does RFC-001 note?,Hybrid search adds indexing complexity but improves recall and grounded answers.,trade_offs,rfcs:RFC-001:trade_offs,False
+RFC-001:section_summary,section,rfcs,RFC-001,What does RFC-001 say in the alternatives considered section?,- Use keyword-only search.,alternatives_considered,rfcs:RFC-001:alternatives_considered,False
+RFC-002:status,metadata,rfcs,RFC-002,What is the status of RFC-002?,Draft,,rfcs:RFC-002:content,False
+RFC-002:problem,section,rfcs,RFC-002,What problem does RFC-002 describe?,Search quality drops when uploads are not structured and evidence cannot be mapped to the correct source.,problem_statement,rfcs:RFC-002:problem_statement,False
+RFC-002:tradeoffs,section,rfcs,RFC-002,What trade-offs does RFC-002 note?,Hybrid search adds indexing complexity but improves recall and grounded answers.,trade_offs,rfcs:RFC-002:trade_offs,False
+RFC-002:section_summary,section,rfcs,RFC-002,What does RFC-002 say in the alternatives considered section?,- Use keyword-only search.,alternatives_considered,rfcs:RFC-002:alternatives_considered,False
+RFC-003:status,metadata,rfcs,RFC-003,What is the status of RFC-003?,Draft,,rfcs:RFC-003:content,False
+RFC-003:problem,section,rfcs,RFC-003,What problem does RFC-003 describe?,Search quality drops when uploads are not structured and evidence cannot be mapped to the correct source.,problem_statement,rfcs:RFC-003:problem_statement,False
+RFC-003:tradeoffs,section,rfcs,RFC-003,What trade-offs does RFC-003 note?,Hybrid search adds indexing complexity but improves recall and grounded answers.,trade_offs,rfcs:RFC-003:trade_offs,False
+RFC-003:section_summary,section,rfcs,RFC-003,What does RFC-003 say in the alternatives considered section?,- Use keyword-only search.,alternatives_considered,rfcs:RFC-003:alternatives_considered,False
+RFC-004:status,metadata,rfcs,RFC-004,What is the status of RFC-004?,Draft,,rfcs:RFC-004:content,False
+RFC-004:problem,section,rfcs,RFC-004,What problem does RFC-004 describe?,Search quality drops when uploads are not structured and evidence cannot be mapped to the correct source.,problem_statement,rfcs:RFC-004:problem_statement,False
+RFC-004:tradeoffs,section,rfcs,RFC-004,What trade-offs does RFC-004 note?,Hybrid search adds indexing complexity but improves recall and grounded answers.,trade_offs,rfcs:RFC-004:trade_offs,False
+RFC-004:section_summary,section,rfcs,RFC-004,What does RFC-004 say in the alternatives considered section?,- Use keyword-only search.,alternatives_considered,rfcs:RFC-004:alternatives_considered,False
+RFC-005:status,metadata,rfcs,RFC-005,What is the status of RFC-005?,Draft,,rfcs:RFC-005:content,False
+RFC-005:problem,section,rfcs,RFC-005,What problem does RFC-005 describe?,Search quality drops when uploads are not structured and evidence cannot be mapped to the correct source.,problem_statement,rfcs:RFC-005:problem_statement,False
+RFC-005:tradeoffs,section,rfcs,RFC-005,What trade-offs does RFC-005 note?,Hybrid search adds indexing complexity but improves recall and grounded answers.,trade_offs,rfcs:RFC-005:trade_offs,False
+RFC-005:section_summary,section,rfcs,RFC-005,What does RFC-005 say in the alternatives considered section?,- Use keyword-only search.,alternatives_considered,rfcs:RFC-005:alternatives_considered,False
+RFC-006:status,metadata,rfcs,RFC-006,What is the status of RFC-006?,Draft,,rfcs:RFC-006:content,False
+RFC-006:problem,section,rfcs,RFC-006,What problem does RFC-006 describe?,Search quality drops when uploads are not structured and evidence cannot be mapped to the correct source.,problem_statement,rfcs:RFC-006:problem_statement,False
+RFC-006:tradeoffs,section,rfcs,RFC-006,What trade-offs does RFC-006 note?,Hybrid search adds indexing complexity but improves recall and grounded answers.,trade_offs,rfcs:RFC-006:trade_offs,False
+RFC-006:section_summary,section,rfcs,RFC-006,What does RFC-006 say in the alternatives considered section?,- Use keyword-only search.,alternatives_considered,rfcs:RFC-006:alternatives_considered,False
+RFC-007:status,metadata,rfcs,RFC-007,What is the status of RFC-007?,Draft,,rfcs:RFC-007:content,False
+RFC-007:problem,section,rfcs,RFC-007,What problem does RFC-007 describe?,Search quality drops when uploads are not structured and evidence cannot be mapped to the correct source.,problem_statement,rfcs:RFC-007:problem_statement,False
+RFC-007:tradeoffs,section,rfcs,RFC-007,What trade-offs does RFC-007 note?,Hybrid search adds indexing complexity but improves recall and grounded answers.,trade_offs,rfcs:RFC-007:trade_offs,False
+RFC-007:section_summary,section,rfcs,RFC-007,What does RFC-007 say in the alternatives considered section?,- Use keyword-only search.,alternatives_considered,rfcs:RFC-007:alternatives_considered,False
+RFC-008:status,metadata,rfcs,RFC-008,What is the status of RFC-008?,Draft,,rfcs:RFC-008:content,False
+RFC-008:problem,section,rfcs,RFC-008,What problem does RFC-008 describe?,Search quality drops when uploads are not structured and evidence cannot be mapped to the correct source.,problem_statement,rfcs:RFC-008:problem_statement,False
+RFC-008:tradeoffs,section,rfcs,RFC-008,What trade-offs does RFC-008 note?,Hybrid search adds indexing complexity but improves recall and grounded answers.,trade_offs,rfcs:RFC-008:trade_offs,False
+RFC-008:section_summary,section,rfcs,RFC-008,What does RFC-008 say in the alternatives considered section?,- Use keyword-only search.,alternatives_considered,rfcs:RFC-008:alternatives_considered,False
+RFC-009:status,metadata,rfcs,RFC-009,What is the status of RFC-009?,Draft,,rfcs:RFC-009:content,False
+RFC-009:problem,section,rfcs,RFC-009,What problem does RFC-009 describe?,Search quality drops when uploads are not structured and evidence cannot be mapped to the correct source.,problem_statement,rfcs:RFC-009:problem_statement,False
+RFC-009:tradeoffs,section,rfcs,RFC-009,What trade-offs does RFC-009 note?,Hybrid search adds indexing complexity but improves recall and grounded answers.,trade_offs,rfcs:RFC-009:trade_offs,False
+RFC-009:section_summary,section,rfcs,RFC-009,What does RFC-009 say in the alternatives considered section?,- Use keyword-only search.,alternatives_considered,rfcs:RFC-009:alternatives_considered,False
+RFC-010:status,metadata,rfcs,RFC-010,What is the status of RFC-010?,Draft,,rfcs:RFC-010:content,False
+RFC-010:problem,section,rfcs,RFC-010,What problem does RFC-010 describe?,Search quality drops when uploads are not structured and evidence cannot be mapped to the correct source.,problem_statement,rfcs:RFC-010:problem_statement,False
+RFC-010:tradeoffs,section,rfcs,RFC-010,What trade-offs does RFC-010 note?,Hybrid search adds indexing complexity but improves recall and grounded answers.,trade_offs,rfcs:RFC-010:trade_offs,False
+RFC-010:section_summary,section,rfcs,RFC-010,What does RFC-010 say in the alternatives considered section?,- Use keyword-only search.,alternatives_considered,rfcs:RFC-010:alternatives_considered,False
+TICKET-001:priority,metadata,tickets,TICKET-001,What priority is listed for TICKET-001?,P2,,tickets:TICKET-001:content,False
+TICKET-001:description,section,tickets,TICKET-001,What does TICKET-001 ask for?,Admin needs to upload multiple markdown files or diagrams and confirm that indexing completed for the workspace.,description,tickets:TICKET-001:description,False
+TICKET-001:resolution,section,tickets,TICKET-001,What was the resolution for TICKET-001?,"Files are saved by data type, queued for ingestion, indexed, and exposed in search with linked evidence.",resolution,tickets:TICKET-001:resolution,False
+TICKET-001:section_summary,section,tickets,TICKET-001,What does TICKET-001 say in the description section?,Admin needs to upload multiple markdown files or diagrams and confirm that indexing completed for the workspace.,description,tickets:TICKET-001:description,False
+TICKET-002:priority,metadata,tickets,TICKET-002,What priority is listed for TICKET-002?,P3,,tickets:TICKET-002:content,False
+TICKET-002:description,section,tickets,TICKET-002,What does TICKET-002 ask for?,Admin needs to upload multiple markdown files or diagrams and confirm that indexing completed for the workspace.,description,tickets:TICKET-002:description,False
+TICKET-002:resolution,section,tickets,TICKET-002,What was the resolution for TICKET-002?,"Files are saved by data type, queued for ingestion, indexed, and exposed in search with linked evidence.",resolution,tickets:TICKET-002:resolution,False
+TICKET-002:section_summary,section,tickets,TICKET-002,What does TICKET-002 say in the description section?,Admin needs to upload multiple markdown files or diagrams and confirm that indexing completed for the workspace.,description,tickets:TICKET-002:description,False
+TICKET-003:priority,metadata,tickets,TICKET-003,What priority is listed for TICKET-003?,P1,,tickets:TICKET-003:content,False
+TICKET-003:description,section,tickets,TICKET-003,What does TICKET-003 ask for?,Admin needs to upload multiple markdown files or diagrams and confirm that indexing completed for the workspace.,description,tickets:TICKET-003:description,False
+TICKET-003:resolution,section,tickets,TICKET-003,What was the resolution for TICKET-003?,"Files are saved by data type, queued for ingestion, indexed, and exposed in search with linked evidence.",resolution,tickets:TICKET-003:resolution,False
+TICKET-003:section_summary,section,tickets,TICKET-003,What does TICKET-003 say in the description section?,Admin needs to upload multiple markdown files or diagrams and confirm that indexing completed for the workspace.,description,tickets:TICKET-003:description,False
+TICKET-004:priority,metadata,tickets,TICKET-004,What priority is listed for TICKET-004?,P2,,tickets:TICKET-004:content,False
+TICKET-004:description,section,tickets,TICKET-004,What does TICKET-004 ask for?,Admin needs to upload multiple markdown files or diagrams and confirm that indexing completed for the workspace.,description,tickets:TICKET-004:description,False
+TICKET-004:resolution,section,tickets,TICKET-004,What was the resolution for TICKET-004?,"Files are saved by data type, queued for ingestion, indexed, and exposed in search with linked evidence.",resolution,tickets:TICKET-004:resolution,False
+TICKET-004:section_summary,section,tickets,TICKET-004,What does TICKET-004 say in the description section?,Admin needs to upload multiple markdown files or diagrams and confirm that indexing completed for the workspace.,description,tickets:TICKET-004:description,False
+TICKET-005:priority,metadata,tickets,TICKET-005,What priority is listed for TICKET-005?,P3,,tickets:TICKET-005:content,False
+TICKET-005:description,section,tickets,TICKET-005,What does TICKET-005 ask for?,Admin needs to upload multiple markdown files or diagrams and confirm that indexing completed for the workspace.,description,tickets:TICKET-005:description,False
+TICKET-005:resolution,section,tickets,TICKET-005,What was the resolution for TICKET-005?,"Files are saved by data type, queued for ingestion, indexed, and exposed in search with linked evidence.",resolution,tickets:TICKET-005:resolution,False
+TICKET-005:section_summary,section,tickets,TICKET-005,What does TICKET-005 say in the description section?,Admin needs to upload multiple markdown files or diagrams and confirm that indexing completed for the workspace.,description,tickets:TICKET-005:description,False
+TICKET-006:priority,metadata,tickets,TICKET-006,What priority is listed for TICKET-006?,P1,,tickets:TICKET-006:content,False
+TICKET-006:description,section,tickets,TICKET-006,What does TICKET-006 ask for?,Admin needs to upload multiple markdown files or diagrams and confirm that indexing completed for the workspace.,description,tickets:TICKET-006:description,False
+TICKET-006:resolution,section,tickets,TICKET-006,What was the resolution for TICKET-006?,"Files are saved by data type, queued for ingestion, indexed, and exposed in search with linked evidence.",resolution,tickets:TICKET-006:resolution,False
+TICKET-006:section_summary,section,tickets,TICKET-006,What does TICKET-006 say in the description section?,Admin needs to upload multiple markdown files or diagrams and confirm that indexing completed for the workspace.,description,tickets:TICKET-006:description,False
+TICKET-007:priority,metadata,tickets,TICKET-007,What priority is listed for TICKET-007?,P2,,tickets:TICKET-007:content,False
+TICKET-007:description,section,tickets,TICKET-007,What does TICKET-007 ask for?,Admin needs to upload multiple markdown files or diagrams and confirm that indexing completed for the workspace.,description,tickets:TICKET-007:description,False
+TICKET-007:resolution,section,tickets,TICKET-007,What was the resolution for TICKET-007?,"Files are saved by data type, queued for ingestion, indexed, and exposed in search with linked evidence.",resolution,tickets:TICKET-007:resolution,False
+TICKET-007:section_summary,section,tickets,TICKET-007,What does TICKET-007 say in the description section?,Admin needs to upload multiple markdown files or diagrams and confirm that indexing completed for the workspace.,description,tickets:TICKET-007:description,False
+TICKET-008:priority,metadata,tickets,TICKET-008,What priority is listed for TICKET-008?,P3,,tickets:TICKET-008:content,False
+TICKET-008:description,section,tickets,TICKET-008,What does TICKET-008 ask for?,Admin needs to upload multiple markdown files or diagrams and confirm that indexing completed for the workspace.,description,tickets:TICKET-008:description,False
+TICKET-008:resolution,section,tickets,TICKET-008,What was the resolution for TICKET-008?,"Files are saved by data type, queued for ingestion, indexed, and exposed in search with linked evidence.",resolution,tickets:TICKET-008:resolution,False
+TICKET-008:section_summary,section,tickets,TICKET-008,What does TICKET-008 say in the description section?,Admin needs to upload multiple markdown files or diagrams and confirm that indexing completed for the workspace.,description,tickets:TICKET-008:description,False
+TICKET-009:priority,metadata,tickets,TICKET-009,What priority is listed for TICKET-009?,P1,,tickets:TICKET-009:content,False
+TICKET-009:description,section,tickets,TICKET-009,What does TICKET-009 ask for?,Admin needs to upload multiple markdown files or diagrams and confirm that indexing completed for the workspace.,description,tickets:TICKET-009:description,False
+TICKET-009:resolution,section,tickets,TICKET-009,What was the resolution for TICKET-009?,"Files are saved by data type, queued for ingestion, indexed, and exposed in search with linked evidence.",resolution,tickets:TICKET-009:resolution,False
+TICKET-009:section_summary,section,tickets,TICKET-009,What does TICKET-009 say in the description section?,Admin needs to upload multiple markdown files or diagrams and confirm that indexing completed for the workspace.,description,tickets:TICKET-009:description,False
+TICKET-010:priority,metadata,tickets,TICKET-010,What priority is listed for TICKET-010?,P2,,tickets:TICKET-010:content,False
+TICKET-010:description,section,tickets,TICKET-010,What does TICKET-010 ask for?,Admin needs to upload multiple markdown files or diagrams and confirm that indexing completed for the workspace.,description,tickets:TICKET-010:description,False
+TICKET-010:resolution,section,tickets,TICKET-010,What was the resolution for TICKET-010?,"Files are saved by data type, queued for ingestion, indexed, and exposed in search with linked evidence.",resolution,tickets:TICKET-010:resolution,False
+TICKET-010:section_summary,section,tickets,TICKET-010,What does TICKET-010 say in the description section?,Admin needs to upload multiple markdown files or diagrams and confirm that indexing completed for the workspace.,description,tickets:TICKET-010:description,False
+negative:1,negative,mixed,,What does the workspace say about florbax protocol 19?,,,,True
+negative:2,negative,mixed,,Which record approves zentora authentication for quorim 7?,,,,True
+negative:3,negative,mixed,,Where is the narvex deployment plan documented?,,,,True
+negative:4,negative,mixed,,What is the official guidance for plinzo billing reconciliation?,,,,True
+negative:5,negative,mixed,,Which note explains solar flare reimbursement for vextro?,,,,True
+negative:6,negative,mixed,,What does MemoStack say about tarvix payroll for region 9?,,,,True
+negative:7,negative,mixed,,Which document covers potato encryption standards in yulma?,,,,True
+negative:8,negative,mixed,,What is the process for unicorn incident response in qelto?,,,,True
+negative:9,negative,mixed,,Which record explains helium customer onboarding for zyxra?,,,,True
+negative:10,negative,mixed,,What is the policy for orbital coffee refills in brondo?,,,,True

@@ -26,8 +26,13 @@ from src.state_store import (
     revoke_all_user_sessions,
     revoke_session,
 )
-from src.telemetry import log_event
-from src.traffic_control import enforce_rate_limit
+from src.telemetry import log_event, observe_auth_failure
+from src.traffic_control import (
+    clear_login_failures,
+    enforce_rate_limit,
+    get_login_lockout_remaining_seconds,
+    record_login_failure,
+)
 
 router = APIRouter(
     prefix="/auth",
@@ -143,20 +148,39 @@ def _issue_token(user: dict, request: Request, *, include_invite_code: bool = Fa
 def login(data: LoginRequest, request: Request):
     email = _clean_email(data.email)
     ip = getattr(request.client, "host", "unknown") or "unknown"
+    identity = _rate_limit_identity(request, email)
     if not email or not data.password.strip():
         log_event(30, "login_failed", event="auth", outcome="invalid_input", client_ip=ip, email_hash=_email_hash(email or ""))
+        observe_auth_failure("invalid_input")
         raise HTTPException(status_code=400, detail="Email and password are required")
-    enforce_rate_limit(_rate_limit_identity(request, email), "login")
+    enforce_rate_limit(identity, "login")
+    lockout_remaining = get_login_lockout_remaining_seconds(identity)
+    if lockout_remaining > 0:
+        log_event(30, "login_failed", event="auth", outcome="locked_out", client_ip=ip, email_hash=_email_hash(email), retry_after=lockout_remaining)
+        observe_auth_failure("locked_out")
+        raise HTTPException(
+            status_code=429,
+            detail=f"Too many login attempts. Try again in {lockout_remaining} seconds",
+        )
     user = get_user_by_email(email)
 
     if not user:
         log_event(30, "login_failed", event="auth", outcome="unknown_email", client_ip=ip, email_hash=_email_hash(email))
+        observe_auth_failure("unknown_email")
+        lockout_remaining = record_login_failure(identity)
+        if lockout_remaining:
+            log_event(30, "login_lockout_activated", event="auth", client_ip=ip, email_hash=_email_hash(email), retry_after=lockout_remaining)
         raise HTTPException(status_code=401, detail="Invalid credentials")
 
     if not verify_password(data.password, user["hashed_password"]):
         log_event(30, "login_failed", event="auth", outcome="bad_password", client_ip=ip, email_hash=_email_hash(email), user_id=user["id"], org_id=user["org_id"])
+        observe_auth_failure("bad_password")
+        lockout_remaining = record_login_failure(identity)
+        if lockout_remaining:
+            log_event(30, "login_lockout_activated", event="auth", client_ip=ip, email_hash=_email_hash(email), user_id=user["id"], org_id=user["org_id"], retry_after=lockout_remaining)
         raise HTTPException(status_code=401, detail="Invalid credentials")
 
+    clear_login_failures(identity)
     log_event(20, "login_success", event="auth", outcome="success", client_ip=ip, email_hash=_email_hash(email), user_id=user["id"], org_id=user["org_id"], org_slug=user["org_slug"])
     return _issue_token(user, request)
 
@@ -172,27 +196,33 @@ def register(data: RegisterRequest, request: Request):
 
     if not email:
         log_event(30, "register_failed", event="auth", outcome="missing_email", client_ip=ip, email_hash=_email_hash(email or ""))
+        observe_auth_failure("register_missing_email")
         raise HTTPException(status_code=400, detail="Email is required")
 
     if not _validate_email(email):
         log_event(30, "register_failed", event="auth", outcome="invalid_email", client_ip=ip, email_hash=_email_hash(email))
+        observe_auth_failure("register_invalid_email")
         raise HTTPException(status_code=400, detail="Enter a valid email address")
 
     if not data.password.strip():
         log_event(30, "register_failed", event="auth", outcome="missing_password", client_ip=ip, email_hash=_email_hash(email))
+        observe_auth_failure("register_missing_password")
         raise HTTPException(status_code=400, detail="Password is required")
 
     password_error = _validate_password_strength(data.password)
     if password_error:
         log_event(30, "register_failed", event="auth", outcome="weak_password", client_ip=ip, email_hash=_email_hash(email))
+        observe_auth_failure("register_weak_password")
         raise HTTPException(status_code=400, detail=password_error)
 
     if role not in VALID_ROLES:
         log_event(30, "register_failed", event="auth", outcome="invalid_role", client_ip=ip, email_hash=_email_hash(email))
+        observe_auth_failure("register_invalid_role")
         raise HTTPException(status_code=400, detail="Invalid role selected")
 
     if get_user_by_email(email):
         log_event(30, "register_failed", event="auth", outcome="account_exists", client_ip=ip, email_hash=_email_hash(email))
+        observe_auth_failure("register_account_exists")
         raise HTTPException(status_code=409, detail="Account already exists")
 
     try:
@@ -271,8 +301,9 @@ def logout_all(data: RefreshRequest):
 
 
 @router.post("/password-reset/request")
-def request_password_reset(data: EmailRequest):
+def request_password_reset(data: EmailRequest, request: Request):
     email = _clean_email(data.email)
+    enforce_rate_limit(_rate_limit_identity(request, email), "auth")
     user = get_user_by_email(email)
     if user:
         create_password_reset_token(user["id"])
@@ -299,8 +330,9 @@ def confirm_password_reset(data: PasswordResetRequest):
 
 
 @router.post("/email-verification/request")
-def request_email_verification(data: EmailRequest):
+def request_email_verification(data: EmailRequest, request: Request):
     email = _clean_email(data.email)
+    enforce_rate_limit(_rate_limit_identity(request, email), "auth")
     user = get_user_by_email(email)
     if user and not user.get("email_verified_at"):
         create_email_verification_token(user["id"])

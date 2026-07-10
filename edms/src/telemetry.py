@@ -196,8 +196,21 @@ except Exception:
 
 
 HTTP_REQUESTS_TOTAL = Counter("edms_http_requests_total", "Total HTTP requests", ["route", "method", "status_code"]) if Counter else None
-HTTP_REQUEST_LATENCY = Histogram("edms_http_request_latency_seconds", "HTTP latency", ["route", "method"]) if Histogram else None
-STAGE_LATENCY = Histogram("edms_stage_latency_seconds", "Stage latency", ["stage"]) if Histogram else None
+HTTP_REQUEST_LATENCY = Histogram(
+    "edms_http_request_latency_seconds",
+    "HTTP latency",
+    ["route", "method"],
+    buckets=(0.01, 0.025, 0.05, 0.1, 0.2, 0.35, 0.5, 0.75, 1.0, 1.5, 2.5, 4.0, 6.0, 10.0),
+) if Histogram else None
+STAGE_LATENCY = Histogram(
+    "edms_stage_latency_seconds",
+    "Stage latency",
+    ["stage"],
+    buckets=(0.01, 0.025, 0.05, 0.1, 0.2, 0.35, 0.5, 0.75, 1.0, 1.5, 2.5, 4.0, 6.0, 10.0, 20.0),
+) if Histogram else None
+REQUEST_REJECTIONS_TOTAL = Counter("edms_request_rejections_total", "Rejected requests", ["reason", "route", "method"]) if Counter else None
+AUTH_FAILURES_TOTAL = Counter("edms_auth_failures_total", "Auth failures", ["outcome"]) if Counter else None
+HTTP_RESPONSES_TOTAL = Counter("edms_http_responses_total", "HTTP responses by class", ["status_class"]) if Counter else None
 INGESTION_JOBS_TOTAL = Counter("edms_ingestion_jobs_total", "Ingestion jobs", ["status", "trigger_source", "data_type"]) if Counter else None
 LLM_REQUESTS_TOTAL = Counter("edms_llm_requests_total", "LLM calls", ["model", "mode", "fallback_used"]) if Counter else None
 RETRIEVAL_TOTAL = Counter("edms_retrieval_total", "Retrieval calls", ["fallback_used", "cache_hit"]) if Counter else None
@@ -230,6 +243,24 @@ def observe_http(route: str, method: str, status_code: int, latency_seconds: flo
         HTTP_REQUESTS_TOTAL.labels(route=route, method=method, status_code=str(status_code)).inc()
     if HTTP_REQUEST_LATENCY:
         HTTP_REQUEST_LATENCY.labels(route=route, method=method).observe(latency_seconds)
+    if HTTP_RESPONSES_TOTAL:
+        status_class = f"{int(status_code) // 100}xx"
+        HTTP_RESPONSES_TOTAL.labels(status_class=status_class).inc()
+
+
+def observe_request_rejection(reason: str, route: str, method: str) -> None:
+    if REQUEST_REJECTIONS_TOTAL:
+        REQUEST_REJECTIONS_TOTAL.labels(reason=reason, route=route, method=method).inc()
+
+
+def observe_auth_failure(outcome: str) -> None:
+    if AUTH_FAILURES_TOTAL:
+        AUTH_FAILURES_TOTAL.labels(outcome=outcome).inc()
+
+
+def observe_queue_depth(queue_name: str, depth: float) -> None:
+    if QUEUE_DEPTH:
+        QUEUE_DEPTH.labels(queue_name=queue_name).set(depth)
 
 
 def metrics_payload() -> bytes:

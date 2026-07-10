@@ -198,6 +198,39 @@ def list_ingestion_jobs(org_id: int, limit: int = 10) -> List[Dict]:
         conn.close()
 
 
+def list_queued_ingestion_jobs(org_id: int, limit: int = 25) -> List[Dict]:
+    conn = connect()
+    try:
+        cursor = conn.cursor()
+        execute(
+            cursor,
+            """
+            SELECT *
+            FROM ingestion_jobs
+            WHERE org_id = ?
+              AND status = 'queued'
+            ORDER BY created_at ASC, id ASC
+            LIMIT ?
+            """,
+            (org_id, limit),
+        )
+        return [_row_to_job(row) for row in fetchall(cursor)]
+    finally:
+        conn.close()
+
+
+def claim_queued_ingestion_jobs(org_id: int, *, limit: int = 25, exclude_job_id: str | None = None) -> List[Dict]:
+    queued_jobs = list_queued_ingestion_jobs(org_id, limit=limit)
+    claimed = []
+    for job in queued_jobs:
+        if exclude_job_id and job["id"] == exclude_job_id:
+            continue
+        claimed_job = claim_ingestion_job(job["id"])
+        if claimed_job:
+            claimed.append(claimed_job)
+    return claimed
+
+
 def latest_completed_uploads_by_data_type(org_id: int, limit: int = 100) -> Dict[str, Dict]:
     conn = connect()
     try:

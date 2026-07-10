@@ -46,7 +46,7 @@ export default function ChatInput({ onSend, disabled, embedded = false }) {
         disabled={!canSend}
         className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl transition ${
           canSend
-            ? "bg-gradient-primary text-white shadow-glow hover:opacity-95"
+            ? "border border-[#f48d16]/22 bg-[#fff4e1] text-[#251f19] shadow-sm hover:border-[#f48d16]/35 hover:bg-[#ffeed2]"
             : "bg-secondary text-muted-foreground cursor-not-allowed"
         }`}
         aria-label="Send message"

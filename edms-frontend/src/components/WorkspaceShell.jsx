@@ -18,13 +18,13 @@ export default function WorkspaceShell({ children, mainClassName = "" }) {
   }, [sidebarHidden]);
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 text-foreground lg:flex-row">
+    <div className="min-h-screen flex flex-col bg-white text-foreground lg:flex-row">
       {!sidebarHidden && <Sidebar onHide={() => setSidebarHidden(true)} />}
       {sidebarHidden && (
         <button
           type="button"
           onClick={() => setSidebarHidden(false)}
-          className="fixed left-4 top-4 z-40 inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-primary/15 bg-white/95 text-primary shadow-lg shadow-slate-900/10 backdrop-blur transition hover:-translate-y-0.5 hover:border-primary/30 hover:bg-accent"
+          className="fixed left-4 top-4 z-40 inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-primary/15 bg-white/95 text-primary shadow-lg shadow-stone-900/10 backdrop-blur transition hover:-translate-y-0.5 hover:border-[#f48d16]/25 hover:bg-[#fff4e1]"
           aria-label="Show sidebar"
           title="Show sidebar"
         >
@@ -33,7 +33,7 @@ export default function WorkspaceShell({ children, mainClassName = "" }) {
       )}
       <div className="relative min-w-0 flex-1">
         <div className="pointer-events-none fixed inset-0 z-0" aria-hidden>
-          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.92),rgba(248,250,252,0.98))]" />
+          <div className="absolute inset-0 bg-white" />
           <div className="absolute inset-0 bg-dot-grid opacity-35" />
         </div>
         <main className={`relative z-10 min-w-0 ${mainClassName}`.trim()}>{children}</main>

@@ -39,6 +39,11 @@ def _evidence_payload(chunks: List[Dict]) -> List[Dict]:
             "data_type": chunk["data_type"],
             "section_type": chunk["section_type"],
             "text": chunk["text"],
+            "service": chunk.get("service") or chunk.get("metadata", {}).get("service"),
+            "service_confidence": chunk.get("service_confidence") or chunk.get("metadata", {}).get("service_confidence", 0.0),
+            "source_file": chunk.get("metadata", {}).get("source_file"),
+            "source_updated_at": chunk.get("source_updated_at") or chunk.get("metadata", {}).get("source_updated_at"),
+            "source_size_bytes": chunk.get("source_size_bytes") or chunk.get("metadata", {}).get("source_size_bytes"),
         }
         for chunk in chunks
     ]

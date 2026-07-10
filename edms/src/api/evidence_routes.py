@@ -10,6 +10,7 @@ from src.auth.dependencies import get_current_user
 from src.chunker import create_chunks
 from src.data_types import DATA_TYPE_ALIASES, canonicalize_data_type
 from src.parser import parse_org_folder
+from src.services.workspace_context import infer_service_context
 from src.storage import exists, iter_files, read_bytes
 from src.tenancy import get_org_data_path
 from src.traffic_control import enforce_rate_limit
@@ -96,11 +97,23 @@ def _list_image_items(
 
         full_path = os.path.join(get_org_data_path(org_slug), rel_path)
         stat = os.stat(full_path) if os.path.exists(full_path) else None
+        image_context = infer_service_context(
+            data_type="images",
+            title=os.path.splitext(fname)[0].replace("_", " ").replace("-", " ").strip(),
+            source_file=rel_path,
+            text="",
+            section_type="vision_summary",
+        )
         items.append({
             "doc_id": fname,
             "data_type": "images",
             "section_type": "vision_summary",
             "text": "",
+            "service": image_context["service"],
+            "service_confidence": image_context["service_confidence"],
+            "source_file": rel_path,
+            "source_updated_at": stat.st_mtime if stat else None,
+            "source_size_bytes": len(payload),
             "is_image": True,
             "image_path": f"/evidence/image/{fname}",
             "updated_at": stat.st_mtime if stat else None,
@@ -170,6 +183,10 @@ def list_evidence(
             "data_type": chunk_type,
             "section_type": chunk.get("section_type"),
             "text": chunk.get("text"),
+            "service": chunk.get("service") or chunk.get("metadata", {}).get("service"),
+            "service_confidence": chunk.get("service_confidence") or chunk.get("metadata", {}).get("service_confidence", 0.0),
+            "source_file": chunk.get("metadata", {}).get("source_file"),
+            "source_updated_at": chunk.get("source_updated_at") or chunk.get("metadata", {}).get("source_updated_at"),
             "updated_at": source_meta["updated_at"],
             "size_bytes": source_meta["size_bytes"],
         }

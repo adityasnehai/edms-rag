@@ -348,7 +348,7 @@ export default function AdminDataManager() {
     <WorkspaceShell mainClassName="overflow-x-hidden">
       <div className="container max-w-6xl space-y-6 py-8 lg:py-10">
         <div className="animate-fade-up overflow-hidden rounded-2xl border border-border bg-white shadow-sm">
-          <div className="h-1 w-full bg-gradient-primary" />
+          <div className="h-1 w-full bg-[#f48d16]/24" />
           <div className="grid gap-5 p-5 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center lg:p-6">
             <div>
               <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-primary">
@@ -389,7 +389,7 @@ export default function AdminDataManager() {
                   onClick={() => setDataType(type.value)}
                   className={`rounded-full border px-3 py-2 text-xs font-semibold transition ${
                     dataType === type.value
-                      ? "border-primary bg-primary text-white shadow-sm shadow-primary/20"
+                      ? "border-[#f48d16]/28 bg-[#fff4e1] text-[#251f19] shadow-sm"
                       : "border-border bg-white text-muted-foreground hover:border-primary/20 hover:text-primary"
                   }`}
                 >
@@ -445,7 +445,7 @@ export default function AdminDataManager() {
               </div>
             )}
             {jobStatus && (
-              <div className="flex items-center gap-3 rounded-xl border border-primary/10 bg-accent px-4 py-3">
+              <div className="flex items-center gap-3 rounded-xl border border-[#f48d16]/18 bg-[#fff4e1] px-4 py-3">
                 <span className={`h-2 w-2 rounded-full ${jobStatus.status === "completed" ? "bg-emerald-500" : jobStatus.status === "failed" ? "bg-destructive" : "animate-pulse bg-amber-400"}`} />
                 <p className="text-sm text-foreground">
                   <span className="font-semibold">Index refresh:</span> {jobStatus.status}
@@ -458,7 +458,7 @@ export default function AdminDataManager() {
         <section className="animate-fade-up overflow-hidden rounded-2xl border border-border bg-white shadow-sm" style={{ animationDelay: "120ms" }}>
           <div className="border-b border-border px-5 py-4">
             <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-accent text-primary">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#fff4e1] text-primary">
                 <FolderIcon className="h-5 w-5" />
               </div>
               <div>
@@ -497,7 +497,7 @@ export default function AdminDataManager() {
                       onClick={() => openPreview(item)}
                       className="flex min-w-0 items-start gap-3 rounded-xl text-left outline-none transition focus:ring-4 focus:ring-primary/10"
                     >
-                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-accent text-primary">
+                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#fff4e1] text-primary">
                         <Icon className="h-5 w-5" />
                       </div>
                       <div className="min-w-0">
@@ -511,7 +511,7 @@ export default function AdminDataManager() {
                     </button>
 
                     <div>
-                      <span className="inline-flex rounded-full border border-primary/15 bg-accent px-2.5 py-1 text-xs font-semibold text-primary">
+                      <span className="inline-flex rounded-full border border-[#f48d16]/22 bg-[#fff4e1] px-2.5 py-1 text-xs font-semibold text-[#a76311]">
                         {TYPE_LABELS[item.data_type] || item.data_type}
                       </span>
                     </div>
@@ -526,7 +526,7 @@ export default function AdminDataManager() {
                         type="button"
                         disabled={actionLoading}
                         onClick={() => openReplacePicker(item)}
-                        className="inline-flex items-center gap-2 rounded-xl border border-border bg-white px-3 py-2 text-xs font-semibold text-foreground transition hover:border-primary/20 hover:bg-accent hover:text-primary disabled:opacity-60"
+                        className="inline-flex items-center gap-2 rounded-xl border border-border bg-white px-3 py-2 text-xs font-semibold text-foreground transition hover:border-[#f48d16]/22 hover:bg-[#fff4e1] hover:text-primary disabled:opacity-60"
                       >
                         <UploadIcon className="h-3.5 w-3.5" />
                         Replace
@@ -551,7 +551,7 @@ export default function AdminDataManager() {
 
       {preview && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/55 px-4 py-6 backdrop-blur-sm"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-stone-950/55 px-4 py-6 backdrop-blur-sm"
           role="dialog"
           aria-modal="true"
           onMouseDown={(event) => {
@@ -580,13 +580,13 @@ export default function AdminDataManager() {
                   setPreview(null);
                   setPreviewError("");
                 }}
-                className="rounded-full border border-border bg-white px-4 py-2 text-sm font-semibold text-foreground shadow-sm transition hover:border-primary/20 hover:bg-accent hover:text-primary"
+                className="rounded-full border border-border bg-white px-4 py-2 text-sm font-semibold text-foreground shadow-sm transition hover:border-[#f48d16]/22 hover:bg-[#fff4e1] hover:text-primary"
               >
                 Close
               </button>
             </div>
 
-            <div className="min-h-0 flex-1 overflow-auto bg-slate-50 p-5">
+            <div className="min-h-0 flex-1 overflow-auto bg-secondary/55 p-5">
               {previewLoading ? (
                 <div className="rounded-2xl border border-border bg-white p-5 text-sm text-muted-foreground">
                   Loading preview...
@@ -604,7 +604,7 @@ export default function AdminDataManager() {
                   />
                 </div>
               ) : (
-                <pre className="max-h-[64vh] overflow-auto whitespace-pre-wrap rounded-2xl border border-border bg-white p-5 text-sm leading-6 text-slate-800 shadow-sm">
+                <pre className="max-h-[64vh] overflow-auto whitespace-pre-wrap rounded-2xl border border-border bg-white p-5 text-sm leading-6 text-stone-800 shadow-sm">
                   <code>{preview.content}</code>
                 </pre>
               )}

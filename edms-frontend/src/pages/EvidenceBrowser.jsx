@@ -18,13 +18,13 @@ const FILTERS = [
 ];
 
 const FILTER_ACTIVE = {
-  all: "bg-gradient-primary text-white border-transparent shadow-sm",
-  adrs: "bg-violet-600 text-white border-transparent shadow-sm",
-  rfcs: "bg-sky-600 text-white border-transparent shadow-sm",
-  meeting_notes: "bg-emerald-600 text-white border-transparent shadow-sm",
-  postmortems: "bg-rose-600 text-white border-transparent shadow-sm",
-  tickets: "bg-amber-500 text-white border-transparent shadow-sm",
-  images: "bg-indigo-600 text-white border-transparent shadow-sm",
+  all: "border-[#f48d16]/22 bg-[#fff4e1] text-[#251f19] shadow-sm",
+  adrs: "bg-[#f48d16]/80 text-[#251f19] border-transparent shadow-sm",
+  rfcs: "border-[#f48d16]/22 bg-[#fff4e1] text-[#251f19] shadow-sm",
+  meeting_notes: "border-[#f48d16]/22 bg-[#fff4e1] text-[#251f19] shadow-sm",
+  postmortems: "border-[#f48d16]/22 bg-[#fff4e1] text-[#251f19] shadow-sm",
+  tickets: "border-[#f48d16]/22 bg-[#fff4e1] text-[#251f19] shadow-sm",
+  images: "border-[#f48d16]/22 bg-[#fff4e1] text-[#251f19] shadow-sm",
 };
 
 const SORT_OPTIONS = [
@@ -228,14 +228,14 @@ export default function EvidenceBrowser() {
                   className={`inline-flex items-center gap-1.5 rounded-xl border px-3.5 py-2 text-sm font-medium transition ${
                     active
                       ? FILTER_ACTIVE[option.value]
-                      : "border-border bg-secondary text-muted-foreground hover:border-primary/20 hover:bg-accent hover:text-accent-foreground"
+                      : "border-border bg-secondary text-muted-foreground hover:border-[#f48d16]/22 hover:bg-[#fff4e1] hover:text-primary"
                   }`}
                 >
                   {option.label}
                   {count !== null && (
                     <span
                       className={`rounded-full px-1.5 py-0.5 text-[10px] font-semibold tabular-nums ${
-                        active ? "bg-white/20 text-white" : "bg-background text-muted-foreground"
+                        active ? "bg-white/60 text-[#a76311]" : "bg-background text-muted-foreground"
                       }`}
                     >
                       {count}
@@ -250,18 +250,18 @@ export default function EvidenceBrowser() {
 
         {/* Loading */}
         {loading && (
-          <section className="rounded-[24px] border border-primary/10 bg-accent/40 p-5 backdrop-blur-sm">
+          <section className="rounded-[24px] border border-[#f48d16]/18 bg-[#fff4e1]/70 p-5 backdrop-blur-sm">
             <div className="flex items-center gap-3">
-              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-primary shadow-glow">
-                <SparkleIcon className="h-4 w-4 animate-pulse-soft text-white" />
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-[#f48d16]/18 bg-[#fff4e1]">
+                <SparkleIcon className="h-4 w-4 animate-pulse-soft text-[#a76311]" />
               </div>
               <div>
                 <p className="text-sm font-semibold text-foreground">Loading evidence…</p>
                 <p className="text-xs text-muted-foreground">Fetching records from the workspace index</p>
               </div>
             </div>
-            <div className="mt-4 h-0.5 overflow-hidden rounded-full bg-primary/10">
-              <div className="h-full w-full rounded-full bg-gradient-to-r from-primary via-violet-400 to-primary bg-[length:200%_100%] animate-line-flow" />
+            <div className="mt-4 h-0.5 overflow-hidden rounded-full bg-[#f4eee4]">
+              <div className="h-full w-full rounded-full bg-[linear-gradient(90deg,rgba(244,141,22,0),rgba(244,141,22,0.45),rgba(244,141,22,0))] bg-[length:200%_100%] animate-line-flow" />
             </div>
           </section>
         )}
@@ -276,7 +276,7 @@ export default function EvidenceBrowser() {
         {/* Empty state */}
         {!loading && !error && visibleItems.length === 0 && (
           <div className="rounded-[24px] border border-dashed border-border bg-white/60 px-6 py-14 text-center backdrop-blur-sm">
-            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-accent text-primary">
+            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-[#fff4e1] text-primary">
               <FolderIcon className="h-5 w-5" />
             </div>
             <h2 className="mt-4 text-lg font-semibold text-foreground">

@@ -1,0 +1,72 @@
+groups:
+  - name: edms-api-alerts
+    rules:
+      - alert: EdmsApiHighErrorRate
+        expr: sum(rate(edms_http_responses_total{status_class=~"5xx"}[5m])) / clamp_min(sum(rate(edms_http_responses_total[5m])), 1) > 0.05
+        for: 10m
+        labels:
+          severity: page
+          service: edms-api
+        annotations:
+          summary: "EDMS API 5xx error rate is above 5%"
+          description: "More than 5% of requests are returning 5xx responses over the last 5 minutes."
+
+      - alert: EdmsApiP95LatencyHigh
+        expr: histogram_quantile(0.95, sum(rate(edms_http_request_latency_seconds_bucket[5m])) by (le, route, method)) > 1.5
+        for: 10m
+        labels:
+          severity: page
+          service: edms-api
+        annotations:
+          summary: "EDMS API p95 latency is above 1.5s"
+          description: "One or more routes have a p95 latency above 1.5 seconds."
+
+      - alert: EdmsApiP96LatencyHigh
+        expr: histogram_quantile(0.96, sum(rate(edms_http_request_latency_seconds_bucket[5m])) by (le, route, method)) > 2
+        for: 10m
+        labels:
+          severity: ticket
+          service: edms-api
+        annotations:
+          summary: "EDMS API p96 latency is above 2s"
+          description: "One or more routes have a p96 latency above 2 seconds."
+
+      - alert: EdmsQueueBacklogHigh
+        expr: edms_queue_depth{queue_name="ingestion"} > 20
+        for: 15m
+        labels:
+          severity: ticket
+          service: edms-worker
+        annotations:
+          summary: "Ingestion queue backlog is high"
+          description: "The ingestion queue depth is above 20 for more than 15 minutes."
+
+      - alert: EdmsAuthFailuresSpike
+        expr: sum(rate(edms_auth_failures_total[5m])) > 2
+        for: 10m
+        labels:
+          severity: ticket
+          service: edms-api
+        annotations:
+          summary: "Auth failures are spiking"
+          description: "Authentication failures are elevated over the last 5 minutes."
+
+      - alert: EdmsRequestRejectionsSpike
+        expr: sum(rate(edms_request_rejections_total[5m])) > 2
+        for: 10m
+        labels:
+          severity: ticket
+          service: edms-api
+        annotations:
+          summary: "Request rejections are spiking"
+          description: "Rejected requests are elevated; check body size, invalid content length, and capacity limits."
+
+      - alert: EdmsApiDown
+        expr: up{job="edms-api"} == 0
+        for: 5m
+        labels:
+          severity: page
+          service: edms-api
+        annotations:
+          summary: "EDMS API is down"
+          description: "Prometheus can no longer scrape the EDMS API metrics endpoint."

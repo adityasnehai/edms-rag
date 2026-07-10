@@ -19,6 +19,7 @@ class BM25Index:
                         c.get("data_type", ""),
                         c.get("section_type", ""),
                         c.get("metadata", {}).get("title", ""),
+                        c.get("metadata", {}).get("service", ""),
                         c.get("text", ""),
                     ]
                 )

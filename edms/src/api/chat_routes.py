@@ -1,28 +1,28 @@
 from fastapi import APIRouter, Depends, HTTPException
-from pydantic import BaseModel, Field
-from typing import List, Dict
 from fastapi.responses import StreamingResponse
+from pydantic import BaseModel, Field
+from typing import Dict, List
 
+from src.api.index_manager import get_index_metadata
 from src.auth.dependencies import get_current_user
-from src.api.index_manager import (
-    get_index_metadata,
-    ensure_org_search_indexes,
-)
-from src.retriever import DEFAULT_TOP_K, retrieve_chunks, sanitize_top_k
+from src.generator import generate_answer, stream_answer
+from src.retriever import DEFAULT_TOP_K, sanitize_top_k
 from src.runtime_config import CHAT_HISTORY_MAX_MESSAGES, QUERY_MAX_CHARS
+from src.services.query_flow import (
+    annotate_file_fallback_index_version,
+    get_cached_workspace_insights,
+    fallback_file_retrieval,
+    resolve_query_chunks,
+)
 from src.telemetry import log_event, stage_timer
 from src.traffic_control import enforce_rate_limit, request_capacity_guard
-from src.generator import generate_answer, stream_answer
-from src.chunker import create_chunks
-from src.parser import parse_org_folder
-from src.retrieval.bm25_index import BM25Index
 
 router = APIRouter(prefix="/chat", tags=["chat"])
 
 
 class ChatRequest(BaseModel):
     message: str = Field(..., max_length=QUERY_MAX_CHARS)
-    history: List[Dict] = []
+    history: List[Dict] = Field(default_factory=list)
     top_k: int = DEFAULT_TOP_K
 
 
@@ -49,35 +49,6 @@ def _validated_history(history: List[Dict]) -> List[Dict]:
     return history
 
 
-def _fallback_file_retrieval(
-    *,
-    query: str,
-    org_slug: str,
-    org_id: int,
-    top_k: int,
-) -> List[Dict]:
-    docs = parse_org_folder(org_slug=org_slug, org_id=org_id)
-    chunks = create_chunks(docs)
-    if not chunks:
-        return []
-
-    bm25_index = BM25Index(chunks)
-    results = bm25_index.search(query, top_k=sanitize_top_k(top_k))
-    if results:
-        log_event(
-            30,
-            "chat_file_fallback_used",
-            event="chat",
-            org_slug=org_slug,
-            retrieved_chunks=len(results),
-        )
-    return results
-
-
-def _should_use_file_fallback_first(meta: Dict) -> bool:
-    return meta.get("status") != "ready"
-
-
 @router.post("")
 def chat(
     data: ChatRequest,
@@ -91,68 +62,53 @@ def chat(
     retrieved = None
     query_length = len(message)
     with request_capacity_guard():
-        if _should_use_file_fallback_first(meta):
-            with stage_timer("chat_file_retrieval", route="/chat", user_id=user["id"], org_id=user["org_id"], org_slug=org_slug):
-                retrieved = _fallback_file_retrieval(
+        try:
+            with stage_timer("chat_retrieval", route="/chat", user_id=user["id"], org_id=user["org_id"], org_slug=org_slug):
+                resolution = resolve_query_chunks(
                     query=message,
                     org_slug=org_slug,
                     org_id=user["org_id"],
                     top_k=data.top_k,
                 )
-
-        if retrieved is None:
-            try:
-                with stage_timer("chat_retrieval", route="/chat", user_id=user["id"], org_id=user["org_id"], org_slug=org_slug):
-                    store, bm25_index, meta = ensure_org_search_indexes(
-                        org_slug,
-                        user["org_id"],
-                    )
-                    retrieved = retrieve_chunks(
-                        message,
-                        store,
-                        bm25_index=bm25_index,
-                        top_k=sanitize_top_k(data.top_k),
-                        org_slug=org_slug,
-                        index_version=meta.get("index_version"),
-                    )
-            except Exception as exc:
-                log_event(
-                    40,
-                    "chat_retrieval_failed",
-                    route="/chat",
-                    user_id=user["id"],
-                    org_id=user["org_id"],
-                    org_slug=org_slug,
-                    query_length=query_length,
-                    index_status=meta.get("status"),
-                    pipeline_status=meta.get("pipeline_status"),
-                    error_type=exc.__class__.__name__,
+                retrieved = resolution.retrieved
+                meta = annotate_file_fallback_index_version(
+                    resolution.meta,
+                    org_slug,
+                    resolution.used_file_fallback,
                 )
-                retrieved = _fallback_file_retrieval(
-                    query=message,
-                    org_slug=org_slug,
-                    org_id=user["org_id"],
-                    top_k=data.top_k,
-                )
-                if retrieved:
-                    meta = get_index_metadata(org_slug)
-                else:
-                    latest_meta = get_index_metadata(org_slug)
-                    status = latest_meta.get("status", meta.get("status", "unavailable"))
-                    pipeline_status = latest_meta.get("pipeline_status", meta.get("pipeline_status", "idle"))
-                    return {
-                        "answer": (
-                            "I could not find indexed content for this workspace yet. "
-                            f"Current status: {status}. Pipeline: {pipeline_status}. Upload data or try again after indexing finishes."
-                        ),
-                        "evidence": [],
-                    }
-
-    if _should_use_file_fallback_first(meta) and retrieved:
-        meta = {
-            **meta,
-            "index_version": f"file-fallback:{org_slug}",
-        }
+        except Exception as exc:
+            meta = meta or {}
+            log_event(
+                40,
+                "chat_retrieval_failed",
+                route="/chat",
+                user_id=user["id"],
+                org_id=user["org_id"],
+                org_slug=org_slug,
+                query_length=query_length,
+                index_status=meta.get("status"),
+                pipeline_status=meta.get("pipeline_status"),
+                error_type=exc.__class__.__name__,
+            )
+            retrieved = fallback_file_retrieval(
+                query=message,
+                org_slug=org_slug,
+                org_id=user["org_id"],
+                top_k=data.top_k,
+            )
+            if retrieved:
+                meta = get_index_metadata(org_slug)
+            else:
+                latest_meta = get_index_metadata(org_slug)
+                status = latest_meta.get("status", meta.get("status", "unavailable"))
+                pipeline_status = latest_meta.get("pipeline_status", meta.get("pipeline_status", "idle"))
+                return {
+                    "answer": (
+                        "I could not find indexed content for this workspace yet. "
+                        f"Current status: {status}. Pipeline: {pipeline_status}. Upload data or try again after indexing finishes."
+                    ),
+                    "evidence": [],
+                }
 
     # 🛑 LOW-SIGNAL GUARDRAIL
     if not retrieved:
@@ -169,8 +125,21 @@ def chat(
             org_slug=org_slug,
             index_version=meta.get("index_version"),
         )
+    intelligence = get_cached_workspace_insights(
+        org_slug=org_slug,
+        org_id=user["org_id"],
+        index_version=meta.get("index_version"),
+        seed_chunks=retrieved,
+        query=message,
+    )
     log_event(20, "chat_completed", event="chat", route="/chat", user_id=user["id"], org_id=user["org_id"], org_slug=org_slug, query_length=query_length, retrieved_chunks=len(retrieved), top_k=sanitize_top_k(data.top_k), index_status=meta.get("status"), pipeline_status=meta.get("pipeline_status"))
-    return result
+    return {
+        **result,
+        "related_evidence": intelligence["related_evidence"],
+        "service_summary": intelligence["service_summary"],
+        "timeline": intelligence["timeline"],
+        "workspace_summary": intelligence["workspace_summary"],
+    }
 
 
 @router.post("/stream")
@@ -187,29 +156,19 @@ def chat_stream(
     query_length = len(message)
     try:
         with request_capacity_guard():
-            if _should_use_file_fallback_first(meta):
-                with stage_timer("chat_stream_file_retrieval", route="/chat/stream", user_id=user["id"], org_id=user["org_id"], org_slug=org_slug):
-                    retrieved = _fallback_file_retrieval(
-                        query=message,
-                        org_slug=org_slug,
-                        org_id=user["org_id"],
-                        top_k=data.top_k,
-                    )
-
-            if retrieved is None:
-                with stage_timer("chat_stream_retrieval", route="/chat/stream", user_id=user["id"], org_id=user["org_id"], org_slug=org_slug):
-                    store, bm25_index, meta = ensure_org_search_indexes(
-                        org_slug,
-                        user["org_id"],
-                    )
-                    retrieved = retrieve_chunks(
-                        message,
-                        store,
-                        bm25_index=bm25_index,
-                        top_k=sanitize_top_k(data.top_k),
-                        org_slug=org_slug,
-                        index_version=meta.get("index_version"),
-                    )
+            with stage_timer("chat_stream_retrieval", route="/chat/stream", user_id=user["id"], org_id=user["org_id"], org_slug=org_slug):
+                resolution = resolve_query_chunks(
+                    query=message,
+                    org_slug=org_slug,
+                    org_id=user["org_id"],
+                    top_k=data.top_k,
+                )
+                retrieved = resolution.retrieved
+                meta = annotate_file_fallback_index_version(
+                    resolution.meta,
+                    org_slug,
+                    resolution.used_file_fallback,
+                )
     except Exception as exc:
         log_event(
             40,
@@ -224,18 +183,14 @@ def chat_stream(
             error_type=exc.__class__.__name__,
         )
         meta = get_index_metadata(org_slug)
-        retrieved = _fallback_file_retrieval(
+        retrieved = fallback_file_retrieval(
             query=message,
             org_slug=org_slug,
             org_id=user["org_id"],
             top_k=data.top_k,
         )
-
-    if _should_use_file_fallback_first(meta) and retrieved:
-        meta = {
-            **meta,
-            "index_version": f"file-fallback:{org_slug}",
-        }
+        if retrieved:
+            meta = get_index_metadata(org_slug)
 
     def event_generator():
         if retrieved is None:

@@ -4,64 +4,64 @@
 
 @layer base {
   :root {
-    --background: 240 20% 99%;
-    --foreground: 240 10% 6%;
+    --background: 60 16% 96%;
+    --foreground: 30 19% 12%;
 
     --card: 0 0% 100%;
-    --card-foreground: 240 10% 6%;
+    --card-foreground: 30 19% 12%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 6%;
+    --popover-foreground: 30 19% 12%;
 
-    --primary: 243 75% 59%;
-    --primary-foreground: 0 0% 100%;
-    --primary-glow: 270 91% 65%;
+    --primary: 30 19% 12%;
+    --primary-foreground: 60 16% 96%;
+    --primary-glow: 32 91% 52%;
 
-    --secondary: 240 5% 96%;
-    --secondary-foreground: 240 10% 12%;
+    --secondary: 50 18% 92%;
+    --secondary-foreground: 30 19% 12%;
 
-    --muted: 240 5% 96%;
-    --muted-foreground: 240 4% 46%;
+    --muted: 50 18% 92%;
+    --muted-foreground: 30 7% 38%;
 
-    --accent: 243 100% 97%;
-    --accent-foreground: 243 75% 35%;
+    --accent: 32 91% 52%;
+    --accent-foreground: 30 19% 12%;
 
-    --success: 160 70% 42%;
-    --success-foreground: 0 0% 100%;
+    --success: 145 55% 36%;
+    --success-foreground: 60 16% 96%;
 
-    --warning: 14 90% 60%;
-    --warning-foreground: 0 0% 100%;
+    --warning: 32 91% 52%;
+    --warning-foreground: 30 19% 12%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 240 6% 90%;
-    --input: 240 6% 90%;
-    --ring: 243 75% 59%;
+    --border: 24 11% 88%;
+    --input: 24 11% 88%;
+    --ring: 28 6% 55%;
 
     --radius: 0.9rem;
 
-    --gradient-primary: linear-gradient(135deg, hsl(243 75% 59%), hsl(270 91% 65%));
-    --gradient-soft: linear-gradient(180deg, hsl(243 100% 99%), hsl(0 0% 100%));
+    --gradient-primary: linear-gradient(135deg, hsl(30 19% 12%), hsl(32 91% 52%));
+    --gradient-soft: linear-gradient(180deg, hsl(38 100% 94%), hsl(60 16% 96%));
     --gradient-mesh:
-      radial-gradient(at 20% 10%, hsl(243 100% 95% / 0.85) 0px, transparent 52%),
-      radial-gradient(at 80% 0%, hsl(270 100% 95% / 0.75) 0px, transparent 55%),
-      radial-gradient(at 52% 100%, hsl(200 100% 95% / 0.55) 0px, transparent 50%);
-    --gradient-text: linear-gradient(135deg, hsl(243 75% 45%), hsl(270 91% 55%));
+      radial-gradient(at 18% 10%, hsl(32 91% 52% / 0.12) 0px, transparent 48%),
+      radial-gradient(at 82% 0%, hsl(32 100% 82% / 0.28) 0px, transparent 52%),
+      radial-gradient(at 52% 100%, hsl(30 19% 12% / 0.06) 0px, transparent 48%);
+    --gradient-text: linear-gradient(135deg, hsl(30 19% 12%), hsl(32 91% 44%));
 
-    --shadow-glow: 0 20px 60px -20px hsl(243 75% 59% / 0.35);
+    --shadow-glow: 0 20px 60px -20px hsl(32 91% 52% / 0.28);
     --shadow-card:
-      0 1px 0 0 hsl(240 6% 92%),
-      0 8px 24px -8px hsl(240 10% 6% / 0.08);
+      0 1px 0 0 hsl(24 11% 88%),
+      0 8px 24px -8px hsl(30 19% 12% / 0.08);
 
-    --sidebar-background: 240 20% 99%;
-    --sidebar-foreground: 240 6% 30%;
-    --sidebar-primary: 243 75% 59%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 5% 95%;
-    --sidebar-accent-foreground: 240 10% 12%;
-    --sidebar-border: 240 6% 90%;
-    --sidebar-ring: 243 75% 59%;
+    --sidebar-background: 60 16% 96%;
+    --sidebar-foreground: 30 7% 38%;
+    --sidebar-primary: 30 19% 12%;
+    --sidebar-primary-foreground: 60 16% 96%;
+    --sidebar-accent: 50 18% 92%;
+    --sidebar-accent-foreground: 30 19% 12%;
+    --sidebar-border: 24 11% 88%;
+    --sidebar-ring: 28 6% 55%;
   }
 
   * {
@@ -273,10 +273,10 @@
   .animate-shimmer-text {
     background-image: linear-gradient(
       90deg,
-      hsl(243 75% 45%),
-      hsl(270 91% 55%),
-      hsl(200 80% 50%),
-      hsl(243 75% 45%)
+      hsl(30 19% 12%),
+      hsl(32 91% 44%),
+      hsl(32 100% 72%),
+      hsl(30 19% 12%)
     );
     background-size: 200% auto;
     -webkit-background-clip: text;
@@ -330,9 +330,106 @@
   .bg-dot-grid {
     background-image: radial-gradient(
       circle,
-      hsl(240 6% 65% / 0.28) 1px,
+      hsl(30 19% 12% / 0.14) 1px,
       transparent 1px
     );
     background-size: 26px 26px;
+  }
+
+  .memostack-page {
+    --background: 60 16% 96%;
+    --foreground: 30 19% 12%;
+    --card: 0 0% 100%;
+    --card-foreground: 30 19% 12%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 30 19% 12%;
+    --primary: 30 19% 12%;
+    --primary-foreground: 60 16% 96%;
+    --secondary: 50 18% 92%;
+    --secondary-foreground: 30 19% 12%;
+    --muted: 50 18% 92%;
+    --muted-foreground: 30 7% 38%;
+    --accent: 32 91% 52%;
+    --accent-foreground: 30 19% 12%;
+    --destructive: 350 96% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 24 11% 88%;
+    --input: 24 11% 88%;
+    --ring: 28 6% 55%;
+    --radius: 0.75rem;
+  }
+
+  .memostack-page .bg-dot-grid {
+    background-image: radial-gradient(rgba(37, 31, 25, 0.09) 1px, transparent 1px);
+    background-size: 22px 22px;
+  }
+
+  @keyframes orb-drift {
+    0% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(24px, -18px) scale(1.12); }
+    100% { transform: translate(-16px, 14px) scale(0.96); }
+  }
+
+  .animate-orb-drift { animation: orb-drift 14s ease-in-out infinite alternate; }
+
+  @keyframes caret-blink {
+    0%, 45% { opacity: 1; }
+    50%, 95% { opacity: 0; }
+  }
+
+  .animate-caret { animation: caret-blink 1.1s step-end infinite; }
+
+  @keyframes audience-marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(calc(-50% - 0.5rem)); }
+  }
+
+  .animate-audience-marquee { animation: audience-marquee 34s linear infinite; }
+
+  @keyframes sky-drift {
+    0% { transform: translate3d(0, 0, 0) scale(1); }
+    50% { transform: translate3d(28px, -10px, 0) scale(1.04); }
+    100% { transform: translate3d(-12px, 6px, 0) scale(0.98); }
+  }
+
+  .animate-sky-drift { animation: sky-drift 24s ease-in-out infinite alternate; }
+  .animate-sky-drift-reverse { animation: sky-drift 30s ease-in-out infinite alternate-reverse; }
+
+  @keyframes heading-glow {
+    0% { transform: translate3d(0, 0, 0) scale(0.96); opacity: 0.62; }
+    50% { transform: translate3d(10px, -6px, 0) scale(1.04); opacity: 0.78; }
+    100% { transform: translate3d(-8px, 4px, 0) scale(0.98); opacity: 0.66; }
+  }
+
+  .animate-heading-glow { animation: heading-glow 10s ease-in-out infinite alternate; }
+
+  @keyframes scan-drift {
+    from { background-position: 0 0; }
+    to { background-position: 0 18px; }
+  }
+
+  .bg-scanlines {
+    background-image: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.08) 0,
+      rgba(255, 255, 255, 0.08) 1px,
+      transparent 1px,
+      transparent 9px
+    );
+    background-size: 100% 10px;
+  }
+
+  .animate-scanlines { animation: scan-drift 14s linear infinite; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .animate-orb-drift,
+    .animate-caret,
+    .animate-audience-marquee,
+    .animate-sky-drift,
+    .animate-sky-drift-reverse,
+    .animate-heading-glow,
+    .animate-scanlines {
+      animation: none;
+    }
   }
 }

@@ -76,7 +76,7 @@ export default function AdminAccess() {
 
         {/* Header */}
         <div className="animate-fade-up overflow-hidden rounded-2xl border border-border bg-white shadow-sm">
-          <div className="h-1 w-full bg-gradient-primary" />
+          <div className="h-1 w-full bg-[#f48d16]/24" />
           <div className="flex flex-col gap-4 p-5 lg:flex-row lg:items-center lg:justify-between lg:p-6">
             <div>
               <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-primary">
@@ -105,7 +105,7 @@ export default function AdminAccess() {
           <div className="border-b border-border p-5 lg:p-6">
             <div className="flex flex-wrap items-center justify-between gap-4">
               <div>
-                <span className="inline-flex items-center rounded-full border border-primary/20 bg-accent px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-primary">
+                <span className="inline-flex items-center rounded-full border border-[#f48d16]/22 bg-[#fff4e1] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-[#a76311]">
                   Employee Invite Code
                 </span>
                 <h2 className="mt-2.5 text-lg font-semibold tracking-tight text-foreground">
@@ -118,7 +118,7 @@ export default function AdminAccess() {
                   type="button"
                   onClick={handleCopyCode}
                   disabled={!inviteCode}
-                  className="inline-flex items-center gap-2 rounded-xl border border-border bg-secondary px-4 py-2.5 text-sm font-medium text-foreground transition hover:border-primary/20 hover:bg-accent hover:text-accent-foreground disabled:opacity-50"
+                  className="inline-flex items-center gap-2 rounded-xl border border-border bg-secondary px-4 py-2.5 text-sm font-medium text-foreground transition hover:border-[#f48d16]/22 hover:bg-[#fff4e1] hover:text-primary disabled:opacity-50"
                 >
                   {copied ? <CheckIcon className="h-4 w-4 text-emerald-600" /> : <CopyIcon className="h-4 w-4" />}
                   {copied ? "Copied!" : "Copy Code"}
@@ -127,7 +127,7 @@ export default function AdminAccess() {
                   type="button"
                   onClick={handleRotateCode}
                   disabled={loading}
-                  className="inline-flex items-center gap-2 rounded-xl bg-gradient-primary px-4 py-2.5 text-sm font-semibold text-white shadow-glow transition hover:opacity-95 disabled:opacity-60"
+                  className="inline-flex items-center gap-2 rounded-xl border border-[#f48d16]/22 bg-[#fff4e1] px-4 py-2.5 text-sm font-semibold text-[#251f19] shadow-sm transition hover:border-[#f48d16]/35 hover:bg-[#ffeed2] disabled:opacity-60"
                 >
                   <RotateIcon className="h-4 w-4" />
                   {loading ? "Loading…" : "Rotate Code"}
@@ -138,13 +138,13 @@ export default function AdminAccess() {
 
           <div className="grid gap-4 p-5 md:grid-cols-[minmax(0,1fr)_220px] lg:p-6">
             {/* Invite code display */}
-            <div className="relative overflow-hidden rounded-2xl border border-primary/20 bg-accent p-6">
-              <div className="pointer-events-none absolute -right-8 -top-8 h-32 w-32 rounded-full bg-primary/5 blur-2xl" />
+            <div className="relative overflow-hidden rounded-2xl border border-[#f48d16]/18 bg-[#fff4e1]/80 p-6">
+              <div className="pointer-events-none absolute -right-8 -top-8 h-32 w-32 rounded-full bg-[#ffd7a7]/22 blur-2xl" />
               <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-muted-foreground">
                 Current Invite
               </p>
               {loading ? (
-                <div className="mt-4 h-10 w-48 animate-pulse rounded-xl bg-primary/10" />
+                <div className="mt-4 h-10 w-48 animate-pulse rounded-xl bg-[#f48d16]/10" />
               ) : (
                 <p className="mt-4 break-all font-mono text-3xl font-bold tracking-[0.35em] text-primary">
                   {inviteCode || "— — —"}
@@ -157,8 +157,8 @@ export default function AdminAccess() {
 
             {/* Info card */}
             <div className="flex flex-col gap-3 rounded-2xl border border-border bg-secondary/60 p-5">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-primary text-white shadow-glow">
-                <ShieldIcon className="h-5 w-5" />
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-[#f48d16]/18 bg-[#fff4e1]">
+                <ShieldIcon className="h-5 w-5 text-[#a76311]" />
               </div>
               <div>
                 <p className="text-sm font-semibold text-foreground">Workspace isolation</p>

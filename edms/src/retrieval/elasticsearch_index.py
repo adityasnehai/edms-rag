@@ -51,6 +51,10 @@ def _chunk_document(chunk: Dict, org_slug: str) -> Dict:
         "section_type": str(chunk.get("section_type") or ""),
         "title": str(metadata.get("title") or ""),
         "source_file": str(metadata.get("source_file") or ""),
+        "service": str(chunk.get("service") or metadata.get("service") or ""),
+        "service_confidence": float(chunk.get("service_confidence") or metadata.get("service_confidence") or 0.0),
+        "source_updated_at": float(chunk.get("source_updated_at") or metadata.get("source_updated_at") or 0.0),
+        "source_size_bytes": int(chunk.get("source_size_bytes") or metadata.get("source_size_bytes") or 0),
         "text": str(chunk.get("text") or ""),
         "org_slug": str(org_slug or ""),
     }
@@ -116,6 +120,10 @@ class ElasticsearchBM25Index:
                     "section_type": {"type": "keyword"},
                     "title": {"type": "text"},
                     "source_file": {"type": "keyword"},
+                    "service": {"type": "keyword"},
+                    "service_confidence": {"type": "float"},
+                    "source_updated_at": {"type": "double"},
+                    "source_size_bytes": {"type": "long"},
                     "text": {"type": "text"},
                     "org_slug": {"type": "keyword"},
                 }
@@ -174,14 +182,15 @@ class ElasticsearchBM25Index:
                 "multi_match": {
                     "query": query,
                     "fields": [
-                        "text^3",
-                        "title^2",
-                        "doc_id^4",
-                        "data_type^2",
-                        "section_type^2",
-                    ],
-                    "type": "best_fields",
-                    "operator": "or",
+                    "text^3",
+                    "title^2",
+                    "doc_id^4",
+                    "data_type^2",
+                    "section_type^2",
+                    "service^2",
+                ],
+                "type": "best_fields",
+                "operator": "or",
                 }
             },
         }
@@ -220,9 +229,17 @@ class ElasticsearchBM25Index:
                     "data_type": source.get("data_type"),
                     "section_type": source.get("section_type"),
                     "text": source.get("text", ""),
+                    "service": source.get("service"),
+                    "service_confidence": source.get("service_confidence", 0.0),
+                    "source_updated_at": source.get("source_updated_at"),
+                    "source_size_bytes": source.get("source_size_bytes"),
                     "metadata": {
                         "title": source.get("title", ""),
                         "source_file": source.get("source_file", ""),
+                        "service": source.get("service", ""),
+                        "service_confidence": source.get("service_confidence", 0.0),
+                        "source_updated_at": source.get("source_updated_at"),
+                        "source_size_bytes": source.get("source_size_bytes"),
                     },
                 }
 

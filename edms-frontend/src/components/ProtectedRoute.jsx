@@ -5,7 +5,7 @@ export default function ProtectedRoute({ children, requireAdmin }) {
   const payload = getAuthPayload();
 
   if (!payload) {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/login" replace />;
   }
 
   if (requireAdmin && !isAdmin()) {

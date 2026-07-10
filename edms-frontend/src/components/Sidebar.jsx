@@ -2,6 +2,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import useRecentSearches from "../hooks/useRecentSearches";
 import { logoutSession } from "../api/auth";
 import { clearSession, getAuthPayload, getRefreshToken } from "../utils/auth";
+import { Logo } from "../memostack/components/logo";
 import {
   BuildingIcon,
   ChatIcon,
@@ -20,8 +21,6 @@ export default function Sidebar({ onHide }) {
 
   const payload = getAuthPayload();
   const adminUser = payload?.role === "admin";
-  const displayName = payload?.sub?.split("@")[0] || "user";
-  const initials = displayName.slice(0, 2).toUpperCase();
 
   async function logout() {
     const refreshToken = getRefreshToken();
@@ -54,10 +53,10 @@ export default function Sidebar({ onHide }) {
 
   function navButtonClass(active) {
     return [
-      "group flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-150",
+      "group flex w-full items-center gap-3 rounded-xl border border-transparent px-3 py-2.5 text-sm font-medium transition-all duration-150",
       active
-        ? "bg-gradient-primary text-white shadow-sm shadow-primary/20"
-        : "text-sidebar-foreground hover:bg-white hover:text-foreground hover:shadow-sm",
+        ? "border border-[#f48d16]/22 bg-[#fff4e1] text-[#251f19] shadow-sm"
+        : "text-sidebar-foreground hover:bg-[#fff4e1] hover:text-foreground hover:shadow-sm",
     ].join(" ");
   }
 
@@ -70,14 +69,9 @@ export default function Sidebar({ onHide }) {
           onClick={() => navigate("/dashboard")}
           className="flex items-center gap-3 text-left"
         >
-          <img
-            src="/edms-favicon.png"
-            alt="EDMS"
-            className="h-9 w-9 rounded-xl border border-border/60 object-cover shadow-glow"
-            loading="eager"
-          />
+          <Logo className="size-9" />
           <div>
-            <p className="text-sm font-bold text-foreground">EDMS</p>
+            <p className="font-heading text-base font-semibold tracking-normal text-foreground">MemoStack</p>
           </div>
         </button>
 
@@ -85,7 +79,7 @@ export default function Sidebar({ onHide }) {
           <span
             className={`rounded-full px-2.5 py-1 text-[10px] font-semibold uppercase ${
               adminUser
-                ? "bg-primary/10 text-primary"
+                ? "border border-[#f48d16]/22 bg-[#fff4e1] text-[#a76311]"
                 : "bg-secondary text-muted-foreground"
             }`}
           >
@@ -94,7 +88,7 @@ export default function Sidebar({ onHide }) {
           <button
             type="button"
             onClick={onHide}
-            className="inline-flex h-8 w-8 items-center justify-center rounded-xl border border-border bg-white text-muted-foreground transition hover:border-primary/20 hover:bg-accent hover:text-primary"
+            className="inline-flex h-8 w-8 items-center justify-center rounded-xl border border-border bg-white text-muted-foreground transition hover:border-[#f48d16]/25 hover:bg-[#fff4e1] hover:text-primary"
             aria-label="Hide sidebar"
             title="Hide sidebar"
           >
@@ -105,16 +99,13 @@ export default function Sidebar({ onHide }) {
 
       {/* Workspace / User card */}
       <div className="px-4 pt-4">
-        <div className="flex items-center gap-3 rounded-2xl border border-primary/10 bg-accent/45 p-3">
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-primary text-[11px] font-bold text-white shadow-sm">
-            {initials}
-          </div>
+        <div className="flex items-center gap-3 rounded-2xl border border-[#f48d16]/20 bg-[#fff4e1]/75 p-3">
           <div className="min-w-0">
             <p className="truncate text-sm font-semibold text-foreground">
               {payload?.org_name || "Enterprise Memory"}
             </p>
             <p className="truncate text-xs text-muted-foreground">
-              {payload?.sub || "workspace@edms.ai"}
+              {payload?.sub || "workspace@memostack.ai"}
             </p>
           </div>
         </div>
@@ -134,7 +125,7 @@ export default function Sidebar({ onHide }) {
               className={navButtonClass(isActive(item.path))}
             >
               <item.Icon
-                className={`h-4 w-4 shrink-0 ${isActive(item.path) ? "text-white" : "text-muted-foreground group-hover:text-foreground"}`}
+                className={`h-4 w-4 shrink-0 ${isActive(item.path) ? "text-[#a76311]" : "text-muted-foreground group-hover:text-foreground"}`}
               />
               <span className="whitespace-nowrap">{item.label}</span>
             </button>
@@ -157,7 +148,7 @@ export default function Sidebar({ onHide }) {
                 className={navButtonClass(isActive(item.path))}
               >
                 <item.Icon
-                  className={`h-4 w-4 shrink-0 ${isActive(item.path) ? "text-white" : "text-muted-foreground group-hover:text-foreground"}`}
+                  className={`h-4 w-4 shrink-0 ${isActive(item.path) ? "text-[#a76311]" : "text-muted-foreground group-hover:text-foreground"}`}
                 />
                 <span className="whitespace-nowrap">{item.label}</span>
               </button>

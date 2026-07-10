@@ -1,0 +1,25 @@
+id,query_type,no_answer,groundedness,answer_quality,citation_quality,abstention_quality,overall,reason
+ADR-001:status,,False,2,1,2,1,1,Evidence does not mention the status.
+ADR-001:decision,,False,5,5,5,5,5,Evidence directly matches the gold answer.
+ADR-001:consequences,,False,2,1,2,1,1,Evidence does not mention the consequence.
+ADR-001:section_summary,,False,5,5,5,5,5,Evidence directly matches the gold answer.
+ADR-002:status,,False,2,1,2,1,1,Evidence does not mention the status.
+ADR-002:decision,,False,5,5,5,5,5,Evidence directly matches the gold answer.
+ADR-002:consequences,,False,2,1,2,1,1,Evidence does not mention the consequence.
+ADR-002:section_summary,,False,5,5,5,5,5,Evidence directly matches the gold answer.
+ADR-003:status,,False,2,1,2,1,1,Evidence does not support the status answer.
+ADR-003:decision,,False,5,5,5,0,5,Evidence directly matches the decision answer.
+ADR-003:consequences,,False,2,1,2,1,1,Evidence does not support the consequence answer.
+ADR-003:section_summary,,False,5,5,5,0,5,Evidence directly matches the consequences answer.
+ADR-004:status,,False,2,1,2,1,1,Evidence does not support the status answer.
+ADR-004:decision,,False,5,5,5,0,5,Evidence directly matches the decision answer.
+ADR-004:consequences,,False,2,1,2,1,1,Evidence does not support the consequence answer.
+ADR-004:section_summary,,False,5,5,5,0,5,Evidence directly matches the consequences answer.
+ADR-005:status,,False,2,1,2,0,1,Evidence does not mention the status.
+ADR-005:decision,,False,5,5,5,0,5,Evidence directly matches the gold answer.
+ADR-005:consequences,,False,2,1,2,0,1,Evidence does not mention the consequence.
+ADR-005:section_summary,,False,5,5,5,0,5,Evidence directly matches the gold answer.
+ADR-006:status,,False,2,1,2,0,1,Evidence does not mention the status.
+ADR-006:decision,,False,5,5,5,0,5,Evidence directly matches the gold answer.
+ADR-006:consequences,,False,2,1,2,0,1,Evidence does not mention the consequence.
+ADR-006:section_summary,,False,5,5,5,0,5,Evidence directly matches the gold answer.

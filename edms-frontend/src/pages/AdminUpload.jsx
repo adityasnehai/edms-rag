@@ -339,7 +339,7 @@ export default function AdminUpload() {
     <WorkspaceShell mainClassName="overflow-x-hidden">
       <div className="container max-w-5xl space-y-6 py-8 lg:py-10">
         <div className="animate-fade-up overflow-hidden rounded-2xl border border-border bg-white shadow-sm">
-          <div className="h-1 w-full bg-gradient-primary" />
+          <div className="h-1 w-full bg-[#f48d16]/24" />
           <div className="p-5 lg:p-6">
             <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-primary">
               Upload Data
@@ -365,8 +365,8 @@ export default function AdminUpload() {
                     key={type.value}
                     className={`rounded-xl border p-4 cursor-pointer transition ${
                       docType === type.value
-                        ? "border-primary/25 bg-accent ring-1 ring-primary/20 text-accent-foreground"
-                        : "border-border bg-secondary/50 text-foreground hover:border-primary/15 hover:bg-accent/50"
+                        ? "border-[#f48d16]/32 bg-[#fff4e1] ring-1 ring-[#f48d16]/18 text-foreground"
+                        : "border-border bg-secondary/50 text-foreground hover:border-[#f48d16]/22 hover:bg-[#fff4e1]/70"
                     }`}
                   >
                     <input
@@ -397,15 +397,15 @@ export default function AdminUpload() {
                           }}
                           className={`h-full w-full rounded-full border text-xs font-bold shadow-sm transition ${
                             activeGuideType === type.value
-                              ? "border-primary bg-primary text-white"
-                              : "border-primary/15 bg-white text-primary hover:bg-primary hover:text-white"
+                              ? "border-[#f48d16]/28 bg-[#fff4e1] text-[#251f19]"
+                              : "border-[#f48d16]/18 bg-white text-primary hover:border-[#f48d16]/28 hover:bg-[#fff4e1]"
                           }`}
                         >
                           i
                         </button>
                         {activeGuideType === type.value && (
                           <span
-                            className="absolute right-0 top-9 z-30 block w-[min(24rem,calc(100vw-3rem))] rounded-2xl border border-primary/15 bg-white p-4 text-left text-slate-700 shadow-xl"
+                            className="absolute right-0 top-9 z-30 block w-[min(24rem,calc(100vw-3rem))] rounded-2xl border border-primary/15 bg-white p-4 text-left text-stone-700 shadow-xl"
                             onClick={(event) => {
                               event.preventDefault();
                               event.stopPropagation();
@@ -440,13 +440,13 @@ export default function AdminUpload() {
                               {type.sections.map((section) => (
                                 <span
                                   key={section}
-                                  className="rounded-full border border-primary/15 bg-accent px-2.5 py-1 text-[11px] font-medium text-primary"
+                                  className="rounded-full border border-[#f48d16]/22 bg-[#fff4e1] px-2.5 py-1 text-[11px] font-medium text-[#a76311]"
                                 >
                                   {section}
                                 </span>
                               ))}
                             </span>
-                            <pre className="mt-3 max-h-60 overflow-y-auto overflow-x-hidden whitespace-pre-wrap rounded-xl border border-border bg-slate-50 p-3 text-xs leading-5 text-slate-700">
+                            <pre className="mt-3 max-h-60 overflow-y-auto overflow-x-hidden whitespace-pre-wrap rounded-xl border border-border bg-secondary/55 p-3 text-xs leading-5 text-stone-700">
                               <code>{type.sample}</code>
                             </pre>
                           </span>
@@ -547,7 +547,7 @@ export default function AdminUpload() {
             <button
               type="submit"
               disabled={loading || !docType}
-              className="inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-primary px-5 py-3 text-sm font-semibold text-primary-foreground shadow-glow transition hover:opacity-95 disabled:opacity-60"
+              className="inline-flex items-center justify-center gap-2 rounded-2xl border border-[#f48d16]/22 bg-[#fff4e1] px-5 py-3 text-sm font-semibold text-[#251f19] shadow-sm transition hover:border-[#f48d16]/35 hover:bg-[#ffeed2] disabled:opacity-60"
             >
               {loading ? (
                 "Uploading..."
@@ -573,7 +573,7 @@ export default function AdminUpload() {
                 </div>
               )}
               {jobStatus && (
-                <div className="flex items-center gap-3 rounded-xl border border-primary/10 bg-accent px-4 py-3">
+                <div className="flex items-center gap-3 rounded-xl border border-[#f48d16]/18 bg-[#fff4e1] px-4 py-3">
                   <span className={`h-2 w-2 rounded-full ${jobStatus.status === "completed" ? "bg-emerald-500" : jobStatus.status === "failed" ? "bg-destructive" : "bg-amber-400 animate-pulse"}`} />
                   <p className="text-sm text-foreground">
                     <span className="font-semibold">Processing:</span> {jobStatus.status}

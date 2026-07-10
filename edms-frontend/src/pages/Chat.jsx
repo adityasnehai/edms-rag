@@ -321,7 +321,7 @@ export default function Chat() {
             type="button"
             onClick={startNewChat}
             disabled={isStreaming}
-            className="inline-flex w-fit items-center gap-2 rounded-xl bg-gradient-primary px-4 py-2.5 text-sm font-semibold text-white shadow-glow transition hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-50"
+            className="inline-flex w-fit items-center gap-2 rounded-xl border border-[#f48d16]/22 bg-[#fff4e1] px-4 py-2.5 text-sm font-semibold text-[#251f19] shadow-sm transition hover:border-[#f48d16]/35 hover:bg-[#ffeed2] disabled:cursor-not-allowed disabled:opacity-50"
           >
             <PlusIcon className="h-4 w-4" />
             New Chat
@@ -335,7 +335,7 @@ export default function Chat() {
             <div className="flex flex-col gap-3 border-b border-border bg-white/70 px-4 py-4 sm:flex-row sm:items-center sm:justify-between lg:px-5">
               <div className="min-w-0">
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className="inline-flex items-center rounded-full bg-gradient-primary px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-white">
+                  <span className="inline-flex items-center rounded-full border border-[#f48d16]/22 bg-[#fff4e1] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#a76311]">
                     Active Chat
                   </span>
                   {activeThread?.updatedAt && (
@@ -382,7 +382,7 @@ export default function Chat() {
                         type="button"
                         onClick={startNewChat}
                         disabled={isStreaming}
-                        className="inline-flex items-center gap-1.5 rounded-lg bg-gradient-primary px-2.5 py-1.5 text-xs font-semibold text-white disabled:opacity-50"
+                        className="inline-flex items-center gap-1.5 rounded-lg border border-[#f48d16]/22 bg-[#fff4e1] px-2.5 py-1.5 text-xs font-semibold text-[#251f19] disabled:opacity-50"
                       >
                         <PlusIcon className="h-3.5 w-3.5" />
                         New
@@ -391,7 +391,7 @@ export default function Chat() {
 
                     <div className="max-h-80 overflow-y-auto p-2">
                       {activeThreadId === null && (
-                        <div className="mb-2 rounded-xl border border-primary/20 bg-accent px-3 py-2 text-xs text-accent-foreground">
+                        <div className="mb-2 rounded-xl border border-[#f48d16]/22 bg-[#fff4e1] px-3 py-2 text-xs text-primary">
                           New chat ready — send a message to save it.
                         </div>
                       )}
@@ -408,7 +408,7 @@ export default function Chat() {
                                 key={thread.id}
                                 className={`flex items-start gap-2 rounded-xl border p-3 transition ${
                                   active
-                                    ? "border-primary/20 bg-accent"
+                                    ? "border-[#f48d16]/22 bg-[#fff4e1]"
                                     : "border-transparent hover:border-border hover:bg-secondary/60"
                                 }`}
                               >
@@ -473,7 +473,7 @@ export default function Chat() {
                         onClick={() => sendMessage(suggestion)}
                         className="flex items-start gap-3 rounded-[20px] border border-border bg-white/80 p-4 text-left shadow-sm backdrop-blur-sm transition hover:-translate-y-0.5 hover:border-primary/20 hover:shadow-md"
                       >
-                        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-accent text-primary">
+                        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-[#fff4e1] text-primary">
                           {index % 2 === 0 ? <ChatIcon className="h-4 w-4" /> : <SearchIcon className="h-4 w-4" />}
                         </div>
                         <p className="text-sm font-medium leading-6 text-foreground">{suggestion}</p>
@@ -501,7 +501,7 @@ export default function Chat() {
                   {isStreaming && (
                     <div className="flex items-center gap-2 text-xs text-muted-foreground">
                       <SparkleIcon className="h-3.5 w-3.5 animate-pulse-soft text-primary" />
-                      EDMS is analyzing evidence…
+                      MemoStack is analyzing evidence…
                     </div>
                   )}
 

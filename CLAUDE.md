@@ -35,7 +35,7 @@ docker-compose.yml
 1. Embed query via OpenAI (`text-embedding-3-small`)
 2. Build candidate pool: **semantic** (vector search) + **lexical** (BM25/ES) + **exact doc-id match boost**
 3. Fuse with **RRF** (Reciprocal Rank Fusion, k=60)
-4. Rerank: **Cohere** (`rerank-v4.0-fast`) → fallback to heuristic (0.3·semantic + 0.22·lexical + 0.18·overlap + 0.18·metadata + 0.12·fusion)
+4. Rerank: **local sentence-transformers cross-encoder** (`cross-encoder/ms-marco-MiniLM-L-6-v2`) → fallback to heuristic (0.3·semantic + 0.22·lexical + 0.18·overlap + 0.18·metadata + 0.12·fusion)
 5. Exact doc-id matches prepended regardless of score
 6. Results cached: query embeddings (24h disk), retrieval refs (10min memory)
 
@@ -87,7 +87,7 @@ docker-compose up --build
 ```
 OPENAI_API_KEY          # embeddings + generation
 PINECONE_API_KEY        # vector store
-COHERE_API_KEY          # optional reranker (falls back to heuristic)
+RERANKER_MODEL          # optional local reranker (falls back to heuristic)
 APP_ENV                 # "production" enables strict checks
 ADMIN_EMAIL / ADMIN_PASSWORD / ADMIN_ORG_NAME  # seeds first user on startup
 VECTOR_BACKEND          # pinecone | faiss
@@ -134,7 +134,9 @@ CORS_ALLOW_ORIGINS      # required in prod (comma-separated)
 ---
 
 ## Observability
-- **Prometheus** metrics at `/metrics` (retrieval totals, LLM requests, queue depth, HTTP latency)
+- **Prometheus** metrics at `/metrics` (retrieval totals, LLM requests, queue depth, HTTP latency, auth failures, request rejections)
+- **Grafana** dashboards provisioned from `edms/deploy/monitoring/grafana/provisioning/dashboards`
+- **Alertmanager** routes Prometheus alerts from `edms/deploy/monitoring/prometheus/rules.yml`
 - **OpenTelemetry** traces (OTLP export)
 - **Sentry/Glitchtip** error tracking
 - Structured JSON logging via `telemetry.py:log_event()`

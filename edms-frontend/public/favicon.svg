@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="MemoStack">
+  <rect width="64" height="64" rx="14" fill="#f7f7f4"/>
+  <path d="M32 12 50 21 32 30 14 21 32 12Z" fill="none" stroke="#251f19" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M50 31 32 40 14 31" fill="none" stroke="#251f19" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M50 41 32 50 14 41" fill="none" stroke="#251f19" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

@@ -1,7 +1,10 @@
+import os
 from typing import Dict, List
 
 from src.data_types import canonicalize_data_type
 from src.storage import iter_files
+from src.tenancy import get_org_data_path
+from src.services.workspace_context import infer_service_context
 
 
 def parse_org_folder(
@@ -24,6 +27,16 @@ def parse_org_folder(
         else:
             section_type = "content"
             doc_id = fname.replace(".md", "")
+
+        full_path = os.path.join(get_org_data_path(org_slug), rel)
+        stat = os.stat(full_path) if os.path.exists(full_path) else None
+        service_context = infer_service_context(
+            data_type=data_type,
+            title=fname.rsplit(".", 1)[0].replace("_", " ").replace("-", " ").strip(),
+            source_file=rel,
+            text=payload.decode("utf-8", errors="ignore"),
+            section_type=section_type,
+        )
         documents.append(
             {
                 "org_id": org_id,
@@ -34,6 +47,9 @@ def parse_org_folder(
                 "text": payload.decode("utf-8", errors="ignore"),
                 "title": fname.rsplit(".", 1)[0].replace("_", " ").replace("-", " ").strip(),
                 "source_file": rel,
+                "source_updated_at": stat.st_mtime if stat else None,
+                "source_size_bytes": stat.st_size if stat else len(payload),
+                **service_context,
             }
         )
 
