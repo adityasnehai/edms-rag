@@ -17,7 +17,7 @@ EDMS is built for teams that need the decision trail, not another generic chatbo
 
 <br/>
 
-![EDMS workflow demo](recording/edms-workflow-github.gif)
+![EDMS workflow demo](docs/demo.gif)
 
 </div>
 
@@ -310,7 +310,7 @@ EDMS includes a synthetic evaluation suite in [`edms/eval/`](edms/eval/) to chec
 
 ## Workflow Preview
 
-![EDMS workflow preview](recording/edms-workflow-github.gif)
+![EDMS workflow preview](docs/demo.gif)
 
 ---
 
