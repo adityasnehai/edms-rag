@@ -1,4 +1,4 @@
-const FALLBACK_API_BASE = "https://edms-api-e2bc.onrender.com";
+const REMOTE_API_BASE = "https://edms-api-e2bc.onrender.com";
 const FETCH_ATTEMPT_TIMEOUT_MS = 60000;
 const FETCH_TOTAL_TIMEOUT_MS = 120000;
 const FETCH_RETRY_DELAY_MS = 250;
@@ -6,20 +6,25 @@ const FETCH_MAX_CYCLES = 3;
 const LAST_WORKING_API_BASE_KEY = "edms:last_api_base";
 const API_UNAVAILABLE_ERROR = "Cannot reach the MemoStack API. Start the backend server and try again.";
 
-function normalizeApiBase(base) {
-  return (base || "").replace(/\/+$/, "");
-}
-
-export const API_BASE = normalizeApiBase(
-  import.meta.env.VITE_API_BASE_URL ||
-    import.meta.env.VITE_API_BASE ||
-    FALLBACK_API_BASE,
-);
 function isLocalBrowser() {
   if (typeof window === "undefined") return false;
   const host = window.location.hostname;
   return host === "localhost" || host === "127.0.0.1" || host === "0.0.0.0" || host === "::1";
 }
+
+function normalizeApiBase(base) {
+  return (base || "").replace(/\/+$/, "");
+}
+
+function getDefaultApiBase() {
+  return isLocalBrowser() ? "http://127.0.0.1:8000" : "/api";
+}
+
+export const API_BASE = normalizeApiBase(
+  import.meta.env.VITE_API_BASE_URL ||
+    import.meta.env.VITE_API_BASE ||
+    getDefaultApiBase(),
+);
 
 function getApiBaseCandidates() {
   const localCandidates = [
@@ -33,7 +38,7 @@ function getApiBaseCandidates() {
     import.meta.env.VITE_API_BASE,
     typeof window !== "undefined" ? window.localStorage.getItem(LAST_WORKING_API_BASE_KEY) : null,
     API_BASE,
-    FALLBACK_API_BASE,
+    REMOTE_API_BASE,
   ]
     .map((value) => normalizeApiBase(value))
     .filter(Boolean);
