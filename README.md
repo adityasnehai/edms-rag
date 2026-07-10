@@ -1,10 +1,10 @@
 <div align="center">
 
-# EDMS — Enterprise Document Memory System
+# EDMS — Incident and Decision Memory
 
-**Search your company's internal knowledge with AI-grounded answers and linked evidence.**
+**Turn engineering docs, incidents, and decisions into grounded answers with linked evidence.**
 
-Upload ADRs, RFCs, meeting notes, postmortems, tickets, and diagrams. Ask questions in plain English. Get answers sourced back to the exact document — no hallucination, no guessing.
+EDMS is built for teams that need the decision trail, not another generic chatbot. Upload ADRs, RFCs, meeting notes, postmortems, tickets, and diagrams. Ask questions in plain English. Get answers tied back to the exact source.
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-edms--rag.vercel.app-4f46e5?style=for-the-badge&logo=vercel&logoColor=white)](https://edms-rag.vercel.app)
 [![Python](https://img.shields.io/badge/Python-3.12-3776ab?style=for-the-badge&logo=python&logoColor=white)](#)
@@ -17,7 +17,7 @@ Upload ADRs, RFCs, meeting notes, postmortems, tickets, and diagrams. Ask questi
 
 <br/>
 
-![EDMS full workflow demo](docs/demo.gif)
+![EDMS workflow demo](docs/demo.gif)
 
 </div>
 
@@ -30,6 +30,7 @@ Upload ADRs, RFCs, meeting notes, postmortems, tickets, and diagrams. Ask questi
 - [System Architecture](#system-architecture)
 - [Retrieval Pipeline](#retrieval-pipeline)
 - [Tech Stack](#tech-stack)
+- [Workflow Preview](#workflow-preview)
 - [Project Structure](#project-structure)
 - [Getting Started](#getting-started)
 - [Deployment](#deployment)
@@ -42,15 +43,15 @@ Upload ADRs, RFCs, meeting notes, postmortems, tickets, and diagrams. Ask questi
 
 ## What is EDMS?
 
-EDMS is a **multi-tenant RAG (Retrieval-Augmented Generation) platform** built for engineering and ops teams. Each company gets an isolated workspace. Admins upload internal documents, and every user in that workspace can search, chat, and browse evidence — all answers grounded in your actual records.
+EDMS is a **multi-tenant RAG platform for engineering and ops teams**. Each company gets an isolated workspace. Admins upload internal documents, incident notes, and diagrams. Users search, chat, and browse evidence with every answer grounded in source material.
 
-> Think of it as Notion Search meets a private ChatGPT, but every answer cites its source.
+> Think of it as incident memory for engineering teams, but every answer cites its source.
 
 **Key ideas:**
-- **Multi-tenant by design** — each org's vectors, files, and indices are fully isolated
-- **Hybrid retrieval** — vector search + BM25 fused with RRF, reranked with a 5-signal heuristic scorer
-- **Model routing** — simple queries hit `gpt-4o-mini`; complex ones escalate to `gpt-4.1`
-- **Role-based access** — admins manage data; users search and chat
+- **Multi-tenant by design** - each org's files, vectors, cache, and indices stay isolated
+- **Hybrid retrieval** - Pinecone + BM25 + reranking to avoid single-signal misses
+- **Model routing** - simple queries use `gpt-4o-mini`; harder ones escalate to `gpt-4.1`
+- **Role-based access** - admins manage data; users search, chat, and inspect evidence
 
 ---
 
@@ -59,29 +60,29 @@ EDMS is a **multi-tenant RAG (Retrieval-Augmented Generation) platform** built f
 ### For Users
 | Feature | Description |
 |---|---|
-| 🔍 **Semantic Search** | Ask questions in natural language, get grounded answers with source citations |
-| 💬 **Persistent Chat** | Conversational AI with full message history and context-aware follow-ups |
-| 📚 **Evidence Browser** | Browse, filter by type, and search all indexed chunks |
-| ⌨️ **Keyboard Shortcut** | Press `/` anywhere on the dashboard to focus the search box instantly |
+| 🔍 **Search** | Natural language search with grounded answers and evidence cards |
+| 💬 **Chat** | Conversation history with follow-up questions tied to workspace context |
+| 📚 **Evidence** | Browse indexed chunks by type, source, and match quality |
+| ⌨️ **Shortcut** | Press `/` anywhere on the dashboard to focus search instantly |
 
 ### For Admins
 | Feature | Description |
 |---|---|
-| 📤 **Document Upload** | Upload ADRs, RFCs, meeting notes, postmortems, tickets, and diagrams |
-| 🔄 **Auto-Indexing** | Upload triggers extraction → chunking → embedding → index rebuild automatically |
-| 🗂️ **Data Manager** | View, manage, and delete indexed files per document type |
-| 🔑 **Invite Codes** | Generate and rotate invite codes to control workspace membership |
-| 📊 **Index Stats** | Real-time document counts and index status per category |
+| 📤 **Document Upload** | Upload ADRs, RFCs, notes, postmortems, tickets, and images |
+| 🔄 **Auto-Indexing** | Upload triggers extraction, chunking, embedding, and index refresh |
+| 🗂️ **Data Manager** | View, replace, and delete indexed files per document type |
+| 🔑 **Invite Codes** | Generate and rotate invite codes for workspace access |
+| 📊 **Index Stats** | Workspace counts, ingestion status, and source coverage |
 
 ### Platform
 | Feature | Description |
 |---|---|
-| 🏢 **Multi-tenancy** | Fully isolated workspaces — vectors, files, and indices scoped per org |
-| 🔐 **JWT + RBAC** | Access + refresh tokens with admin/user role separation |
-| ⚡ **Streaming Answers** | SSE streams the LLM response token by token |
-| 🖼️ **Image Support** | Upload diagrams and screenshots — processed through multimodal pipeline |
-| 🚦 **Rate Limiting** | Per-endpoint limits (search 60/min, chat 90/min, upload 12/min) |
-| 🧠 **Multi-layer Cache** | Disk cache for embeddings (24h), memory cache for answers (3 min) |
+| 🏢 **Multi-tenancy** | Workspaces are isolated by org for files, vectors, cache, and jobs |
+| 🔐 **JWT + RBAC** | Access and refresh tokens with admin/user separation |
+| ⚡ **Streaming Answers** | SSE streams responses token by token |
+| 🖼️ **Image Support** | Diagrams and screenshots flow through the multimodal pipeline |
+| 🚦 **Rate Limiting** | Per-endpoint limits for search, chat, upload, and auth |
+| 🧠 **Caching** | Disk cache for embeddings and in-memory answer caching |
 
 ---
 
@@ -89,88 +90,65 @@ EDMS is a **multi-tenant RAG (Retrieval-Augmented Generation) platform** built f
 
 ```mermaid
 flowchart TD
-    subgraph Clients["👥 Clients"]
-        A["Admin\nUpload · Manage · Invite"]
-        U["User\nSearch · Chat · Browse"]
+    subgraph Clients["Clients"]
+        A["Admin"]
+        U["User"]
     end
 
-    subgraph FE["⚡ Frontend — React 19 + Vite · Vercel CDN"]
-        LP["Landing Page\nMarketing + Auth modals"]
-        DASH["Dashboard\nHybrid search + evidence cards"]
-        CHAT["Chat\nConversational RAG + history"]
-        EB["Evidence Browser\nFilter · Search · Inspect chunks"]
-        ADM["Admin Panel\nUpload · Data Manager · Access Control"]
+    subgraph FE["Frontend - React 19 + Vite on Vercel"]
+        LP["Landing page"]
+        DASH["Dashboard"]
+        CHAT["Chat"]
+        EB["Evidence browser"]
+        ADM["Admin tools"]
     end
 
-    subgraph BE["🚀 Backend API — FastAPI · Render Web Service"]
-        direction LR
-        MW["Middleware\nCORS · Rate limiting · JWT verify"]
-        AuthR["/auth\nLogin · Register · Refresh · Reset"]
-        SearchR["/search  /search/stream\nHybrid RAG + SSE streaming"]
-        ChatR["/chat\nConversational RAG with history"]
-        EvidR["/evidence\nBrowse indexed chunks"]
-        AdminR["/admin\nUpload · Data · Org · Stats"]
-        Health["/live  /ready  /metrics\nHealth + Prometheus"]
-        MW --> AuthR & SearchR & ChatR & EvidR & AdminR & Health
+    subgraph API["Backend - FastAPI on Render"]
+        AUTH["Auth routes"]
+        SEARCH["Search / stream"]
+        CHATAPI["Chat"]
+        EVIDENCE["Evidence"]
+        ADMIN["Admin + stats"]
+        INSIGHTS["Workspace insights"]
+        HEALTH["Health + metrics"]
     end
 
-    subgraph Queue["⚙️ Task Queue — Celery + Redis"]
-        JQ["Job Queue\nRedis broker"]
-        CW["Celery Worker\nRender Background Service"]
-        JQ -->|"pick up"| CW
+    subgraph INGEST["Ingestion"]
+        JOB["Celery job"]
+        PARSE["Parser"]
+        CHUNK["Chunker"]
+        EMBED["OpenAI embeddings"]
+        VECTOR["Pinecone"]
+        LEX["BM25 / Elasticsearch"]
     end
 
-    subgraph Ingest["📥 Ingestion Pipeline — runs inside Celery Worker"]
-        direction LR
-        PA["parser.py\nExtract text + metadata\nfrom .md and images"]
-        CH["chunker.py\nSplit into retrieval units\nwith section awareness"]
-        EM["embedder.py\nOpenAI text-embedding-3-small\n1536-dim, disk-cached 30d"]
-        PI["Pinecone upsert\nOrg-namespaced index"]
-        BI["BM25 rebuild\nIn-memory lexical index per org"]
-        PA --> CH --> EM --> PI & BI
+    subgraph STORAGE["Storage"]
+        PG["Neon Postgres"]
+        RD["Upstash Redis"]
+        R2["Cloudflare R2"]
     end
 
-    subgraph RAG["🔍 Retrieval Pipeline — runs per query"]
-        direction LR
-        QE["① Embed query\nOpenAI · disk-cached 24h"]
-        CP["② Candidate pool\nVector top-k + BM25 + exact doc-ID boost"]
-        RF["③ RRF Fusion\nReciprocal Rank Fusion k=60\nmerges semantic + lexical ranks"]
-        HR["④ Heuristic Reranker\n0.30 semantic · 0.22 lexical\n0.18 token overlap · 0.18 metadata\n0.12 RRF fusion · min-max normalised"]
-        MR["⑤ Model routing\nComplex → gpt-4.1\nSimple → gpt-4o-mini"]
-        GEN["⑥ Generate answer\nStreaming SSE · cached 3 min"]
-        QE --> CP --> RF --> HR --> MR --> GEN
-    end
-
-    subgraph Storage["💾 Storage Layer"]
-        PG["PostgreSQL · Neon\nUsers · Orgs · Jobs\nTokens · Sessions"]
-        PC["Pinecone\nVector embeddings\nper-org namespace"]
-        RD["Redis · Upstash\nCache · Job queue\nSession store"]
-        S3["Cloudflare R2\nFile storage\nper-org path isolation"]
-    end
-
-    subgraph Obs["📊 Observability"]
-        PR["Prometheus\n/metrics endpoint\nretrieval · LLM · queue depth"]
-        SN["Sentry\nFrontend + backend\nerror tracking"]
-        LG["Structured JSON logs\nstdout → Render log drain"]
-        OT["OpenTelemetry\nOTLP trace export"]
+    subgraph OBS["Observability"]
+        PROM["Prometheus"]
+        GRAF["Grafana"]
+        LOKI["Loki"]
+        SENT["Sentry"]
     end
 
     A & U --> FE
-    FE -->|"JWT in header"| BE
-    AdminR -->|"enqueue ingestion job"| JQ
-    CW --> Ingest
-    Ingest --> PC & RD & S3
-    SearchR & ChatR --> RAG
-    RAG --> PC & RD
-    BE <--> PG & RD & S3
-    BE --> Obs
+    FE --> API
+    ADMIN --> JOB
+    JOB --> PARSE --> CHUNK --> EMBED --> VECTOR
+    CHUNK --> LEX
+    API <--> STORAGE
+    API --> OBS
 ```
 
 ---
 
 ## Retrieval Pipeline
 
-EDMS uses a **6-stage hybrid retrieval** pipeline — no naive single-vector lookup:
+EDMS uses a **6-stage hybrid retrieval pipeline**:
 
 ```
 Query
@@ -181,21 +159,21 @@ Query
   │
   ├─② Build candidate pool  (3 sources merged)
   │     ├── Semantic   — Pinecone ANN top-k in org namespace
-  │     ├── Lexical    — BM25 keyword match (rank-bm25, rebuilt per upload)
-  │     └── Exact      — doc-ID match boost (prepended regardless of score)
+  │     ├── Lexical    — BM25 keyword match, rebuilt per upload
+  │     └── Exact      — doc-ID boost for direct references
   │
   ├─③ RRF Fusion  (Reciprocal Rank Fusion, k=60)
-  │     Combines semantic + lexical rank lists without score normalisation
+  │     Combines semantic and lexical ranks without score normalisation
   │     Candidate pool = final_top_k × HYBRID_CANDIDATE_MULTIPLIER
   │
   ├─④ Heuristic Reranker  (5-signal weighted scorer)
-  │     Each signal min-max normalised before weighting:
-  │       0.30 × semantic cosine similarity  (re-computed from embeddings)
+  │     Each signal is min-max normalised before weighting:
+  │       0.30 × semantic cosine similarity
   │       0.22 × BM25 lexical score
-  │       0.18 × token overlap  (content-filtered query terms vs chunk terms)
-  │       0.18 × metadata match  (query terms vs doc_id, type, section header)
+  │       0.18 × token overlap
+  │       0.18 × metadata match
   │       0.12 × RRF fusion score
-  │     Ties broken by fusion score · deduped · sliced to top_k
+  │     Ties broken by fusion score and sliced to top_k
   │
   ├─⑤ Model routing  (automatic, no config needed)
   │     → gpt-4o-mini  if: query ≤16 words AND history ≤6 turns
@@ -218,15 +196,14 @@ Query
 | API framework | **FastAPI** 0.115 + Python 3.12 | Async, typed, OpenAPI auto-docs |
 | Auth | **JWT** (python-jose) + bcrypt | Access + refresh tokens, RBAC |
 | Vector DB | **Pinecone** | Org-namespaced indices, 1536-dim |
-| Lexical search | **BM25** (rank-bm25) | In-memory, rebuilt per upload; Elasticsearch-ready |
-| Embeddings | **OpenAI** text-embedding-3-small | Disk-cached 30 days |
-| LLM — small | **OpenAI** gpt-4o-mini | Fast, cost-efficient for simple queries |
-| LLM — large | **OpenAI** gpt-4.1 | Complex queries, long history, rich evidence |
-| Reranker | **Heuristic** (5-signal weighted) | Semantic + lexical + overlap + metadata + RRF |
-| Task queue | **Celery** + **Redis** | Thread pool in dev, Celery worker in prod |
+| Lexical search | **BM25** / **Elasticsearch** | Local dev or managed lexical backend |
+| Embeddings | **OpenAI** text-embedding-3-small | Disk-cached |
+| LLMs | **OpenAI** gpt-4o-mini / gpt-4.1 | Small vs complex query routing |
+| Retrieval | **Hybrid + heuristic rerank** | Pinecone + BM25 + RRF + signal scoring |
+| Task queue | **Celery** + **Redis** | Worker-backed ingestion |
 | Database | **PostgreSQL** (Neon) | Users, orgs, jobs, tokens |
-| File storage | **S3-compatible** (Cloudflare R2) | Per-org path isolation |
-| Cache | **Redis** (Upstash) | Multi-layer: disk (embeddings) + memory (answers) + Redis |
+| File storage | **Cloudflare R2** / local MinIO | S3-compatible object store |
+| Cache | **Redis** (Upstash) | Cache, queue, session support |
 | Rate limiting | **slowapi** | Per-endpoint, per-IP |
 
 ### Frontend
@@ -252,6 +229,10 @@ Query
 | Error tracking | **Sentry** | Frontend + backend |
 | CI/CD | **GitHub Actions** | Lint, build, Docker |
 
+## Workflow Preview
+
+![EDMS workflow preview](docs/demo.gif)
+
 ---
 
 ## Project Structure
@@ -259,7 +240,7 @@ Query
 ```
 edms-rag/
 ├── docs/
-│   └── demo.gif                     # Product demo GIF
+│   ├── demo.gif                     # Workflow preview GIF
 ├── edms/                            # FastAPI backend
 │   ├── Dockerfile
 │   ├── requirements.txt
@@ -323,7 +304,7 @@ edms-rag/
 │       │   ├── usePageTitle.js      # Per-page document.title
 │       │   └── useRecentSearches.js
 │       ├── pages/
-│       │   ├── Login.jsx            # Landing page + auth modals
+│       │   ├── Home.jsx             # Landing page + auth modals
 │       │   ├── Dashboard.jsx        # Search + results + recent queries
 │       │   ├── Chat.jsx             # Conversational RAG
 │       │   ├── EvidenceBrowser.jsx  # Browse + filter indexed chunks
@@ -427,21 +408,21 @@ docker compose up --build
 
 ```
 1.  Push code to GitHub (main branch)
-2.  Create Neon Postgres → copy DATABASE_URL
-3.  Create Upstash Redis → copy REDIS_URL
-4.  Create Pinecone index (dimension: 1536, metric: cosine) → copy PINECONE_API_KEY
-5.  Create Cloudflare R2 bucket → copy R2_* credentials
-6.  Deploy backend on Render (Docker, root: edms/) → set all env vars
+2.  Create Neon Postgres → copy `DATABASE_URL`
+3.  Create Upstash Redis → copy `REDIS_URL`
+4.  Create Pinecone index (dimension: 1536, metric: cosine) → copy `PINECONE_API_KEY`
+5.  Create Cloudflare R2 bucket → copy `S3_*` credentials and bucket name
+6.  Deploy backend on Render (Docker, root: `edms/`) → set all env vars
 7.  Deploy Celery worker on Render (same Docker image, start command below)
-8.  Set CORS_ALLOW_ORIGINS to your Vercel domain on the backend
-9.  Deploy frontend on Vercel → set VITE_API_BASE_URL to Render backend URL
+8.  Set `CORS_ALLOW_ORIGINS` to your Vercel domain on the backend
+9.  Deploy frontend on Vercel → set `VITE_API_BASE_URL` to the Render backend URL
 10. Attach Sentry DSN to frontend and backend
 11. Smoke test: sign up → upload a file → search → confirm answer is grounded
 ```
 
 **Celery worker start command:**
 ```bash
-celery -A src.worker worker --loglevel=info --concurrency=2
+celery -A src.celery_app.celery worker --loglevel=info --concurrency=2
 ```
 
 ---
@@ -465,9 +446,9 @@ celery -A src.worker worker --loglevel=info --concurrency=2
 | `ELASTICSEARCH_URL` | No | Required only if `LEXICAL_BACKEND=elasticsearch` |
 | `OBJECT_STORAGE_BACKEND` | No | `s3` or `local` (default dev) |
 | `S3_BUCKET` | Prod | R2 / S3 bucket name |
-| `R2_ENDPOINT_URL` | Prod | Cloudflare R2 endpoint |
-| `R2_ACCESS_KEY_ID` | Prod | R2 access key |
-| `R2_SECRET_ACCESS_KEY` | Prod | R2 secret key |
+| `S3_ENDPOINT_URL` | Prod | Cloudflare R2 endpoint |
+| `S3_ACCESS_KEY_ID` | Prod | R2 access key |
+| `S3_SECRET_ACCESS_KEY` | Prod | R2 secret key |
 | `CORS_ALLOW_ORIGINS` | Prod | Comma-separated allowed origins |
 | `ADMIN_EMAIL` | Yes | Seeds first admin user on startup |
 | `ADMIN_PASSWORD` | Yes | Seeds first admin password |
@@ -516,17 +497,28 @@ Full interactive docs at `/docs` when running locally.
 
 | Signal | Tool | Details |
 |---|---|---|
-| Metrics | **Prometheus** | `GET /metrics` — retrieval totals, LLM calls, queue depth, HTTP latency |
+| Metrics | **Prometheus** | `GET /metrics` — retrieval totals, LLM calls, queue depth, HTTP latency, error/rejection counters |
 | Traces | **OpenTelemetry** | OTLP export, `stage_timer` wraps each pipeline stage |
 | Errors | **Sentry** | Frontend JS errors + backend exceptions with stack traces |
-| Logs | **Structured JSON** | stdout → Render log drain, keyed by `org_slug` and event type |
+| Logs | **Structured JSON** | stdout → Render log drain or Loki, keyed by `org_slug` and event type |
 | Health | **Probes** | `/live` (process alive) + `/ready` (dependencies connected) |
 
 Key Prometheus metrics:
-- `edms_retrieval_total` — by org, backend, cache hit
+- `edms_http_request_latency_seconds` — route-level latency histogram
+- `edms_http_responses_total` — response classes by route
+- `edms_request_rejections_total` — rejected requests by reason
+- `edms_auth_failures_total` — login/register abuse visibility
+- `edms_retrieval_total` — retrieval volume by fallback/cache usage
 - `edms_llm_requests_total` — by model, mode, fallback used
-- `edms_job_queue_depth` — pending ingestion jobs
-- `http_requests_total` — by route and status code
+- `edms_queue_depth` — pending ingestion jobs
+
+Free observability stack:
+- `Prometheus` for metrics and alert rules
+- `Grafana` for dashboards
+- `Loki` + `Promtail` for logs
+- `Alertmanager` for alert routing
+- `OpenTelemetry` for traces
+- Provisioned Grafana dashboard: `edms/deploy/monitoring/grafana/provisioning/dashboards/edms-overview.json`
 
 ---
 
