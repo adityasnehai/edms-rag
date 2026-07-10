@@ -1,10 +1,10 @@
 <div align="center">
 
-# EDMS — Incident and Decision Memory
+# MemoStack (EDMS) — Incident and Decision Memory
 
 **Turn engineering docs, incidents, and decisions into grounded answers with linked evidence.**
 
-EDMS is built for teams that need the decision trail, not another generic chatbot. Upload ADRs, RFCs, meeting notes, postmortems, tickets, and diagrams. Ask questions in plain English. Get answers tied back to the exact source.
+MemoStack (EDMS) is built for teams that need the decision trail, not another generic chatbot. Upload ADRs, RFCs, meeting notes, postmortems, tickets, and diagrams. Ask questions in plain English. Get answers tied back to the exact source.
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-edms--rag.vercel.app-4f46e5?style=for-the-badge&logo=vercel&logoColor=white)](https://edms-rag.vercel.app)
 [![Python](https://img.shields.io/badge/Python-3.12-3776ab?style=for-the-badge&logo=python&logoColor=white)](#)
@@ -25,7 +25,7 @@ EDMS is built for teams that need the decision trail, not another generic chatbo
 
 ## Table of Contents
 
-- [What is EDMS?](#what-is-edms)
+- [What is MemoStack (EDMS)?](#what-is-memostack-edms)
 - [Features](#features)
 - [System Architecture](#system-architecture)
 - [Retrieval Pipeline](#retrieval-pipeline)
@@ -42,9 +42,9 @@ EDMS is built for teams that need the decision trail, not another generic chatbo
 
 ---
 
-## What is EDMS?
+## What is MemoStack (EDMS)?
 
-EDMS is a **multi-tenant RAG platform for engineering and ops teams**. Each company gets an isolated workspace. Admins upload internal documents, incident notes, and diagrams. Users search, chat, and browse evidence with every answer grounded in source material.
+MemoStack (EDMS) is a **multi-tenant RAG platform for engineering and ops teams**. Each company gets an isolated workspace. Admins upload internal documents, incident notes, and diagrams. Users search, chat, and browse evidence with every answer grounded in source material.
 
 > Think of it as incident memory for engineering teams, but every answer cites its source.
 
