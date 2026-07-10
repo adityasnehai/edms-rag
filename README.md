@@ -29,6 +29,7 @@ EDMS is built for teams that need the decision trail, not another generic chatbo
 - [Features](#features)
 - [System Architecture](#system-architecture)
 - [Retrieval Pipeline](#retrieval-pipeline)
+- [Evaluation](#evaluation)
 - [Tech Stack](#tech-stack)
 - [Workflow Preview](#workflow-preview)
 - [Project Structure](#project-structure)
@@ -185,6 +186,84 @@ Query
         Answer cached 3 min in memory per org
         Grounded fallback answer if LLM call fails
 ```
+
+## Evaluation
+
+EDMS includes a synthetic evaluation suite in [`edms/eval/`](edms/eval/) to check retrieval quality, grounding, and abstention behavior on workspace-style documents.
+
+### What we evaluated
+
+| Step | What it checks |
+|---|---|
+| Synthetic corpus build | 50 source documents across ADRs, RFCs, meeting notes, postmortems, and tickets |
+| Query generation | 210 examples covering answerable and unanswerable questions |
+| Retrieval eval | Recall@1/3/5, MRR, answer support, and no-answer accuracy |
+| LLM judge pass | Groundedness, answer quality, citation quality, abstention quality, and overall score |
+
+### Dataset shape
+
+| Item | Count | Notes |
+|---|---:|---|
+| Documents | 50 | Workspace corpus used to build chunks |
+| Chunks | 230 | Indexed retrieval units |
+| Total examples | 210 | Synthetic benchmark examples |
+| Positive examples | 200 | Answerable questions |
+| Negative examples | 10 | Out-of-scope / no-answer questions |
+| ADRs | 40 | 4 queries per doc family |
+| RFCs | 40 | 4 queries per doc family |
+| Meeting notes | 40 | 4 queries per doc family |
+| Postmortems | 40 | 4 queries per doc family |
+| Tickets | 40 | 4 queries per doc family |
+| Mixed negatives | 10 | No-answer validation set |
+
+### Results
+
+| Scope | Metric | Value |
+|---|---|---:|
+| Overall | Retrieval recall@1 | 0.80 |
+| Overall | Retrieval recall@3 | 0.80 |
+| Overall | Retrieval recall@5 | 0.85 |
+| Overall | MRR | 0.9559 |
+| Overall | Answer support@1 | 0.80 |
+| Overall | Answer support@3 | 0.80 |
+| Overall | No-answer accuracy | 1.00 |
+| ADRs | Recall@1 / @3 / @5 | 0.50 / 0.50 / 0.75 |
+| ADRs | MRR | 0.5625 |
+| Meeting notes | Recall@1 / @3 / @5 | 0.75 / 0.75 / 0.75 |
+| Meeting notes | MRR | 0.75 |
+| Postmortems | Recall@1 / @3 / @5 | 1.00 / 1.00 / 1.00 |
+| Postmortems | MRR | 1.00 |
+| RFCs | Recall@1 / @3 / @5 | 0.75 / 0.75 / 0.75 |
+| RFCs | MRR | 0.75 |
+| Tickets | Recall@1 / @3 / @5 | 1.00 / 1.00 / 1.00 |
+| Tickets | MRR | 1.00 |
+| Negative set | Recall@1 / @3 / @5 | 0.00 / 0.00 / 0.00 |
+| Negative set | MRR | 0.00 |
+
+### LLM judge pass
+
+| Item | Value |
+|---|---:|
+| Judge model | `gpt-4o-mini` |
+| Examples scored | 24 |
+| Mean groundedness | 3.5 / 5 |
+| Mean answer quality | 3.0 / 5 |
+| Mean citation quality | 3.5 / 5 |
+| Mean abstention quality | 1.1667 / 5 |
+| Mean overall | 3.0 / 5 |
+
+### Eval artifacts
+
+| File | Purpose |
+|---|---|
+| `edms/eval/synthetic_dataset.jsonl` | Synthetic benchmark input |
+| `edms/eval/synthetic_dataset.csv` | Tabular benchmark export |
+| `edms/eval/eval_results.json` | Retrieval evaluation output |
+| `edms/eval/eval_summary.csv` | Human-readable summary table |
+| `edms/eval/eval_examples.csv` | Example-by-example results |
+| `edms/eval/eval_validation.json` | Dataset validation status |
+| `edms/eval/llm_judge_results.json` | Judge output JSON |
+| `edms/eval/llm_judge_results.csv` | Judge output CSV |
 
 ---
 
