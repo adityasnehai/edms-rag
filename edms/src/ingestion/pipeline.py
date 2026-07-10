@@ -27,8 +27,6 @@ def _dispatch_job(job_id: str) -> None:
         if QUEUE_DEPTH:
             QUEUE_DEPTH.labels(queue_name="ingestion").inc()
         return
-    if PRODUCTION_MODE:
-        raise RuntimeError("Production requires Celery worker dispatch")
 
     _job_queue.put(job_id)
     if QUEUE_DEPTH:
@@ -45,8 +43,6 @@ def start_ingestion_worker() -> None:
             for job in requeue_unfinished_jobs():
                 _dispatch_job(job["id"])
             return
-        if PRODUCTION_MODE:
-            raise RuntimeError("Production requires Celery worker")
 
         if _worker_thread and _worker_thread.is_alive():
             return

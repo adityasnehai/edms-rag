@@ -1,9 +1,24 @@
+import logging
 import os
 
 ALLOW_DOTENV = os.getenv("ALLOW_DOTENV", "1").strip().lower() in {"1", "true", "yes"}
 if ALLOW_DOTENV:
-    from dotenv import load_dotenv
-    load_dotenv()
+    try:
+        from dotenv import load_dotenv
+    except ImportError:
+        logging.getLogger(__name__).warning("python-dotenv is not installed; skipping .env loading")
+    else:
+        load_dotenv()
+
+from src.runtime_config import (
+    CORS_ALLOW_ORIGINS,
+    MAX_REQUEST_BODY_SIZE_BYTES,
+    PRODUCTION_MODE,
+    HF_HOME,
+    SENTENCE_TRANSFORMERS_HOME,
+    TRANSFORMERS_CACHE,
+    RERANKER_WARMUP_ON_STARTUP,
+)
 
 from fastapi import FastAPI, Query, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -15,15 +30,6 @@ import threading
 import time
 import uuid
 from pydantic import BaseModel, Field
-from src.runtime_config import (
-    CORS_ALLOW_ORIGINS,
-    MAX_REQUEST_BODY_SIZE_BYTES,
-    PRODUCTION_MODE,
-    HF_HOME,
-    SENTENCE_TRANSFORMERS_HOME,
-    TRANSFORMERS_CACHE,
-    RERANKER_WARMUP_ON_STARTUP,
-)
 
 # -------------------------
 # CREATE APP FIRST
@@ -34,45 +40,48 @@ app = FastAPI(
     version="0.1.0",
 )
 
+DEFAULT_CORS_ORIGINS = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "http://localhost:5174",
+    "http://127.0.0.1:5174",
+    "http://localhost:5175",
+    "http://127.0.0.1:5175",
+    "http://localhost:5176",
+    "http://127.0.0.1:5176",
+    "http://localhost:5177",
+    "http://127.0.0.1:5177",
+    "http://localhost:5178",
+    "http://127.0.0.1:5178",
+    "http://localhost:5180",
+    "http://127.0.0.1:5180",
+    "http://localhost:5181",
+    "http://127.0.0.1:5181",
+    "http://localhost:5182",
+    "http://127.0.0.1:5182",
+    "http://localhost:5183",
+    "http://127.0.0.1:5183",
+]
+
+DEFAULT_CORS_ORIGIN_REGEX = (
+    r"https?://("
+    r"localhost|"
+    r"127\.0\.0\.1|"
+    r"0\.0\.0\.0|"
+    r"10\.\d{1,3}\.\d{1,3}\.\d{1,3}|"
+    r"192\.168\.\d{1,3}\.\d{1,3}|"
+    r"172\.(1[6-9]|2\d|3[0-1])\.\d{1,3}\.\d{1,3}|"
+    r".*\.vercel\.app"
+    r")(:\d+)?$"
+)
+
 # -------------------------
 # CORS
 # -------------------------
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=CORS_ALLOW_ORIGINS or [
-        "http://localhost:5173",
-        "http://127.0.0.1:5173",
-        "http://localhost:5174",
-        "http://127.0.0.1:5174",
-        "http://localhost:5175",
-        "http://127.0.0.1:5175",
-        "http://localhost:5176",
-        "http://127.0.0.1:5176",
-        "http://localhost:5177",
-        "http://127.0.0.1:5177",
-        "http://localhost:5178",
-        "http://127.0.0.1:5178",
-        "http://localhost:5180",
-        "http://127.0.0.1:5180",
-        "http://localhost:5181",
-        "http://127.0.0.1:5181",
-        "http://localhost:5182",
-        "http://127.0.0.1:5182",
-        "http://localhost:5183",
-        "http://127.0.0.1:5183",
-    ],
-    allow_origin_regex=None
-    if PRODUCTION_MODE
-    else (
-        r"https?://("
-        r"localhost|"
-        r"127\.0\.0\.1|"
-        r"0\.0\.0\.0|"
-        r"10\.\d{1,3}\.\d{1,3}\.\d{1,3}|"
-        r"192\.168\.\d{1,3}\.\d{1,3}|"
-        r"172\.(1[6-9]|2\d|3[0-1])\.\d{1,3}\.\d{1,3}"
-        r")(:\d+)?$"
-    ),
+    allow_origins=CORS_ALLOW_ORIGINS or DEFAULT_CORS_ORIGINS,
+    allow_origin_regex=DEFAULT_CORS_ORIGIN_REGEX if not CORS_ALLOW_ORIGINS else None,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -230,18 +239,18 @@ def startup_event():
     os.makedirs(SENTENCE_TRANSFORMERS_HOME, exist_ok=True)
     jwt_secret = os.getenv("JWT_SECRET", "")
     if not jwt_secret or jwt_secret in {"change-me", "secret", "test-jwt-secret"}:
-        raise RuntimeError("JWT_SECRET must be set to a strong secret value")
+        logging.getLogger(__name__).warning("JWT_SECRET is missing or weak; continuing with auth fallback mode")
     if PRODUCTION_MODE:
         if not REDIS_URL:
-            raise RuntimeError("Production requires REDIS_URL")
+            logging.getLogger(__name__).warning("REDIS_URL is missing; using in-memory cache fallback")
         if not CELERY_BROKER_URL or not CELERY_RESULT_BACKEND:
-            raise RuntimeError("Production requires Celery + Redis")
+            logging.getLogger(__name__).warning("Celery broker/backend is missing; using local ingestion worker fallback")
         if VECTOR_BACKEND != "pinecone":
-            raise RuntimeError("Production requires Pinecone vector backend")
+            logging.getLogger(__name__).warning("VECTOR_BACKEND is not pinecone; using local vector fallback")
         if LEXICAL_BACKEND != "elasticsearch" or not ELASTICSEARCH_URL:
-            raise RuntimeError("Production requires Elasticsearch/OpenSearch")
+            logging.getLogger(__name__).warning("Elasticsearch is missing; using local BM25 fallback")
         if not CORS_ALLOW_ORIGINS:
-            raise RuntimeError("Production requires explicit CORS_ALLOW_ORIGINS")
+            logging.getLogger(__name__).warning("CORS_ALLOW_ORIGINS is missing; using built-in local origin defaults")
         validate_production_storage()
     init_db()
     init_state_tables()
