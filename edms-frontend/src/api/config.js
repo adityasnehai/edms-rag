@@ -15,7 +15,38 @@ export const API_BASE = normalizeApiBase(
     import.meta.env.VITE_API_BASE ||
     FALLBACK_API_BASE,
 );
-export const API_BASE_CANDIDATES = [API_BASE];
+function isLocalBrowser() {
+  if (typeof window === "undefined") return false;
+  const host = window.location.hostname;
+  return host === "localhost" || host === "127.0.0.1" || host === "0.0.0.0" || host === "::1";
+}
+
+function getApiBaseCandidates() {
+  const localCandidates = [
+    "http://127.0.0.1:8000",
+    "http://localhost:8000",
+    "http://127.0.0.1:8001",
+    "http://localhost:8001",
+  ];
+  const envCandidates = [
+    import.meta.env.VITE_API_BASE_URL,
+    import.meta.env.VITE_API_BASE,
+    typeof window !== "undefined" ? window.localStorage.getItem(LAST_WORKING_API_BASE_KEY) : null,
+    API_BASE,
+    FALLBACK_API_BASE,
+  ]
+    .map((value) => normalizeApiBase(value))
+    .filter(Boolean);
+
+  return Array.from(
+    new Set([
+      ...(isLocalBrowser() ? localCandidates : []),
+      ...envCandidates,
+    ]),
+  );
+}
+
+export const API_BASE_CANDIDATES = getApiBaseCandidates();
 export const API_UNAVAILABLE_ERROR_TEXT = API_UNAVAILABLE_ERROR;
 
 export function buildApiUrl(path, base = API_BASE) {

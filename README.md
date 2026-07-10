@@ -434,7 +434,7 @@ source .venv/bin/activate
 pip install -r requirements.txt
 cp .env.example .env
 # Fill in: OPENAI_API_KEY, PINECONE_API_KEY, JWT_SECRET, ADMIN_EMAIL, ADMIN_PASSWORD, ADMIN_ORG_NAME
-uvicorn src.api.main:app --host 127.0.0.1 --port 8001 --reload
+uvicorn src.api.main:app --host 127.0.0.1 --port 8000 --reload
 ```
 
 ### 3. Frontend
@@ -443,7 +443,7 @@ uvicorn src.api.main:app --host 127.0.0.1 --port 8001 --reload
 cd edms-frontend
 npm install
 cp .env.example .env
-# Set: VITE_API_BASE_URL=http://127.0.0.1:8001
+# Set: VITE_API_BASE_URL=http://127.0.0.1:8000
 npm run dev
 ```
 
@@ -452,8 +452,8 @@ npm run dev
 | Service | URL |
 |---|---|
 | Frontend | http://localhost:5173 |
-| Backend API | http://localhost:8001 |
-| API docs (Swagger) | http://localhost:8001/docs |
+| Backend API | http://localhost:8000 |
+| API docs (Swagger) | http://localhost:8000/docs |
 
 ### 5. First run
 
